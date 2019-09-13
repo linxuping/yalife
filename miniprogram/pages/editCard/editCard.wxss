@@ -1,0 +1,8 @@
+/* miniprogram/pages/editCard/editCard.wxss */
+.add-btn 
+{ 
+  width:100%; 
+  color:green; 
+  position:fixed; 
+  bottom:0; 
+} 

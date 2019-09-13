@@ -1,5 +1,6 @@
 //index.js
 const app = getApp()
+let wechat = require("../../utils/wechat");
 var types = [];
 //var types_titles = {};
 var pages = 0;
@@ -148,6 +149,70 @@ Page({
       return
     }
 
+    console.log("----------1>>>")
+    /*
+    const $ = db.command.aggregate
+    var ret = db.collection('attractions').aggregate()
+      .geoNear({
+        distanceField: 'distance', // 输出的每个记录中 distance 即是与给定点的距离
+        spherical: true,
+        near: db.Geo.Point(113.3089506, 23.0968251),
+        query: {
+          docType: 'geoNear',
+        },
+        key: 'location', // 若只有 location 一个地理位置索引的字段，则不需填
+        includeLocs: 'location', // 若只有 location 一个是地理位置，则不需填
+      })
+      .end()
+    */
+    const db = wx.cloud.database()
+    const _ = db.command
+    db.collection('attractions').where({
+      location: _.geoNear({
+        geometry: db.Geo.Point(113.30593, 23.1361155),
+        minDistance: 0,
+        maxDistance: 500000,
+      })
+    }).get({
+      success: res => {
+        console.log("geo result: ");
+        console.log(res.data);
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })
+
+    wx.getLocation({
+      type: 'gcj02',
+      success(res) {
+        const latitude = res.latitude
+        const longitude = res.longitude
+        const speed = res.speed
+        const accuracy = res.accuracy
+
+        let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
+        let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
+        let params = {
+          location: latitude + "," + longitude,
+          key
+        }
+
+        wechat.request(url, params).then(function (value) {
+            console.log(`fulfilled: ${value}`);
+            console.log(value.data.result);
+            wx.showToast({
+              title: value.data.result.address_component.street_number,
+            })
+          })
+          .catch(function (value) {
+            console.log(`rejected: ${value}`); // 'rejected: Hello World'
+            console.log(data)
+          });
+      }
+    })
+
+
     db.collection('goods').orderBy('quanter', 'desc').limit(10).get({
       success: res => {
         page.setData({ goods: sort(res.data) });
@@ -159,34 +224,6 @@ Page({
     });
     console.log(this.data.types);
 
-    //const db = wx.cloud.database()
-    /*
-    for (var k=0; k<4; k++){  //max 20*4
-      var query = null;
-      if (k == 0)
-        query = db.collection('goods_index').orderBy('seq','desc').limit(20);
-      else
-        query = db.collection('goods_index').orderBy('seq', 'desc').skip(k*20).limit(20);
-      query.get({
-        success: res => {
-          for (var i=0;i<res.data.length;i++){
-            types.push(res.data[i].type);
-            let _type = res.data[i].type;
-            db.collection('goods_index').where(
-              { type: _type }
-            ).get({
-              success: res => {
-                types_titles[_type] = res.data[0].titles;
-              },
-              fail: err => { console.log(err); }
-            });
-          }
-          page.setData({ types: types });
-          console.log(types);
-        },
-        fail: err => { console.log(err); }
-      });      
-    }*/
     db.collection('goods_index').where(
       { type: "预留1" }
     ).get({
@@ -422,6 +459,7 @@ Page({
     get_goods(5)
   },
   copyQuanter: function (e, code) {
+    
     if (openid == "oV5MQ5aN_i_ea9dGxZOHHBC8Bosg") {
       db.collection('click_quanter').add({
         // data 字段表示需新增的 JSON 数据

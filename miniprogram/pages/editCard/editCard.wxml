@@ -1,0 +1,13 @@
+<!--miniprogram/pages/editCard/editCard.wxml-->
+<view class="container">
+  <view style="width:90%;margin-bottom:80px;text-align:center">
+    <input placeholder="题目" style="width:100%;background:gray;bottom-margin:4px"></input>
+    <textarea placeholder="内容" style="width:100%;background:yellow"></textarea>
+    <input type="file" value="hello"></input>
+    <button style="margin:30rpx;" bindtap="chooseImage">获取图片</button> 
+    <image src="{{imgUrl}}" wx:if="{{imgUrl!=''}}"></image>
+    <button style="margin:30rpx;" bindtap="choosePos">修正我的位置</button> 
+    <text style="bottom-margin:20px">{{address}}</text>
+  </view>
+  <button class="add-btn">生成卡片</button>
+</view>
