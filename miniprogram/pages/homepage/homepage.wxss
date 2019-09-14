@@ -24,3 +24,17 @@
 .hover-class{
   background-color: #A4D3EE;
 }
+.testAvatar{
+  display: block;
+  width: 30%;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 10px
+}
+.add-btn 
+{ 
+  width:100%; 
+  color:green; 
+  position:fixed; 
+  bottom:0; 
+} 

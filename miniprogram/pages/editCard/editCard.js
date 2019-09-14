@@ -1,5 +1,19 @@
 // miniprogram/pages/editCard/editCard.js
 let wechat = require("../../utils/wechat");
+var db = wx.cloud.database();
+
+function formatTime(date) {
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+  var second = date.getSeconds()
+
+  return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second
+}
+
 Page({
 
   /**
@@ -7,10 +21,11 @@ Page({
    */
   data: {
     cardId: 0,
-    address: "123",
+    address: "",
     latitude: 0,
     longitude: 0,
-    imgUrl: ""
+    imgurl: "",
+    content: ""
   },
 
   /**
@@ -18,16 +33,66 @@ Page({
    */
   onLoad: function (options) {
     var page = this;
-    wx.getLocation({
-      //type: 'gcj02',
-      success(res) {
-        const latitude = res.latitude
-        const longitude = res.longitude
-        const speed = res.speed
-        const accuracy = res.accuracy
-        page.onUpdateLocation(latitude, longitude);
-      }
-    })
+
+    console.log(options);
+    console.log(options.id);
+
+    if (options.id != undefined) {
+      page.setData({
+        cardId: options.id
+      });
+
+      const _ = db.command
+      db.collection('attractions').where({
+        _id: options.id
+      }).get({
+        success: res => {
+          console.log("edit card: ");
+          console.log(res.data);
+          if (res.data.length > 0) {
+            let card = res.data[0]
+            page.setData({
+              cardId: card._id,
+              address: card.address,
+              latitude: card.latitude,
+              longitude: card.longitude,
+              imgurl: card.imgurl,
+              content: card.content
+            })
+
+            if (card.address == "") {
+              wx.getLocation({
+                type: 'gcj02',
+                success(res) {
+                  const latitude = res.latitude
+                  const longitude = res.longitude
+                  const speed = res.speed
+                  const accuracy = res.accuracy
+                  page.onUpdateLocation(latitude, longitude);
+                }
+              })
+            }
+
+          }
+        },
+        fail: err => {
+          console.log(err);
+        }
+      })      
+    } else {
+      console.log("get location:");
+      wx.getLocation({
+        type: 'gcj02',
+        success: function(res) {
+          console.log(res);
+          page.onUpdateLocation(res.latitude, res.longitude);
+        },
+        fail: function (res) {
+          console.log(res); //{errMsg: "getLocation:fail auth deny"} 不授权的结果
+        }
+      })
+    }
+
   },
 
   onUpdateLocation: function (latitude, longitude) {
@@ -116,7 +181,9 @@ Page({
 
         var timestamp = Date.parse(new Date());
         timestamp = timestamp / 1000;  
-
+        wx.showLoading({
+          title: '文件上传中...',
+        })
         for (var i = 0; i < res.tempFilePaths.length; i++) {
           wx.cloud.uploadFile({
             cloudPath: timestamp+'.'+i+'.png',
@@ -125,10 +192,12 @@ Page({
             // get resource ID
             console.log("img uploaded.")
             console.log(res)
-            page.setData({ imgUrl: res.fileID });
+            page.setData({ imgurl: res.fileID });
+            wx.hideLoading()
           }).catch(error => {
             // handle error
             console.log(error)
+            wx.hideLoading()
           })
         }
       }
@@ -136,14 +205,94 @@ Page({
   },
 
   choosePos: function () {
+    console.log("choose pos");
     var page = this;
     wx.chooseLocation({
       success: function (res) {
         console.log(res);
-        page.setData({ address: res.address });
+        page.setData({ 
+          address: res.address,
+          latitude: res.latitude, 
+          longitude: res.longitude
+        });
         //page.onUpdateLocation(res.latitude, res.longitude);
       },
     })
-  }
+  },
+
+  updateCard: function () {
+    var page = this;
+    var cardData = {
+      title: page.data.title,
+      address: page.data.address,
+      latitude: page.data.latitude,
+      longitude: page.data.longitude,
+      imgurl: page.data.imgurl,
+      content: page.data.content,
+      update_time: new Date //formatTime(new Date)
+    };
+    if (page.data.latitude && page.data.longitude) {
+      cardData["location"] = db.Geo.Point(page.data.longitude, page.data.latitude)
+    }
+    console.log("update card." + page.data.cardId);
+
+    if (page.data.cardId == 0) {
+      console.log("add.")
+      //add
+      cardData["create_time"] = formatTime(new Date)
+      cardData["status"] = 2
+      db.collection('attractions').add({
+        // data 字段表示需新增的 JSON 数据
+        data: cardData,
+        success: function (res) {
+          // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
+          page.setData({
+            cardId: res._id
+          });
+          wx.showToast({
+            title: '新增成功',
+          })
+          wx.redirectTo({
+            url: '/pages/homepage/homepage',
+          })
+        },
+        fail: function (res) {
+          console.log(res);
+          wx.showToast({
+            title: '新增失败',
+          })
+        }
+      })
+    } else {
+      //update
+      db.collection('attractions').doc(this.data.cardId).update({
+        data: cardData,
+        success: function (res) {
+          wx.showToast({
+            title: '更新成功',
+          })
+          wx.redirectTo({
+            url: '/pages/homepage/homepage',
+          })
+        },
+        fail: function (res) {
+          console.log(res);
+          wx.showToast({
+            title: '更新失败',
+          })
+        }
+      });
+    }
+  },
+
+  onInput: function (e) {
+    console.log("on input");
+    this.setData({
+      content: e.detail.value
+    })
+  },
 
 })
+
+
+

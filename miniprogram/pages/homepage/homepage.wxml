@@ -1,27 +1,24 @@
 
 <view class='container'>
   <loading hidden="{{!loading}}">加载中</loading>
-  <open-data type="userAvatarUrl"></open-data>
+  <open-data type="userAvatarUrl" class="testAvatar"></open-data>
   <open-data type="userNickName" lang="zh_CN"></open-data>
 
   <block class="" wx:for="{{cardList}}" wx:key="id">
-    <navigator url='/pages/editCard/editCard?id={{id}}'>
+    <navigator url='/pages/editCard/editCard?id={{item._id}}' bindlongpress="onDeleteCard"  data-cardId="{{item._id}}">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; height:120px;border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
         <view style='width:128rpx; height:128rpx; margin:20rpx;'>
-          <image class='index-logo' style='width:128rpx; height:128rpx' src="{{item.url}}"></image>
+          <image class='index-logo' style='width:128rpx; height:128rpx' src="{{item.imgurl}}"></image>
         </view>
         <!-- 右边内容 上下结构 -->
         <view style='display:flex; flex-direction:column; margin:20rpx;'>
-          <label class='item_title'>{{item.consumption_money}}</label>
-          <label class='item_content'>{{item.consumption_project}}</label>
-          <!-- 右边底部内容 左右结构 -->
-          <view style='display:flex; flex-direction:row; height:40rpx;'>
-            <label class='item_from'>{{item.merchant_name}}</label>
-            <label class='item_time'>{{item.consumption_date}}</label>
-          </view>
+          <label class='item_title'>{{item.content}}</label>
         </view>
       </view>
     </navigator>
   </block>
+  <navigator class="add-btn" url='/pages/editCard/editCard'>
+    <button>新建</button>
+  </navigator>
 </view>

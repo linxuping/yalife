@@ -19,7 +19,7 @@
 	},
 	"appid": "wx9001425b43f6c4d2",
 	"projectname": "yalife",
-	"libVersion": "2.2.5",
+	"libVersion": "2.8.2",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
@@ -44,7 +44,7 @@
 				{
 					"id": -1,
 					"name": "db guide",
-					"pathName": "pages/index/index"
+					"pathName": "pages/homepage/homepage"
 				}
 			]
 		}

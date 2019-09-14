@@ -11,5 +11,17 @@ App({
     }
 
     this.globalData = {}
-  }
+    //this.getOpenid()
+  }/*,
+  getOpenid() {
+    let that = this;
+    wx.cloud.callFunction({
+      name: 'getOpenid',
+      complete: res => {
+        console.log(res)
+        console.log('云函数获取到的openid: ', res.result.openId)
+        this.globalData['openid'] = res.result.openId;
+      }
+    })
+  }*/
 })
