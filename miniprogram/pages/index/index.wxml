@@ -14,7 +14,10 @@
     </view>
   </view>
 
-  <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:100">
+  <image style="width:55px;height:55px;position:fixed;bottom:4px;text-align:center;align-items: center;justify-content: center;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
+  <image style="width:30px;height:30px;position:fixed;top:8px;right:8px;z-index:1000" src="../../images/mine.png" mode="aspectFit" bindtap="goHomePage"></image>
+
+  <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:100;display:none">
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
@@ -25,23 +28,16 @@
 
   <view class="uploader" wx:for="{{goods}}" wx:if="{{showGoods}}" style="display:none">
     <navigator url="../addFunction/addFunction" open-type="navigate" class="uploader-text">
-      <image src="{{item.img}}" style="width:100px;height:100px"></image>
+      <image src="{{item.imgurl}}" style="width:100px;height:100px"></image>
       <text>{{item.title}}</text>
     </navigator>
   </view>
 
-
   <view class="card" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id"  style="width:95%">
       <view>
-          <image class="image" mode="aspectFill" src="{{item.img}}"/>
-          <text class="time"></text>
-          <view class="title">{{item.title}}</view>
-          <view class="title" style="vertical-aligh:center">
-            <text style="font-size:0.8em">销量：{{item.sale_count}} </text>
-            <text style="font-size:0.8em">价格：¥{{item.price}} </text>
-            <image src="https://7961-yalife-3e57c3-1257619748.tcb.qcloud.la/fetch.png?sign=59e2757d6536156960fe56368d5ba332&t=1539522610" style="height:40px;width:40px;position:absolute;right:5px;bottom:1px" bindtap="copyQuanter" data-code="{{item.code}}"></image>
-            <text style="font-size:1em;position:absolute;right:50px;bottom:1px;color:red" data-code="{{item.code}}" data-title="{{item.title}}" bindtap="copyQuanter" > 优惠券：¥{{item.quanter}}  </text>
-          </view>
+          <image mode="aspectFill" src="{{item.imgurl}}" wx:if="{{item.imgurl}}"/>
+          <text >{{item.content}}</text>
+          <view class="title">{{item.address}}</view>
       </view>
   </view>
 
@@ -73,10 +69,7 @@
       <view style="position:fixed;bottom:16px;right:16px;display:none"><text style="color:#CDCDCD">客服微信号：lttlovefm</text></view>
   </view>
 
-
   </view>  
-
-
 
   <!-- 上传图片 -->
   <view class="uploader" style="display:none">

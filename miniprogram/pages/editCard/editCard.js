@@ -33,6 +33,9 @@ Page({
    */
   onLoad: function (options) {
     var page = this;
+    wx.setNavigationBarTitle({
+      title: '新建条目发布'
+    })
 
     console.log(options);
     console.log(options.id);
@@ -93,6 +96,8 @@ Page({
       })
     }
 
+    wx.hideShareMenu({
+    })
   },
 
   onUpdateLocation: function (latitude, longitude) {
@@ -222,6 +227,16 @@ Page({
 
   updateCard: function () {
     var page = this;
+
+    if (page.data.content == "") {
+      wx.showToast({
+        title: '发布内容为空！',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
     var cardData = {
       title: page.data.title,
       address: page.data.address,
@@ -291,6 +306,16 @@ Page({
       content: e.detail.value
     })
   },
+
+  goBack: function () {
+    wx.navigateBack({
+      fail: function(){
+        wx.redirectTo({
+          url: '/pages/index/index',
+        })
+      }
+    });
+  }
 
 })
 

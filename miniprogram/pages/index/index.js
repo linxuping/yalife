@@ -6,13 +6,13 @@ var types = [];
 var pages = 0;
 var openid = '';
 var db = wx.cloud.database();
+var startSize = 50000
 
 function sort(arr){
   var d=new Date();
   //return arr.sort(function () { return d.getHours()/25 - Math.random() });
   return arr.sort(function () { return 0.5 - Math.random() });
 }
-//["良品铺子", "运动裤", "百草味", "三只松鼠", "优衣库", "格力", "史密斯", "可优比", "创维", "海底捞", "波司登", "周黑鸭", "三星", "vivo", "大益", "伊利", "五谷磨房", "荣耀", "耐克", "百雀羚", "玉兰油", "小米手机", "华为", "羽绒服", "点读笔", "卫衣", "预留1", "马克华菲", "飞科", "飞利浦", "长虹", "贝亲", "西门子", "裂帛", "英氏", "苏泊尔", "花花公子", "老板电器", "美的", "美特斯邦威", "海尔", "海信", "森马", "格兰仕", "松下", "杰克琼斯", "思莱德", "巴拉巴拉", "安奈儿", "好奇", "太平鸟", "夏普", "全棉时代", "九阳", "七匹狼", "tcl", "魅族", "裂帛", "oppo", "雀巢", "蒙牛"]
 
 function yesterday(num, str) {
   var today = new Date();
@@ -49,12 +49,12 @@ function goods_distinct(goods){
   var goods_names = [];
   var result = []
   for (var i=0; i<goods.length; i++){
-    if (goods_names.indexOf(goods[i].title) == -1){
+    if (goods_names.indexOf(goods[i]._id) == -1){
       result.push(goods[i]);
-      goods_names.push(goods[i].title);
+      goods_names.push(goods[i]._id);
       continue
     }
-    console.log(goods[i].title);
+    console.log(goods[i]._id);
   }
   return result;
 }
@@ -101,7 +101,8 @@ Page({
       name: "其他"
     }
     ],
-    types_class: []
+    types_class: [],
+    openid: ""
   },
 
   selectTab(e) {
@@ -120,22 +121,48 @@ Page({
     })
   },
 
+  onLoadCards: function (openid, latitude, longitude, dfrom, dto) {
+    if (openid == "") {
+      return
+    }
+    var page = this;
+    console.log(page.data);
+    const db = wx.cloud.database()
+    const _ = db.command
+    db.collection('attractions').orderBy('create_time', 'desc').where({
+      location: _.geoNear({
+        geometry: db.Geo.Point(longitude, latitude),
+        minDistance: dfrom,
+        maxDistance: dto,
+      })
+    }).get({
+      success: res => {
+        console.log("geo result: ");
+        console.log(res.data);
+        page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
+        page.setData({
+          goods: res.data
+        })
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })
+  },
+
   onLoad: function() {
+    var page = this;
     wx.cloud.callFunction({
       name: 'login',
       complete: res => {
         console.log(res);
         console.log('云函数获取到的openid: ', res.result.openid);
-        openid = res.result.openid;
+        page.setData({
+          openid: res.result.openid
+        });
+        page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, startSize);
       }
     });
-/*
-    wx.cloud.callFunction({
-      name: 'db2mgr',
-      complete: res => {
-        console.log(res);
-      }
-    });*/
 
     this.setData({
       types_class: types_class
@@ -149,40 +176,6 @@ Page({
       return
     }
 
-    console.log("----------1>>>")
-    /*
-    const $ = db.command.aggregate
-    var ret = db.collection('attractions').aggregate()
-      .geoNear({
-        distanceField: 'distance', // 输出的每个记录中 distance 即是与给定点的距离
-        spherical: true,
-        near: db.Geo.Point(113.3089506, 23.0968251),
-        query: {
-          docType: 'geoNear',
-        },
-        key: 'location', // 若只有 location 一个地理位置索引的字段，则不需填
-        includeLocs: 'location', // 若只有 location 一个是地理位置，则不需填
-      })
-      .end()
-    */
-    const db = wx.cloud.database()
-    const _ = db.command
-    db.collection('attractions').where({
-      location: _.geoNear({
-        geometry: db.Geo.Point(113.30593, 23.1361155),
-        minDistance: 0,
-        maxDistance: 500000,
-      })
-    }).get({
-      success: res => {
-        console.log("geo result: ");
-        console.log(res.data);
-      },
-      fail: err => {
-        console.log(err);
-      }
-    })
-
     wx.getLocation({
       type: 'gcj02',
       success(res) {
@@ -190,7 +183,13 @@ Page({
         const longitude = res.longitude
         const speed = res.speed
         const accuracy = res.accuracy
+        page.setData({
+          latitude: res.latitude,
+          longitude: res.longitude      
+        });
 
+        page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, startSize)
+        /*
         let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
         let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
         let params = {
@@ -209,9 +208,9 @@ Page({
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
             console.log(data)
           });
+        */
       }
     })
-
 
     db.collection('goods').orderBy('quanter', 'desc').limit(10).get({
       success: res => {
@@ -458,36 +457,6 @@ Page({
     }
     get_goods(5)
   },
-  copyQuanter: function (e, code) {
-    
-    if (openid == "oV5MQ5aN_i_ea9dGxZOHHBC8Bosg") {
-      db.collection('click_quanter').add({
-        // data 字段表示需新增的 JSON 数据
-        data: {
-          title: e.currentTarget.dataset.title,
-          create_time: formatDate(new Date().getTime())
-        }
-      }).then(res => {
-        console.log(res)
-      })
-        .catch(console.error)
-    }
-    wx.setClipboardData({
-      data: e.currentTarget.dataset.code,
-    });
-    wx.showModal({
-      title: '温馨提示',
-      content: "复制成功！打开手机淘宝下单吧～",
-      showCancel: false,
-      success: function (res) {
-        if (res.confirm) {
-          console.log('用户点击确定')
-        } else if (res.cancel) {
-          console.log('用户点击取消')
-        }
-      }
-    })
-  },
   onReachBottom: function(){
     if (pages == -1)
       return;
@@ -501,7 +470,7 @@ Page({
     wx.showLoading({
       title: '加载中！稍等哈',
     })
-    db.collection('goods').orderBy('quanter', 'desc').skip(pages).limit(10).get({
+    /*db.collection('goods').orderBy('quanter', 'desc').skip(pages).limit(10).get({
       success: res => {
         page.setData({ goods: page.data.goods.concat( goods_distinct(res.data) )  });
         wx.hideLoading();
@@ -510,7 +479,9 @@ Page({
         console.log(err);
         wx.hideLoading();
       }
-    });
+    });*/
+    page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000)
+    wx.hideLoading();
   },
   update_goods_index: function(e) {
     //const db = wx.cloud.database();
@@ -621,6 +592,16 @@ Page({
         userInfo: e.detail.userInfo
       })
     }
+  },
+  goAddPage: function () {
+    wx.redirectTo({
+      url: '/pages/editCard/editCard',
+    })
+  },
+  goHomePage: function () {
+    wx.redirectTo({
+      url: '/pages/homepage/homepage',
+    })
   },
 
   onGetOpenid: function() {
