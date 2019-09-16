@@ -201,6 +201,9 @@ Page({
         const longitude = res.longitude
         const speed = res.speed
         const accuracy = res.accuracy
+        
+        app.globalData.latitude = latitude;
+        app.globalData.longitude = longitude;
 
         let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
         let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
@@ -215,6 +218,7 @@ Page({
             wx.showToast({
               title: value.data.result.address_component.street_number,
             })
+            app.globalData.street = value.data.result.address_component.street_number;
           })
           .catch(function (value) {
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
