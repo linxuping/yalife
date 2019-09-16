@@ -1,0 +1,379 @@
+/**index.wxss**/
+
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.userinfo, .uploader, .tunnel {
+  margin-top: 40rpx;
+  height: 140rpx;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: none;
+  border-right: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: all 300ms ease;
+}
+
+.userinfo-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+  background-size: cover;
+  background-color: white;
+}
+
+.userinfo-avatar:after {
+  border: none;
+}
+
+.userinfo-nickname {
+  font-size: 32rpx;
+  color: #007aff;
+  background-color: white;
+  background-size: cover;
+}
+
+.userinfo-nickname::after {
+  border: none;
+}
+
+.uploader, .tunnel {
+  height: auto;
+  padding: 0 0 0 40rpx;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.uploader-text, .tunnel-text {
+  width: 100%;
+  line-height: 52px;
+  font-size: 34rpx;
+  color: #007aff;
+}
+
+.container {
+  margin-top:45px
+}
+
+.uploader-container {
+  width: 100%;
+  height: 400rpx;
+  padding: 20rpx 20rpx 20rpx 0;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.uploader-image {
+  width: 100%;
+  height: 360rpx;
+}
+
+.tunnel {
+  padding: 0 0 0 40rpx;
+}
+
+.tunnel-text {
+  position: relative;
+  color: #222;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tunnel-text:first-child {
+  border-top: none;
+}
+
+.tunnel-switch {
+  position: absolute;
+  right: 20rpx;
+  top: -2rpx;
+}
+
+.disable {
+  color: #888;
+}
+
+.service {
+  position: fixed;
+  right: 40rpx;
+  bottom: 40rpx;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(#007aff, #0063ce);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  transition: all 300ms ease;
+}
+
+.service-button {
+  position: absolute;
+  top: 40rpx;
+}
+
+.service:active {
+  box-shadow: none;
+}
+
+.request-text {
+  padding: 20rpx 0;
+  font-size: 24rpx;
+  line-height: 36rpx;
+  word-break: break-all;
+}
+
+/** 整个区域 */
+.wxSearch{
+  position: absolute;
+  top: 43px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 1px #eee solid;
+  background-color: rgba(200, 200, 200, 0.1);
+  z-index: 9999;
+}
+
+/** 搜索框下面的提示区域 */
+.wxSearchInner{
+  background-color: #fff;
+}
+
+/** 搜索热点标题 */
+.wxSearchTitle{
+  display: block;
+  padding: 10px 5px 5px 10px;
+  font-size: 13px;
+  text-align: left;
+}
+
+/** 提示样式 */
+.wxSearchMindKeyItem{
+  padding: 10px 5px 10px 15px;
+  margin-left: 10px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  font-size: 13px;
+}
+
+/** 标签样式 */
+.wxSearchKeyList{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #eee;
+}
+
+/** 标签样式 */
+.wxSearchKeyItem{
+  flex: 0 0 18%;
+  font-size: 13px;
+  text-align: center;
+  border: 1px solid #eee;
+  margin: 5px;
+  padding: 4px 5px 4px 5px;
+  border-radius: 0px;
+  background-color: rgba(200, 200, 200, 0.1);
+}
+
+/** 搜索记录标题栏 */
+.wxSearchHistoryItem{
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  display: flex;
+}
+
+/** 搜索记录标题 */
+.wxSearchHistoryItemTitle{
+  flex: 8;
+  font-size: 13px;
+}
+
+/** 搜索记录删除按钮 */
+.wxSearchHistoryItemDel{
+  flex: 1;
+  font-size: 13px;
+  text-align: center;
+  padding-top:2px;
+  padding-bottom: 2px;
+  border: 1px solid #eee;
+  border-radius: 2px;
+}
+
+/** ---------------------- 以下是搜索框的 we-ui 样式--------------------------------*/
+
+/*!
+ * WeUI v1.1.1 (https://github.com/weui/weui-wxss)
+ * Copyright 2017 Tencent, Inc.
+ * Licensed under the MIT license
+ */
+
+.weui-search-bar {
+  position: relative;
+  padding: 8px 10px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  box-sizing: border-box;
+  background-color: #efeff4;
+  border-top: 1rpx solid #d7d6dc;
+  border-bottom: 1rpx solid #d7d6dc;
+}
+
+.weui-icon-search {
+  margin-right: 8px;
+  font-size: inherit;
+}
+
+.weui-icon-search_in-box {
+  position: absolute;
+  left: 10px;
+  top: 7px;
+}
+
+.weui-search-bar__text {
+  display: inline-block;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.weui-search-bar__form {
+  position: relative;
+  -webkit-box-flex: 1;
+  -webkit-flex: auto;
+  flex: auto;
+  border-radius: 5px;
+  background: #fff;
+  border: 1rpx solid #e6e6ea;
+}
+
+.weui-search-bar__box {
+  position: relative;
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.weui-search-bar__input {
+  height: 28px;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.weui-icon-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 7px 8px;
+  font-size: 0;
+}
+
+.weui-search-bar__label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  border-radius: 3px;
+  text-align: center;
+  color: #9b9b9b;
+  background: #fff;
+  line-height: 28px;
+}
+
+.weui-search-bar__cancel-btn {
+  margin-left: 10px;
+  line-height: 28px;
+  color: #09bb07;
+  white-space: nowrap;
+}
+
+
+.card {
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 4px 1px 1px #cccccc;
+    margin: 8px;
+    position: relative;
+}
+
+.image {
+    width: 100%;
+    background-color: #eeeeee;
+}
+
+.time {
+    float: right;
+    margin-top: 170px;
+    color: #ffffff;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    font-size: 12px;
+}
+
+.title {
+  font-size: 32rpx;
+  margin-left: 8px;
+  margin-right:8px;
+}
+
+.title {
+  font-size: 30rpx;
+  margin-left: 4px;
+}
+
+.card {
+  width:95%;
+}
+
+
+
+
+.tab-list {
+width: 100%;
+height: 88rpx;
+border-bottom: 1rpx solid #e5e5e5;
+display: inline-block;
+white-space: nowrap;
+ 
+}
+ 
+.tab-item {
+width: 140rpx;
+height: 85rpx;
+display: inline-block;
+line-height: 85rpx;
+vertical-align: middle;
+text-align: center;
+}
+ 
+.selected-tab {
+color: #1aae18;
+border-bottom: 5rpx solid #1aae18;
+}
