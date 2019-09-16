@@ -177,17 +177,15 @@ Page({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);
-        var cardIds = [];
         for (var i=0; i<res.data.length; i++) {
-          cardIds.push(res.data[i]._id)
+          db.collection('attractions').where({
+              _id: res.data[i]._id
+            }).update({
+            data: {
+              visit_count: _.inc( parseInt(Math.random()*10)%3+1 )
+            }
+          })
         }
-        db.collection('attractions').where({
-            _id: _.in(cardIds)
-          }).update({
-          data: {
-            visit_count: _.inc(1)
-          }
-        })
       },
       fail: err => {
         console.log(err);
