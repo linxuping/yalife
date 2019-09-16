@@ -102,7 +102,8 @@ Page({
     }
     ],
     types_class: [],
-    openid: ""
+    openid: "",
+    address: ""
   },
 
   selectTab(e) {
@@ -176,6 +177,48 @@ Page({
       return
     }
 
+    /*
+    const $ = db.command.aggregate
+    var ret = db.collection('attractions').aggregate()
+      .geoNear({
+        distanceField: 'distance', // 输出的每个记录中 distance 即是与给定点的距离
+        spherical: true,
+        near: db.Geo.Point(113.3089506, 23.0968251),
+        query: {
+          docType: 'geoNear',
+        },
+        key: 'location', // 若只有 location 一个地理位置索引的字段，则不需填
+        includeLocs: 'location', // 若只有 location 一个是地理位置，则不需填
+      })
+      .end()
+    */
+    const db = wx.cloud.database()
+    const _ = db.command
+    db.collection('attractions').where({
+      location: _.geoNear({
+        geometry: db.Geo.Point(113.30593, 23.1361155),
+        minDistance: 0,
+        maxDistance: 500000,
+      })
+    }).get({
+      success: res => {
+        console.log("geo result: ");
+        console.log(res.data);
+        for (var i=0; i<res.data.length; i++) {
+          db.collection('attractions').where({
+              _id: res.data[i]._id
+            }).update({
+            data: {
+              visit_count: _.inc( parseInt(Math.random()*10)%3+1 )
+            }
+          })
+        }
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })
+
     wx.getLocation({
       type: 'gcj02',
       success(res) {
@@ -187,6 +230,9 @@ Page({
           latitude: res.latitude,
           longitude: res.longitude      
         });
+        
+        app.globalData.latitude = latitude;
+        app.globalData.longitude = longitude;
 
         page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, startSize)
         /*
@@ -203,6 +249,8 @@ Page({
             wx.showToast({
               title: value.data.result.address_component.street_number,
             })
+            app.globalData.street = value.data.result.address_component.street_number;
+            page.setData({address: app.globalData.street});
           })
           .catch(function (value) {
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
@@ -252,6 +300,20 @@ Page({
           })
         }
       }
+    })
+  },
+  choosePos: function () {
+    console.log("choose pos");
+    var page = this;
+    wx.chooseLocation({
+      success: function (res) {
+        console.log(res);
+        page.setData({ 
+          address: res.address,
+          latitude: res.latitude, 
+          longitude: res.longitude
+        });
+      },
     })
   },
   clickSearch: function (e) {

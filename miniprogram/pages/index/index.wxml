@@ -63,6 +63,10 @@
       
       </swiper-item>
       </block>
+      
+      <text >我的位置：{{address}}</text>
+      <button style="margin:30rpx;" bindtap="choosePos">修正我的位置</button>
+      
     </swiper>
 
       <contact-button style="position:fixed;bottom:16px;right:16px">联系我</contact-button>
