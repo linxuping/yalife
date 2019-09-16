@@ -101,7 +101,8 @@ Page({
       name: "其他"
     }
     ],
-    types_class: []
+    types_class: [],
+    address: ""
   },
 
   selectTab(e) {
@@ -217,6 +218,7 @@ Page({
               title: value.data.result.address_component.street_number,
             })
             app.globalData.street = value.data.result.address_component.street_number;
+            page.setData({address: app.globalData.street});
           })
           .catch(function (value) {
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
@@ -266,6 +268,20 @@ Page({
           })
         }
       }
+    })
+  },
+  choosePos: function () {
+    console.log("choose pos");
+    var page = this;
+    wx.chooseLocation({
+      success: function (res) {
+        console.log(res);
+        page.setData({ 
+          address: res.address,
+          latitude: res.latitude, 
+          longitude: res.longitude
+        });
+      },
     })
   },
   clickSearch: function (e) {
