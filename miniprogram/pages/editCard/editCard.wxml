@@ -1,7 +1,9 @@
 <!--miniprogram/pages/editCard/editCard.wxml-->
 <view class="container">
-  <view style="width:90%;margin-bottom:80px;text-align:center">
-    <textarea placeholder="(求助)发布什么？联系方式是什么？" style="margin-top:10px;width:100%;border:1px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
+  <image style="width:30px;height:30px;position:fixed;top:4px;left:4px;z-index:1000" src="../../images/back.png" mode="aspectFit" bindtap="goBack"></image>
+
+  <view style="width:90%;margin-top:35px;margin-bottom:80px;text-align:center">
+    <textarea placeholder="求助/转卖什么？联系方式是什么？" style="margin-top:10px;width:100%;border:1px;text-align:left;left:1px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
     <button style="margin:30rpx;" bindtap="chooseImage">图片</button> 
     <view>
     <image src="{{imgurl}}" wx:if="{{imgurl!=''}}"></image>
@@ -11,4 +13,5 @@
   </view>
   <button class="add-btn" bindtap="updateCard" wx:if="{{cardId}}">更新卡片</button>
   <button class="add-btn" bindtap="updateCard" wx:else>生成卡片</button>
+
 </view>

@@ -27,6 +27,9 @@ Page({
         page.onShow()
       }
     });
+    wx.setNavigationBarTitle({
+      title: '我的发布'
+    })
   },
 
   /**
@@ -41,14 +44,6 @@ Page({
    */
   onShow: function () {
     var page = this;
-    /*page.setData({
-      cardList:[
-        {
-          id: 1,
-          url: "https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1334376082,413698594&fm=85"
-        }
-      ]
-    })*/
     console.log(page.data);
     const _ = db.command
     db.collection('attractions').orderBy('create_time', 'desc').where({
@@ -136,6 +131,18 @@ Page({
           console.log('用户点击取消')
         }
       }
+    })
+  },
+
+  goMainPage: function(){
+    wx.redirectTo({
+      url: '/pages/index/index'
+    })
+  },
+
+  goAddPage: function () {
+    wx.redirectTo({
+      url: '/pages/editCard/editCard'
     })
   }
 })

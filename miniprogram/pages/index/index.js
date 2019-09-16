@@ -130,7 +130,7 @@ Page({
     console.log(page.data);
     const db = wx.cloud.database()
     const _ = db.command
-    db.collection('attractions').orderBy('create_time', 'desc').where({
+    db.collection('attractions').where({ //.orderBy('create_time', 'desc')
       location: _.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: dfrom,
@@ -141,9 +141,6 @@ Page({
         console.log("geo result: ");
         console.log(res.data);
         page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
-        page.setData({
-          goods: res.data
-        })
       },
       fail: err => {
         console.log(err);
@@ -153,17 +150,7 @@ Page({
 
   onLoad: function() {
     var page = this;
-    wx.cloud.callFunction({
-      name: 'login',
-      complete: res => {
-        console.log(res);
-        console.log('云函数获取到的openid: ', res.result.openid);
-        page.setData({
-          openid: res.result.openid
-        });
-        page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, startSize);
-      }
-    });
+
 
     this.setData({
       types_class: types_class
@@ -192,32 +179,8 @@ Page({
       })
       .end()
     */
-    const db = wx.cloud.database()
+
     const _ = db.command
-    db.collection('attractions').where({
-      location: _.geoNear({
-        geometry: db.Geo.Point(113.30593, 23.1361155),
-        minDistance: 0,
-        maxDistance: 500000,
-      })
-    }).get({
-      success: res => {
-        console.log("geo result: ");
-        console.log(res.data);
-        for (var i=0; i<res.data.length; i++) {
-          db.collection('attractions').where({
-              _id: res.data[i]._id
-            }).update({
-            data: {
-              visit_count: _.inc( parseInt(Math.random()*10)%3+1 )
-            }
-          })
-        }
-      },
-      fail: err => {
-        console.log(err);
-      }
-    })
 
     wx.getLocation({
       type: 'gcj02',
@@ -234,8 +197,20 @@ Page({
         app.globalData.latitude = latitude;
         app.globalData.longitude = longitude;
 
-        page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, startSize)
-        /*
+        wx.cloud.callFunction({
+          name: 'login',
+          complete: res => {
+            console.log(res);
+            console.log('云函数获取到的openid: ', res.result.openid);
+            page.setData({
+              openid: res.result.openid
+            });
+            page.onLoadCards(page.data.openid, latitude, longitude, 0, startSize);
+          }
+        });
+
+        //page.onLoadCards(page.data.openid, latitude, longitude, 0, startSize)
+        
         let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
         let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
         let params = {
@@ -246,9 +221,6 @@ Page({
         wechat.request(url, params).then(function (value) {
             console.log(`fulfilled: ${value}`);
             console.log(value.data.result);
-            wx.showToast({
-              title: value.data.result.address_component.street_number,
-            })
             app.globalData.street = value.data.result.address_component.street_number;
             page.setData({address: app.globalData.street});
           })
@@ -256,9 +228,9 @@ Page({
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
             console.log(data)
           });
-        */
       }
     })
+    return
 
     db.collection('goods').orderBy('quanter', 'desc').limit(10).get({
       success: res => {
@@ -440,86 +412,17 @@ Page({
       })
     }
   },
-  typeSearch: function(e){
-    db = wx.cloud.database();
+  typeSearch: function(event){
+    var distance = parseInt(event.currentTarget.dataset.distance);
+    if (distance == 0) {
+      distance = 100000000000;
+    }
     var page = this;
-    //page.setData({ goods: [] });
-    wx.pageScrollTo({
-      scrollTop: 0
-    })
-    wx.showLoading({
-      title: '查询中....',
-    })
-    setTimeout(function () {
-      wx.hideLoading();
-    }, 5000);
-
-    pages = -1;
-    let _type = e.currentTarget.dataset.type;
     page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [],keyword: ""  });
-    console.log(_type);
-
-    if (openid != "oV5MQ5aN_i_ea9dGxZOHHBC8Bosg"){
-      db.collection('search_keywords').add({
-        // data 字段表示需新增的 JSON 数据
-        data: {
-          keyword: _type,
-          type: 'type',
-          create_time: formatDate(new Date().getTime())
-        }
-      }).then(res => {
-        console.log(res)
-      })
-        .catch(console.error)      
-    }
-
-
-    if (_type == "全部"){
-      pages = 0;
-      db.collection('goods').orderBy('quanter', 'desc').limit(10).get({
-        success: res => {
-          page.setData({ goods: goods_distinct(res.data), keyword:'' });
-          wx.hideLoading();
-        },
-        fail: err => {
-          console.log(err);
-        }
-      });
-      return;
-    }
-
-    db.collection('goods').orderBy('quanter', 'desc').limit(5).where(
-      { type: _type }
-    ).get({
-      success: res => {
-        page.setData({
-          goods: page.data.goods.concat( goods_distinct(res.data) )
-        });
-        wx.hideLoading();
-      },
-      fail: err => { console.log(err); }
-    }); 
-    function get_goods(offset){
-      db.collection('goods').orderBy('quanter', 'desc').skip(offset).limit(20).where(
-        { type: _type }
-      ).get({
-        success: res => {
-          page.setData({
-            goods: page.data.goods.concat( goods_distinct(res.data) )
-          });
-          console.log(offset.toString() + '->' + res.data.length.toString());
-          if (res.data.length == 20){
-            setTimeout(function(){
-              get_goods(offset + 20);
-            },1000);
-          }
-        },
-        fail: err => { console.log(err); }
-      });      
-    }
-    get_goods(5)
+    page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, distance);
   },
   onReachBottom: function(){
+    return;
     if (pages == -1)
       return;
     this.setData({ typeClicked:false });

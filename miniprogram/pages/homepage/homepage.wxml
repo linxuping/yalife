@@ -3,9 +3,9 @@
   <loading hidden="{{!loading}}">加载中</loading>
   <open-data type="userAvatarUrl" class="testAvatar"></open-data>
   <open-data type="userNickName" lang="zh_CN"></open-data>
-
+  <image style="width:30px;height:30px;position:fixed;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
   <block class="" wx:for="{{cardList}}" wx:key="id">
-    <navigator url='/pages/editCard/editCard?id={{item._id}}' bindlongpress="onDeleteCard"  data-cardId="{{item._id}}">
+    <navigator url='/pages/editCard/editCard?id={{item._id}}' bindlongpress="onDeleteCard"  data-cardId="{{item._id}}" style="width:95%">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; height:120px;border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
         <view style='width:128rpx; height:128rpx; margin:20rpx;'>
@@ -14,11 +14,14 @@
         <!-- 右边内容 上下结构 -->
         <view style='display:flex; flex-direction:column; margin:20rpx;'>
           <label class='item_title'>{{item.content}}</label>
+          <label class='item_title'>{{item.create_time.getDate()}}</label>
         </view>
       </view>
     </navigator>
   </block>
-  <navigator class="add-btn" url='/pages/editCard/editCard'>
-    <button>新建</button>
-  </navigator>
+  <view class="add-btn" style="width:100%">
+    <contact-button style="margin:8px">联系我</contact-button>
+    <image style="width:55px;height:55px;position:fixed;bottom:8px;right:8px;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
+  </view>
+  
 </view>

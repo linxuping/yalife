@@ -14,16 +14,18 @@
     </view>
   </view>
 
-  <image style="width:55px;height:55px;position:fixed;bottom:4px;text-align:center;align-items: center;justify-content: center;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
-  <image style="width:30px;height:30px;position:fixed;top:8px;right:8px;z-index:1000" src="../../images/mine.png" mode="aspectFit" bindtap="goHomePage"></image>
+  <image style="width:55px;height:55px;position:fixed;bottom:4px;text-align:center;align-items: center;justify-content: center;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage" wx:if="{{showGoods}}"></image>
+  
 
-  <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:100;display:none">
+  <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:100" wx:if="{{showGoods}}">
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="淘宝优惠券（20181024更新）" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
+
       </view>
     </view>
+    <image style="width:30px;height:30px;margin-left:4px" src="../../images/mine.png" mode="aspectFit" bindtap="goHomePage"></image>
   </view>
 
   <view class="uploader" wx:for="{{goods}}" wx:if="{{showGoods}}" style="display:none">
@@ -43,7 +45,7 @@
 
   <view class="search-types"  style="width:95%">
 
-  <view wx:if="{{showTypes}}" style="height:100px">
+  <view wx:if="{{showTypes}}" style="height:100px;display:none">
     <scroll-view class="tab-list" scroll-x scroll-with-animation>
       <view wx:for="{{tabList}}" class="tab-item {{curTab===index ? 'selected-tab':''}}" data-index="{{index}}" bindtap="selectTab">{{item.name}}</view>
     </scroll-view>
@@ -59,19 +61,26 @@
           <text>全部</text>
         </view>
       </view>  
-    
-      
       </swiper-item>
       </block>
-      
-      <text >我的位置：{{address}}</text>
-      <button style="margin:30rpx;" bindtap="choosePos">修正我的位置</button>
-      
     </swiper>
-
-      <contact-button style="position:fixed;bottom:16px;right:16px">联系我</contact-button>
-      <view style="position:fixed;bottom:16px;right:16px;display:none"><text style="color:#CDCDCD">客服微信号：lttlovefm</text></view>
+      
   </view>
+
+  <view wx:if="{{showTypes}}" style="text-align:left">
+    <text style="display:block;margin-bottom:12px">请选择距离范围（内）：</text>
+    <button class="goodbutton" data-distance="3000" bindtap="typeSearch">3km</button>
+    <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
+    <button class="goodbutton" data-distance="0" bindtap="typeSearch">全部</button>
+    <view class="divLine"></view>
+    <text >我的位置：{{address}}</text>
+    <button style="margin:30rpx;" bindtap="choosePos">修正我的位置</button>
+
+    <button style="margin:30rpx;display:none" bindtap="typeSearch">搜索</button>
+    <contact-button style="position:fixed;bottom:16px;right:16px">联系我</contact-button>
+    <view style="position:fixed;bottom:16px;right:16px;display:none"><text style="color:#CDCDCD">客服微信号：lttlovefm</text></view>
+  </view>
+
 
   </view>  
 

@@ -9,13 +9,14 @@
     "pages/deployFunctions/deployFunctions",
     "pages/chooseLib/chooseLib",
     "pages/editCard/editCard",
-    "pages/homepage/homepage"
+    "pages/homepage/homepage",
+    "pages/cards/cards"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "优惠券分享",
+    "navigationBarTitleText": "邻里那些事儿",
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": true
   },
