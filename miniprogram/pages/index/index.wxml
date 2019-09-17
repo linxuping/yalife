@@ -36,11 +36,17 @@
   </view>
 
   <view class="card" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id"  style="width:95%">
+    <navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >
       <view>
-          <image mode="aspectFill" src="{{item.imgurl}}" wx:if="{{item.imgurl}}"/>
-          <text >{{item.content}}</text>
-          <view class="title">{{item.address}}</view>
+          <image mode="aspectFill" src="{{item.imgurl}}" wx:if="{{item.imgurl}}" style="width:100%"/>
+          <view>
+            <text >{{item.content}}</text>
+          </view>
+          <text wx:for="{{item.types}}" wx:for-item="type"> {{type}}
+          </text>
+          <view class="title" style="text-align:right">{{item.address}}</view>
       </view>
+    </navigator>
   </view>
 
   <view class="search-types"  style="width:95%">
