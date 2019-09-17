@@ -150,7 +150,7 @@ Page({
 
   onLoad: function() {
     var page = this;
-
+    //app.getPermission(page);
 
     this.setData({
       types_class: types_class
@@ -228,49 +228,6 @@ Page({
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
             console.log(data)
           });
-      }
-    })
-    return
-
-    db.collection('goods').orderBy('quanter', 'desc').limit(10).get({
-      success: res => {
-        page.setData({ goods: sort(res.data) });
-        console.log(res.data);
-      },
-      fail: err => {
-        console.log(err);
-      }
-    });
-    console.log(this.data.types);
-
-    db.collection('goods_index').where(
-      { type: "预留1" }
-    ).get({
-      success: res => {
-        types_titles["预留1"] = res.data[0].titles;
-      },
-      fail: err => { console.log(err); }
-    });
-    var types = []
-    for (var key in types_titles){
-      types.push(key);
-    }
-    page.setData({ types: types });
-    
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
-            }
-          })
-        }
       }
     })
   },
