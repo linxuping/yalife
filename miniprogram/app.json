@@ -24,7 +24,7 @@
   "sitemapLocation": "sitemap.json",
   "permission": {
     "scope.userLocation": {
-      "desc": "有位置信息才能查看附近信息哦～"
+      "desc": "有您的位置，才能推荐邻里的信息哦～"
     }
   }
 }

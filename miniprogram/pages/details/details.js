@@ -16,6 +16,9 @@ Page({
    */
   onLoad: function (options) {
     var page = this;
+    wx.setNavigationBarTitle({
+      title: "邻里小事"
+    })
     if (options.id != undefined) {
       page.setData({
         cardId: options.id
@@ -32,12 +35,21 @@ Page({
             page.setData({
               card: card
             });
+            
           }
         },
         fail: err => {
           console.log(err);
         }
       }) 
+    }
+  },
+  onShareAppMessage: function () {
+    var page = this;
+    return {
+      title: '邻里小事分享～',
+      desc: '各种类别都有哦～',
+      path: '/pages/details/details?id='+page.data.cardId
     }
   },
 
@@ -80,13 +92,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
 
   }
 })
