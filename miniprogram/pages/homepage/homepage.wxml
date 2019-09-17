@@ -6,7 +6,7 @@
   <image style="width:30px;height:30px;position:fixed;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
   <block class="" wx:for="{{cardList}}" wx:key="id">
     <navigator url='/pages/editCard/editCard?id={{item._id}}' bindlongpress="onDeleteCard"  data-cardId="{{item._id}}" style="width:95%">
-      <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; height:120px;border-bottom: 1px solid #DBDBDB'>
+      <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
         <view style='width:128rpx; height:128rpx; margin:20rpx;'>
           <image class='index-logo' style='width:128rpx; height:128rpx' src="{{item.imgurl}}"></image>

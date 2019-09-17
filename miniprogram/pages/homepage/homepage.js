@@ -28,7 +28,7 @@ Page({
       }
     });
     wx.setNavigationBarTitle({
-      title: '我的发布'
+      title: '我发布了什么'
     })
   },
 
