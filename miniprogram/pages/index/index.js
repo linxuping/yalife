@@ -498,8 +498,9 @@ Page({
     }
   },
   onShareAppMessage: function () {
+    var page = this;
     return {
-      title: '至少5元，优惠券每日自动更新',
+      title: page.data.address,
       desc: '各种类别都有哦～',
       path: '/pages/index/index'
     }
