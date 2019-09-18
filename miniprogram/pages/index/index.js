@@ -1,12 +1,13 @@
 //index.js
 const app = getApp()
 let wechat = require("../../utils/wechat");
+var common = require("../../utils/common.js")
 var types = [];
 //var types_titles = {};
 var pages = 0;
 var openid = '';
 var db = wx.cloud.database();
-var startSize = 50000
+var startSize = 100000
 
 function sort(arr){
   var d=new Date();
@@ -103,7 +104,9 @@ Page({
     ],
     types_class: [],
     openid: "",
-    address: ""
+    address: "",
+    distanceDesc: "",
+    typeImgHeight: 0
   },
 
   selectTab(e) {
@@ -127,6 +130,14 @@ Page({
       return
     }
     var page = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        page.setData({
+          typeImgHeight: res.windowWidth/3.5
+        }); 
+      }
+    });
+  
     console.log(page.data);
     const db = wx.cloud.database()
     const _ = db.command
@@ -371,11 +382,14 @@ Page({
   },
   typeSearch: function(event){
     var distance = parseInt(event.currentTarget.dataset.distance);
+    var distanceDesc = ""
     if (distance == 0) {
       distance = 100000000000;
+    } else {
+      distanceDesc = distance/1000 + "km内"
     }
     var page = this;
-    page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [],keyword: ""  });
+    page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc  });
     page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, distance);
   },
   onReachBottom: function(){

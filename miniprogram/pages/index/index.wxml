@@ -21,7 +21,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address+' '+distanceDesc}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
 
       </view>
     </view>
@@ -35,6 +35,12 @@
     </navigator>
   </view>
 
+  <view wx:if="{{showGoods}}" style="width:95%;text-align:center;margin-top:8px">
+    <image mode="aspectFit" src="../../images/second.png" data-type="1" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+    <image mode="aspectFit" src="../../images/second.png" data-type="2" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+    <image mode="aspectFit" src="../../images/second.png" data-type="3" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+  </view>
+
   <view class="card" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id"  style="width:95%">
     <navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >
       <view>
@@ -42,9 +48,9 @@
           <view>
             <text >{{item.content}}</text>
           </view>
-          <text wx:for="{{item.types}}" wx:for-item="type"> {{type}}
-          </text>
+          <text>{{item.type}}</text>
           <view class="title" style="text-align:right">{{item.address}}</view>
+          <view class="title" style="text-align:right">{{(item.create_time)}}</view>
       </view>
     </navigator>
   </view>
@@ -77,7 +83,7 @@
     <text style="display:block;margin-bottom:12px">请选择距离范围（内）：</text>
     <button class="goodbutton" data-distance="3000" bindtap="typeSearch">3km</button>
     <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
-    <button class="goodbutton" data-distance="0" bindtap="typeSearch">全部</button>
+    <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
     <view class="divLine"></view>
     <text >我的位置：{{address}}</text>
     <button style="margin:30rpx;" bindtap="choosePos">修正我的位置</button>

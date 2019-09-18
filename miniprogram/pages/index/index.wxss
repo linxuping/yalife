@@ -409,3 +409,8 @@ border-bottom: 5rpx solid #1aae18;
   margin: 4px;
   display: inline-block;
 }
+.typeBtn {
+  width:30%;
+  margin-left:4px;
+  margin-right:4px;
+}

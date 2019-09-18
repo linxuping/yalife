@@ -114,7 +114,11 @@ Page({
       /*wx.showToast({
         title: value.data.result.address_component.street_number,
       })*/
-      page.setData({ address: value.data.result.address_component.street_number });
+      page.setData({ 
+        address: value.data.result.address_component.street_number,
+        latitude: latitude,
+        longitude: longitude
+      });
     })
     .catch(function (value) {
       console.log(`rejected: ${value}`); // 'rejected: Hello World'
@@ -257,6 +261,7 @@ Page({
       cardData["create_time"] = formatTime(new Date)
       cardData["status"] = 2
       cardData["visit_count"] = 1
+      cardData["type"] = "邻里"
       db.collection('attractions').add({
         // data 字段表示需新增的 JSON 数据
         data: cardData,
