@@ -142,12 +142,17 @@ Page({
     console.log(page.data);
     const db = wx.cloud.database()
     const _ = db.command
-    db.collection('attractions').where({ //.orderBy('create_time', 'desc')
+    var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: dfrom,
         maxDistance: dto,
       })
+    };
+    if (page.data.type > 0) {
+      cond.type = page.data.type;
+    }
+    db.collection('attractions').where(cond)
     }).get({
       success: res => {
         console.log("geo result: ");
