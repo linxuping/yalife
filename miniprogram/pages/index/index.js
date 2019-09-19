@@ -162,7 +162,7 @@ Page({
           db.collection('attractions').doc(res.data[i]._id).update({
             // data 传入需要局部更新的数据
             data: {
-              visit_count: _.inc(parseInt(Math.random()*10)%2)
+              visit_count: _.inc(parseInt(Math.random()*10)%2+1)
             },
             success: console.log,
             fail: console.error
