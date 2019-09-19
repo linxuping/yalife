@@ -248,7 +248,7 @@ Page({
         wechat.request(url, params).then(function (value) {
             console.log(`fulfilled: ${value}`);
             console.log(value.data.result);
-            app.globalData.street = value.data.result.address_component.street_number;
+            app.globalData.address = value.data.result.address_component.street_number;
             page.setData({address: app.globalData.street});
           })
           .catch(function (value) {
@@ -269,6 +269,9 @@ Page({
           latitude: res.latitude, 
           longitude: res.longitude
         });
+        app.globalData.latitude = latitude;
+        app.globalData.longitude = longitude;
+        app.globalData.address = address;
       },
     })
   },
