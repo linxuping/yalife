@@ -47,7 +47,7 @@ Page({
   onShareAppMessage: function () {
     var page = this;
     return {
-      title: '邻里小事分享～',
+      title: page.data.card.address,
       desc: '各种类别都有哦～',
       path: '/pages/details/details?id='+page.data.cardId
     }
