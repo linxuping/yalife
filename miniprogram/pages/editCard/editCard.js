@@ -85,7 +85,7 @@ Page({
       })      
     } else {
       console.log("get location:");
-      if (app.globalData.latitude) {
+      if (app.globalData.address) {
         page.setData({ 
           address: app.globalData.address,
           latitude: app.globalData.latitude,
