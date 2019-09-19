@@ -261,7 +261,7 @@ Page({
       cardData["create_time"] = formatTime(new Date)
       cardData["status"] = 2
       cardData["visit_count"] = 1
-      cardData["type"] = "邻里"
+      cardData["type"] = 0
       db.collection('attractions').add({
         // data 字段表示需新增的 JSON 数据
         data: cardData,
