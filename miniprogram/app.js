@@ -72,6 +72,7 @@ App({
   },
   getLocation: function (cb) {
     wx.getLocation({
+      type: 'gcj02',
       success: function (res) {
         cb(res);
       },
