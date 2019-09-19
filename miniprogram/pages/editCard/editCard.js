@@ -1,6 +1,7 @@
 // miniprogram/pages/editCard/editCard.js
 let wechat = require("../../utils/wechat");
 var db = wx.cloud.database();
+const app = getApp()
 
 function formatTime(date) {
   var year = date.getFullYear()
@@ -84,16 +85,24 @@ Page({
       })      
     } else {
       console.log("get location:");
-      wx.getLocation({
-        type: 'gcj02',
-        success: function(res) {
-          console.log(res);
-          page.onUpdateLocation(res.latitude, res.longitude);
-        },
-        fail: function (res) {
-          console.log(res); //{errMsg: "getLocation:fail auth deny"} 不授权的结果
-        }
-      })
+      if (app.globalData.latitude) {
+        page.setData({ 
+          address: app.globalData.address,
+          latitude: app.globalData.latitude,
+          longitude: app.globalData.longitude
+        });
+      } else {
+        wx.getLocation({
+          type: 'gcj02',
+          success: function(res) {
+            console.log(res);
+            page.onUpdateLocation(res.latitude, res.longitude);
+          },
+          fail: function (res) {
+            console.log(res); //{errMsg: "getLocation:fail auth deny"} 不授权的结果
+          }
+        })      
+      }
     }
 
     wx.hideShareMenu({
