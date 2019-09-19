@@ -106,7 +106,8 @@ Page({
     openid: "",
     address: "",
     distanceDesc: "",
-    typeImgHeight: 0
+    typeImgHeight: 0,
+    type: 0
   },
 
   selectTab(e) {
@@ -261,6 +262,10 @@ Page({
       scrollTop: 0
     })
     this.setData({showTypes:true, showGoods:false});
+  },
+  clickType: function (e) {
+    var type = parseInt(event.currentTarget.dataset.type);
+    this.setData({ type: type });
   },
   updateKeyword: function(e){
     var val = e.detail.value;
