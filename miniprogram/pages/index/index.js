@@ -534,13 +534,11 @@ Page({
   onShareAppMessage: function () {
     var page = this;
     return {
-      title: page.data.address,
+      title: page.data.goods[0].content,
       desc: '各种类别都有哦～',
       path: '/pages/index/index'
     }
   },
-
-
   onGetUserInfo: function(e) {
     if (!this.logged && e.detail.userInfo) {
       this.setData({
