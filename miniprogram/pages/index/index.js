@@ -133,7 +133,7 @@ Page({
     wx.getSystemInfo({
       success: function (res) {
         page.setData({
-          typeImgHeight: res.windowWidth/3.5
+          typeImgHeight: res.windowWidth/4
         }); 
       }
     });

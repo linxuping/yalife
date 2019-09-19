@@ -410,7 +410,7 @@ border-bottom: 5rpx solid #1aae18;
   display: inline-block;
 }
 .typeBtn {
-  width:30%;
+  width:20%;
   margin-left:4px;
   margin-right:4px;
 }

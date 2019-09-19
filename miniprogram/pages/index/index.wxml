@@ -35,10 +35,11 @@
     </navigator>
   </view>
 
-  <view wx:if="{{showGoods}}" style="width:95%;text-align:center;margin-top:8px">
+  <view wx:if="{{showGoods}}" style="width:95%;text-align:center;margin-top:8px;background-color:#f0f0f0">
     <image mode="aspectFit" src="../../images/second.png" data-type="1" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
-    <image mode="aspectFit" src="../../images/second.png" data-type="2" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
-    <image mode="aspectFit" src="../../images/second.png" data-type="3" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+    <image mode="aspectFit" src="../../images/employ.png" data-type="2" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+    <image mode="aspectFit" src="../../images/neibor.png" data-type="3" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+    <image mode="aspectFit" src="../../images/neibor.png" data-type="3" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
   </view>
 
   <view class="card" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id"  style="width:95%">
