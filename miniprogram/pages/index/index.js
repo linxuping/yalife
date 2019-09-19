@@ -158,6 +158,16 @@ Page({
         console.log("geo result: ");
         console.log(res.data);
         page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
+        for (var i=0; i<res.data.length; i++) {
+          db.collection('attractions').doc(res.data[i]._id).update({
+            // data 传入需要局部更新的数据
+            data: {
+              visit_count: _.inc(1)
+            },
+            success: console.log,
+            fail: console.error
+          })
+        }
       },
       fail: err => {
         console.log(err);
