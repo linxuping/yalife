@@ -11,7 +11,7 @@ App({
     }
 
     this.globalData = {}
-    //this.getOpenid()
+    this.getOpenid()
   },//获取用户地理位置权限
   getPermission: function (obj) {
     wx.chooseLocation({
@@ -75,16 +75,55 @@ App({
         })
       }
     })
-  }/*,
+  },saveLocation() {
+    var page = this;
+    var db = wx.cloud.database();
+    db.collection('user_location').where(
+        { uid: page.globalData.openid }
+      ).get({
+        success: res => {
+          console.log('save_location addf');
+          console.log(res.data);
+          if (res.data.length == 0){
+            db.collection('user_location').add({
+              // data 字段表示需新增的 JSON 数据
+              data: {
+                uid: page.globalData.openid,
+                latitude: page.globalData.latitude,
+                longitude: page.globalData.longitude,
+                address: page.globalData.address
+              },
+              success: function (res) {
+              },
+              fail: function (res) {
+                console.log(res);
+              }
+            })
+          } else {
+            console.log('save_location update');
+            var _id = res.data[0]._id;
+            db.collection('user_location').doc(_id).update({
+              data: {
+                latitude: page.globalData.latitude,
+                longitude: page.globalData.longitude,
+                address: page.globalData.address
+              },
+              success: console.log,
+              fail: console.error
+            })
+          }
+        }
+      });
+  },
   getOpenid() {
-    let that = this;
+    let page = this;
     wx.cloud.callFunction({
       name: 'getOpenid',
       complete: res => {
         console.log(res)
         console.log('云函数获取到的openid: ', res.result.openId)
-        this.globalData['openid'] = res.result.openId;
+        page.globalData['openid'] = res.result.openId;
       }
     })
-  }*/
+  }
 })
