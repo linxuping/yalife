@@ -12,6 +12,6 @@
     <button style="margin:30rpx;" bindtap="choosePos">修正位置,方便附近人找我</button>
   </view>
   <button class="add-btn" bindtap="updateCard" wx:if="{{cardId}}">更新卡片</button>
-  <button class="add-btn" bindtap="updateCard" wx:else>生成卡片</button>
+  <button class="add-btn" bindtap="updateCard" data-type="add" wx:else>生成卡片</button>
 
 </view>
