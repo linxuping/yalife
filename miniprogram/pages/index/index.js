@@ -131,14 +131,6 @@ Page({
       return
     }
     var page = this;
-    wx.getSystemInfo({
-      success: function (res) {
-        page.setData({
-          typeImgHeight: res.windowWidth/4
-        }); 
-      }
-    });
-  
     console.log(page.data);
     const db = wx.cloud.database()
     const _ = db.command
@@ -152,6 +144,9 @@ Page({
     if (page.data.type > 0) {
       cond.type = page.data.type;
     }
+    wx.showLoading({
+      title: '正在加载...',
+    })
     db.collection('attractions').where(cond)
     }).get({
       success: res => {
@@ -168,9 +163,11 @@ Page({
             fail: console.error
           })
         }
+        wx.hideLoading();
       },
       fail: err => {
         console.log(err);
+        wx.hideLoading();
       }
     })
   },
@@ -190,6 +187,14 @@ Page({
       })
       return
     }
+    
+    wx.getSystemInfo({
+      success: function (res) {
+        page.setData({
+          typeImgHeight: res.windowWidth/4
+        }); 
+      }
+    });
 
     /*
     const $ = db.command.aggregate
