@@ -238,8 +238,9 @@ Page({
     })
   },
 
-  updateCard: function () {
+  updateCard: function (event) {
     var page = this;
+    var opType = event.currentTarget.dataset.type;
 
     if (page.data.content == "") {
       wx.showToast({
@@ -264,7 +265,7 @@ Page({
     }
     console.log("update card." + page.data.cardId);
 
-    if (page.data.cardId == 0) {
+    if (opType == "add" && page.data.cardId == 0) {
       console.log("add.")
       //add
       cardData["create_time"] = formatTime(new Date)
@@ -293,7 +294,8 @@ Page({
           })
         }
       })
-    } else {
+    } 
+    if (opType == "update" && page.data.cardId > 0){
       //update
       db.collection('attractions').doc(this.data.cardId).update({
         data: cardData,
