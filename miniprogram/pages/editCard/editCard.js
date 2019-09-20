@@ -21,6 +21,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    card: undefined,
     cardId: 0,
     address: "",
     latitude: 0,
@@ -56,6 +57,7 @@ Page({
           if (res.data.length > 0) {
             let card = res.data[0]
             page.setData({
+              card: card,
               cardId: card._id,
               address: card.address,
               latitude: card.latitude,
@@ -258,6 +260,7 @@ Page({
       longitude: page.data.longitude,
       imgurl: page.data.imgurl,
       content: page.data.content,
+      status: page.data.card.status,
       update_time: new Date //formatTime(new Date)
     };
     if (page.data.latitude && page.data.longitude) {
