@@ -147,8 +147,7 @@ Page({
     wx.showLoading({
       title: '正在加载...',
     })
-    db.collection('attractions').where(cond)
-    }).get({
+    db.collection('attractions').where(cond).get({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);
@@ -191,7 +190,7 @@ Page({
     wx.getSystemInfo({
       success: function (res) {
         page.setData({
-          typeImgHeight: res.windowWidth/4
+          typeImgHeight: res.windowWidth/6
         }); 
       }
     });
@@ -254,7 +253,7 @@ Page({
             console.log(`fulfilled: ${value}`);
             console.log(value.data.result);
             app.globalData.address = value.data.result.address_component.street_number;
-            page.setData({address: app.globalData.street});
+          page.setData({ address: app.globalData.address});
           })
           .catch(function (value) {
             console.log(`rejected: ${value}`); // 'rejected: Hello World'
