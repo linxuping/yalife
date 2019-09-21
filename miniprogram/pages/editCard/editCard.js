@@ -1,6 +1,7 @@
 // miniprogram/pages/editCard/editCard.js
 let wechat = require("../../utils/wechat");
 var db = wx.cloud.database();
+const app = getApp()
 
 function formatTime(date) {
   var year = date.getFullYear()
@@ -20,6 +21,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    card: undefined,
     cardId: 0,
     address: "",
     latitude: 0,
@@ -55,6 +57,7 @@ Page({
           if (res.data.length > 0) {
             let card = res.data[0]
             page.setData({
+              card: card,
               cardId: card._id,
               address: card.address,
               latitude: card.latitude,
@@ -84,16 +87,24 @@ Page({
       })      
     } else {
       console.log("get location:");
-      wx.getLocation({
-        type: 'gcj02',
-        success: function(res) {
-          console.log(res);
-          page.onUpdateLocation(res.latitude, res.longitude);
-        },
-        fail: function (res) {
-          console.log(res); //{errMsg: "getLocation:fail auth deny"} 不授权的结果
-        }
-      })
+      if (app.globalData.address) {
+        page.setData({ 
+          address: app.globalData.address,
+          latitude: app.globalData.latitude,
+          longitude: app.globalData.longitude
+        });
+      } else {
+        wx.getLocation({
+          type: 'gcj02',
+          success: function(res) {
+            console.log(res);
+            page.onUpdateLocation(res.latitude, res.longitude);
+          },
+          fail: function (res) {
+            console.log(res); //{errMsg: "getLocation:fail auth deny"} 不授权的结果
+          }
+        })      
+      }
     }
 
     wx.hideShareMenu({
@@ -229,8 +240,9 @@ Page({
     })
   },
 
-  updateCard: function () {
+  updateCard: function (event) {
     var page = this;
+    var opType = event.currentTarget.dataset.type;
 
     if (page.data.content == "") {
       wx.showToast({
@@ -248,6 +260,7 @@ Page({
       longitude: page.data.longitude,
       imgurl: page.data.imgurl,
       content: page.data.content,
+      status: page.data.card.status,
       update_time: new Date //formatTime(new Date)
     };
     if (page.data.latitude && page.data.longitude) {
@@ -255,13 +268,13 @@ Page({
     }
     console.log("update card." + page.data.cardId);
 
-    if (page.data.cardId == 0) {
+    if (opType == "add" && page.data.cardId == 0) {
       console.log("add.")
       //add
       cardData["create_time"] = formatTime(new Date)
       cardData["status"] = 2
       cardData["visit_count"] = 1
-      cardData["type"] = "邻里"
+      cardData["type"] = 0
       wx.showLoading({
         title: '正在新建...'
       })
@@ -289,7 +302,8 @@ Page({
           wx.hideLoading();
         }
       })
-    } else {
+    } 
+    if (opType == "update" && page.data.cardId > 0){
       //update
       wx.showLoading({
         title: '正在更新...'

@@ -29,7 +29,9 @@ Page({
     });
     wx.setNavigationBarTitle({
       title: '我发布了什么'
-    })
+    });
+    wx.hideShareMenu({
+    });
   },
 
   /**

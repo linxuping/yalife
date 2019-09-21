@@ -106,7 +106,8 @@ Page({
     openid: "",
     address: "",
     distanceDesc: "",
-    typeImgHeight: 0
+    typeImgHeight: 0,
+    type: 0
   },
 
   selectTab(e) {
@@ -130,31 +131,43 @@ Page({
       return
     }
     var page = this;
-    wx.getSystemInfo({
-      success: function (res) {
-        page.setData({
-          typeImgHeight: res.windowWidth/4
-        }); 
-      }
-    });
-  
     console.log(page.data);
     const db = wx.cloud.database()
     const _ = db.command
-    db.collection('attractions').where({ //.orderBy('create_time', 'desc')
+    var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: dfrom,
         maxDistance: dto,
       })
+    };
+    if (page.data.type > 0) {
+      cond.type = page.data.type;
+    }
+    wx.showLoading({
+      title: '正在加载...',
+    })
+    db.collection('attractions').where(cond)
     }).get({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);
         page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
+        for (var i=0; i<res.data.length; i++) {
+          db.collection('attractions').doc(res.data[i]._id).update({
+            // data 传入需要局部更新的数据
+            data: {
+              visit_count: _.inc(parseInt(Math.random()*10)%2+1)
+            },
+            success: console.log,
+            fail: console.error
+          })
+        }
+        wx.hideLoading();
       },
       fail: err => {
         console.log(err);
+        wx.hideLoading();
       }
     })
   },
@@ -174,6 +187,14 @@ Page({
       })
       return
     }
+    
+    wx.getSystemInfo({
+      success: function (res) {
+        page.setData({
+          typeImgHeight: res.windowWidth/4
+        }); 
+      }
+    });
 
     /*
     const $ = db.command.aggregate
@@ -232,7 +253,7 @@ Page({
         wechat.request(url, params).then(function (value) {
             console.log(`fulfilled: ${value}`);
             console.log(value.data.result);
-            app.globalData.street = value.data.result.address_component.street_number;
+            app.globalData.address = value.data.result.address_component.street_number;
             page.setData({address: app.globalData.street});
           })
           .catch(function (value) {
@@ -253,6 +274,9 @@ Page({
           latitude: res.latitude, 
           longitude: res.longitude
         });
+        app.globalData.latitude = latitude;
+        app.globalData.longitude = longitude;
+        app.globalData.address = address;
       },
     })
   },
@@ -261,6 +285,10 @@ Page({
       scrollTop: 0
     })
     this.setData({showTypes:true, showGoods:false});
+  },
+  clickType: function (e) {
+    var type = parseInt(event.currentTarget.dataset.type);
+    this.setData({ type: type });
   },
   updateKeyword: function(e){
     var val = e.detail.value;
@@ -514,13 +542,11 @@ Page({
   onShareAppMessage: function () {
     var page = this;
     return {
-      title: page.data.address,
+      title: page.data.goods[0].content,
       desc: '各种类别都有哦～',
       path: '/pages/index/index'
     }
   },
-
-
   onGetUserInfo: function(e) {
     if (!this.logged && e.detail.userInfo) {
       this.setData({
