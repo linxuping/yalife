@@ -262,6 +262,9 @@ Page({
       cardData["status"] = 2
       cardData["visit_count"] = 1
       cardData["type"] = "邻里"
+      wx.showLoading({
+        title: '正在新建...'
+      })
       db.collection('attractions').add({
         // data 字段表示需新增的 JSON 数据
         data: cardData,
@@ -276,16 +279,21 @@ Page({
           wx.redirectTo({
             url: '/pages/homepage/homepage',
           })
+          wx.hideLoading();
         },
         fail: function (res) {
           console.log(res);
           wx.showToast({
             title: '新增失败',
           })
+          wx.hideLoading();
         }
       })
     } else {
       //update
+      wx.showLoading({
+        title: '正在更新...'
+      })
       db.collection('attractions').doc(this.data.cardId).update({
         data: cardData,
         success: function (res) {
@@ -295,12 +303,14 @@ Page({
           wx.redirectTo({
             url: '/pages/homepage/homepage',
           })
+          wx.hideLoading();
         },
         fail: function (res) {
           console.log(res);
           wx.showToast({
             title: '更新失败',
           })
+          wx.hideLoading();
         }
       });
     }
