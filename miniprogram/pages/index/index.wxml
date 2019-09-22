@@ -58,13 +58,13 @@
 
   <view class="card" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id"  style="width:95%">
     <navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >
-      <view>
+      <view style="margin:4px">
           <image mode="aspectFill" src="{{item.imgurl}}" wx:if="{{item.imgurl}}" style="width:100%"/>
           <view>
             <text >{{item.content}}</text>
           </view>
           
-          <view class="title" style="text-align:right">{{item.address}}</view>
+          <view class="title address" style="text-align:right">{{item.address}}</view>
           <text class="typeStyle">{{item.type}}</text>
           <view class="title" style="text-align:right">{{(item.create_time)}}</view>
       </view>

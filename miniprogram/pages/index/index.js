@@ -5,7 +5,6 @@ var common = require("../../utils/common.js")
 var types = [];
 //var types_titles = {};
 var pages = 0;
-var openid = '';
 var db = wx.cloud.database();
 var startSize = 100000
 
@@ -103,7 +102,6 @@ Page({
     }
     ],
     types_class: [],
-    openid: "",
     address: "",
     distanceDesc: "",
     typeImgHeight: 0,
@@ -128,6 +126,7 @@ Page({
 
   onLoadCards: function (openid, latitude, longitude, dfrom, dto) {
     if (openid == "") {
+      console.log("no openid");
       return
     }
     var page = this;
@@ -220,9 +219,10 @@ Page({
 
     const _ = db.command
 
-    wx.getLocation({
-      type: 'gcj02',
-      success(res) {
+    //wx.getLocation({
+    //  type: 'gcj02',
+    app.getLocation(
+      function(res) {
         const latitude = res.latitude
         const longitude = res.longitude
         const speed = res.speed
@@ -240,10 +240,8 @@ Page({
           complete: res => {
             console.log(res);
             console.log('云函数获取到的openid: ', res.result.openid);
-            page.setData({
-              openid: res.result.openid
-            });
-            page.onLoadCards(page.data.openid, latitude, longitude, 0, startSize);
+            app.globalData.openid = res.result.openid
+            page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize);
           }
         });
 
@@ -267,13 +265,14 @@ Page({
             console.log(data)
           });
       }
-    })
+    );
   },
   choosePos: function () {
     console.log("choose pos");
     var page = this;
-    wx.chooseLocation({
-      success: function (res) {
+    //wx.chooseLocation({
+    //  success: 
+    app.chooseLocation(function (res) {
         console.log(res);
         var address = ""
         if (res.address) {
@@ -281,14 +280,14 @@ Page({
         }
         page.setData({ 
           address: address,
-          //latitude: res.latitude, 
-          //longitude: res.longitude
+          latitude: res.latitude, 
+          longitude: res.longitude
         });
         app.globalData.latitude = res.latitude;
         app.globalData.longitude = res.longitude;
         app.globalData.address = address;
-      },
-    })
+      }
+    )
   },
   clickSearch: function (e) {
     wx.pageScrollTo({
@@ -430,14 +429,14 @@ Page({
       type = ""
     }
     var distanceDesc = ""
-    if (distance==undefined || distance.length == 0) {
+    if (distance==undefined || distance.length==0 || distance==0) {
       distance = 0;
     } else {
       distanceDesc = distance/1000 + "km内"
     }
     var page = this;
     page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc, distance: distance,  type: type  });
-    page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance));
+    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance));
   },
   onReachBottom: function(){
     return;
@@ -463,7 +462,7 @@ Page({
         wx.hideLoading();
       }
     });*/
-    page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000)
+    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000)
     wx.hideLoading();
   },
   update_goods_index: function(e) {

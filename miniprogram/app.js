@@ -14,6 +14,7 @@ App({
     this.getOpenid()
   },//获取用户地理位置权限
   chooseLocation: function (cb) {
+    var page = this;
     wx.chooseLocation({
       success: function (res) {
         /*obj.setData({
@@ -28,9 +29,10 @@ App({
             if (!statu['scope.userLocation']) {
               wx.showModal({
                 title: '是否授权当前位置',
-                content: '需要获取您的地理位置，请确认授权，否则地图功能将无法使用',
+                content: '需要获取您的地理位置，才能查看邻里的发布信息哦～',
                 success: function (tip) {
                   if (tip.confirm) {
+                    page.getOpenid();
                     wx.openSetting({
                       success: function (data) {
                         if (data.authSetting["scope.userLocation"] === true) {
