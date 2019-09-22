@@ -176,5 +176,91 @@ App({
         page.globalData['openid'] = res.result.openId;
       }
     })
+  },
+  saveFormid: function(formid) {
+    var page = this;
+    var db = wx.cloud.database();
+    const _ = db.command
+    db.collection('user_formid').where(
+      { _openid: page.globalData.openid }
+    ).get({
+      success: res => {
+        console.log('user_formid addf');
+        console.log(res.data);
+        if (res.data.length == 0) {
+          db.collection('user_formid').add({
+            // data 字段表示需新增的 JSON 数据
+            data: {
+              formids: [formid]
+            },
+            success: function (res) {
+            },
+            fail: function (res) {
+              console.log(res);
+            }
+          })
+        } else {
+          console.log('user_formid update');
+          var _id = res.data[0]._id;
+          db.collection('user_formid').doc(_id).update({
+            data: {
+              formids: _.push([formid])
+            },
+            success: console.log,
+            fail: console.error
+          })
+        }
+      }
+    });
+  },
+  sendMessage: function (openid, title, message) {
+    console.log("sendMessage: ");
+    //demo: app.sendMessage(res.result.openid, "title", "msg...");
+    var page = this;
+    var db = wx.cloud.database();
+    const _ = db.command
+
+    db.collection('user_formid').where(
+      { _openid: openid }
+    ).get({
+      success: res => {
+        console.log('sendMessage: ');
+        console.log(res.data);
+
+        if (res.data.length > 0) {
+          var formids = res.data[0].formids;
+          if (formids.length > 0) {
+            var formid = formids[ formids.length-1 ]
+            wx.cloud.callFunction({
+              name: 'message',
+              data: {
+                openid: openid,
+                formid: formid,
+                title: title,
+                message: message
+              },
+              fail: function (res) {
+                console.log(res);
+              },
+              complete: res => {
+                console.log("message:")
+                console.log(res);
+              }
+            });
+            //删除数组尾部元素
+            db.collection('user_formid').doc(res.data[0]._id).update({
+              data: {
+                formids: _.pop()
+              },
+              fail: res => {
+                console.log('pop: ');
+                console.log(res);
+              }
+            })            
+          }
+
+        }
+      }
+    });
   }
 })

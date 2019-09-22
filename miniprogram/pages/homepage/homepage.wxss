@@ -38,3 +38,6 @@
   position:fixed; 
   bottom:0; 
 } 
+.cardStatus {
+  float: right
+}

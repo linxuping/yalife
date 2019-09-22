@@ -134,6 +134,9 @@ Page({
     console.log(page.data);
     const db = wx.cloud.database()
     const _ = db.command
+    if (dto == 0) {
+      dto = 100000000;
+    }
     var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
@@ -141,9 +144,10 @@ Page({
         maxDistance: dto,
       })
     };
-    if (page.data.type > 0) {
+    if (page.data.type && page.data.type.length > 0) {
       cond.type = page.data.type;
     }
+    cond.status = 1
     wx.showLoading({
       title: '正在加载...',
     })
@@ -151,17 +155,20 @@ Page({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);
-        page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
         for (var i=0; i<res.data.length; i++) {
-          db.collection('attractions').doc(res.data[i]._id).update({
+          if (res.data[i].address) {
+            res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "")
+          }
+          /*db.collection('attractions').doc(res.data[i]._id).update({
             // data 传入需要局部更新的数据
             data: {
               visit_count: _.inc(parseInt(Math.random()*10)%2+1)
             },
             success: console.log,
             fail: console.error
-          })
+          })*/
         }
+        page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
         wx.hideLoading();
       },
       fail: err => {
@@ -268,13 +275,17 @@ Page({
     wx.chooseLocation({
       success: function (res) {
         console.log(res);
+        var address = ""
+        if (res.address) {
+          address = res.address.replace("广东省", "").replace("广州市", "").replace("番禺区", "")
+        }
         page.setData({ 
-          address: res.address,
-          latitude: res.latitude, 
-          longitude: res.longitude
+          address: address,
+          //latitude: res.latitude, 
+          //longitude: res.longitude
         });
-        app.globalData.latitude = latitude;
-        app.globalData.longitude = longitude;
+        app.globalData.latitude = res.latitude;
+        app.globalData.longitude = res.longitude;
         app.globalData.address = address;
       },
     })
@@ -408,16 +419,25 @@ Page({
     }
   },
   typeSearch: function(event){
-    var distance = parseInt(event.currentTarget.dataset.distance);
+    var page = this;
+    var distance = page.data.distance;
+    if (event.currentTarget.dataset.distance) {
+      distance = event.currentTarget.dataset.distance;
+    }
+    console.log(distance);
+    var type = event.currentTarget.dataset.type;
+    if (type == "全部" || type==undefined) {
+      type = ""
+    }
     var distanceDesc = ""
-    if (distance == 0) {
-      distance = 100000000000;
+    if (distance==undefined || distance.length == 0) {
+      distance = 0;
     } else {
       distanceDesc = distance/1000 + "km内"
     }
     var page = this;
-    page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc  });
-    page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, distance);
+    page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc, distance: distance,  type: type  });
+    page.onLoadCards(page.data.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance));
   },
   onReachBottom: function(){
     return;

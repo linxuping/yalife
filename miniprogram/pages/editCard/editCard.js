@@ -244,6 +244,23 @@ Page({
     var page = this;
     var opType = event.currentTarget.dataset.type;
 
+    if (event.detail.formId != 'the formId is a mock one') {
+
+    }
+    console.log("formid: ");
+    console.log(event.detail.formId);
+    /*wx.showToast({
+      title: event.detail.formId
+    })
+    wx.setClipboardData({
+      data: event.detail.formId,
+      success() {
+        wx.hideToast();   
+      }
+    })*/
+    app.saveFormid(event.detail.formId);
+    
+
     if (page.data.content == "") {
       wx.showToast({
         title: '发布内容为空！',
@@ -260,7 +277,6 @@ Page({
       longitude: page.data.longitude,
       imgurl: page.data.imgurl,
       content: page.data.content,
-      status: page.data.card.status,
       update_time: new Date //formatTime(new Date)
     };
     if (page.data.latitude && page.data.longitude) {
@@ -274,7 +290,7 @@ Page({
       cardData["create_time"] = formatTime(new Date)
       cardData["status"] = 2
       cardData["visit_count"] = 1
-      cardData["type"] = 0
+      cardData["type"] = "邻里"
       wx.showLoading({
         title: '正在新建...'
       })
@@ -303,11 +319,15 @@ Page({
         }
       })
     } 
-    if (opType == "update" && page.data.cardId > 0){
+    console.log(opType);
+    console.log(page.data.cardId);
+    if (opType == "update" && page.data.cardId.length>0){
+      cardData.status = page.data.card.status,
       //update
       wx.showLoading({
         title: '正在更新...'
       })
+      console.log(123456);
       db.collection('attractions').doc(this.data.cardId).update({
         data: cardData,
         success: function (res) {

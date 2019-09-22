@@ -12,9 +12,11 @@
           <image class='index-logo' style='width:128rpx; height:128rpx' src="{{item.imgurl}}"></image>
         </view>
         <!-- 右边内容 上下结构 -->
-        <view style='display:flex; flex-direction:column; margin:20rpx;'>
-          <label class='item_title'>{{item.content}}</label>
-          <label class='item_title'>{{item.create_time.getDate()}}</label>
+        <view style='width:100%'>
+          <text class='item_title' style="display:block">{{item.content}}</text>
+          <text class='item_title' style="display:block;text-align:right">{{item.create_time}}</text>
+          <text class="cardStatus" wx:if="{{item.status==2}}">审核中</text>
+          <text class="cardStatus" wx:if="{{item.status==1}}">在线</text>
         </view>
       </view>
     </navigator>

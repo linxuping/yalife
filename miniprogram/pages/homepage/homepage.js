@@ -1,5 +1,6 @@
 // miniprogram/pages/homepage/homepage.js
 var db = wx.cloud.database();
+const app = getApp()
 
 Page({
 
@@ -25,8 +26,26 @@ Page({
           openid: res.result.openid
         });
         page.onShow()
+
+        //app.sendMessage(res.result.openid, "title", "msg...");
       }
     });
+
+    /*wx.cloud.callFunction({
+      name: 'message',
+      data: {
+        openid: "oV5MQ5YBim_nRH66WxfWLGVcW7yc",
+        formid: "8cc668a036094bfe917600556088cd8c",
+        title: "123",
+        message: "msg"
+      },
+      complete: res => {
+        console.log("message:")
+        console.log(res);
+      }
+    });*/
+
+
     wx.setNavigationBarTitle({
       title: '我发布了什么'
     });

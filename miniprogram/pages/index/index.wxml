@@ -36,10 +36,24 @@
   </view>
 
   <view wx:if="{{showGoods}}" style="width:95%;text-align:center;margin-top:8px;background-color:#f0f0f0">
-    <image mode="aspectFit" src="../../images/second.png" data-type="1" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
-    <image mode="aspectFit" src="../../images/employ.png" data-type="2" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
-    <image mode="aspectFit" src="../../images/neibor.png" data-type="3" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
-    <image mode="aspectFit" src="../../images/neibor.png" data-type="0" style="height:{{typeImgHeight}}px;" class="typeBtn"></image>
+    <image mode="aspectFit" src="../../images/second.png" data-type="二手" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+    <image mode="aspectFit" src="../../images/employ.png" data-type="招聘" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+    <image mode="aspectFit" src="../../images/neibor.png" data-type="邻里" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+    <image mode="aspectFit" src="../../images/all.png" data-type="全部" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+  </view>
+  <view wx:if="{{showGoods}}" style="width:95%;text-align:center;background-color:#f0f0f0">
+    <view class="typeBtn" data-type="二手">
+      <text>二手</text>
+    </view>
+    <view class="typeBtn">
+      <text>招聘</text>
+    </view>
+    <view class="typeBtn">
+      <text>邻里</text>
+    </view>
+    <view class="typeBtn">
+      <text>全部</text>
+    </view>
   </view>
 
   <view class="card" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id"  style="width:95%">
@@ -49,8 +63,9 @@
           <view>
             <text >{{item.content}}</text>
           </view>
-          <text>{{item.type}}</text>
+          
           <view class="title" style="text-align:right">{{item.address}}</view>
+          <text class="typeStyle">{{item.type}}</text>
           <view class="title" style="text-align:right">{{(item.create_time)}}</view>
       </view>
     </navigator>
