@@ -8,15 +8,16 @@
     <view>
     <image src="{{imgurl}}" wx:if="{{imgurl!=''}}" mode="aspectFit"></image>
     </view>     
-    <text style="bottom-margin:20px;color: blue">我的位置：{{address}}</text>
-    <button style="margin:30rpx;" bindtap="choosePos">修正位置,方便附近人找我</button>
+    <text style="bottom-margin:20px;">
+      <text>我的位置：</text>
+      <text class="address" style="color: blue">{{address}}</text>
+    </text>
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;" bindtap="choosePos">修正位置,方便附近人找我</button>
   </view>
   <form bindsubmit="updateCard" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">
     <button formType="submit">更新卡片</button>
   </form>
   <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
-    <button formType="submit">生成卡片</button>
+    <button formType="submit">+生成卡片</button>
   </form>
-  
-
 </view>

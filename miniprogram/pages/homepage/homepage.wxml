@@ -21,9 +21,11 @@
       </view>
     </navigator>
   </block>
-  <view class="add-btn" style="width:100%">
-    <contact-button style="margin:8px">联系我</contact-button>
-    <image style="width:55px;height:55px;position:fixed;bottom:8px;right:8px;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
+  <view style="height:150px;width:100%;align:left">
+    <contact-button style="margin:8px;color:green;margin-top:30px;z-index:1011">联系管理员</contact-button>
+  </view>
+  <view class="add-btn" style="width:150%;text-align:center">
+    <image style="width:55px;height:55px;bottom:8px;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
   </view>
   
 </view>

@@ -38,6 +38,7 @@
   <view wx:if="{{showGoods}}" style="width:95%;text-align:center;margin-top:8px;background-color:#f0f0f0">
     <image mode="aspectFit" src="../../images/second.png" data-type="二手" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
     <image mode="aspectFit" src="../../images/employ.png" data-type="招聘" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+    <image mode="aspectFit" src="../../images/help.png" data-type="求助" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
     <image mode="aspectFit" src="../../images/neibor.png" data-type="邻里" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
     <image mode="aspectFit" src="../../images/all.png" data-type="全部" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
   </view>
@@ -47,6 +48,9 @@
     </view>
     <view class="typeBtn">
       <text>招聘</text>
+    </view>
+    <view class="typeBtn">
+      <text>求助</text>
     </view>
     <view class="typeBtn">
       <text>邻里</text>
@@ -101,8 +105,8 @@
     <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
     <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
     <view class="divLine"></view>
-    <text >我的位置：{{address}}</text>
-    <button style="margin:30rpx;" bindtap="choosePos">修正我的位置</button>
+    <text >我的位置：</text><text class="address" style="color:blue">{{address}}</text>
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;" bindtap="choosePos">修正我的位置</button>
 
     <button style="margin:30rpx;display:none" bindtap="typeSearch">搜索</button>
     <contact-button style="position:fixed;bottom:16px;right:16px">联系我</contact-button>

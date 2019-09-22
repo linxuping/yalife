@@ -410,7 +410,7 @@ border-bottom: 5rpx solid #1aae18;
   display: inline-block;
 }
 .typeBtn {
-  width:22%;
+  width:16%;
   margin-left:4px;
   margin-right:4px;
   margin-top: 4px;
@@ -430,4 +430,8 @@ border-bottom: 5rpx solid #1aae18;
 .address:before{
   height:30rpx;
   content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhElEQVQ4T31Ty3HCQAzVLgPnlEAHcQl0EEqgBPvAarj5xuxywB3EqQBKoASnA0ogVxhLmefxZtbGxCdbkqX3kQxNPCGEDRGt05Sqnpj5a1xu0sDxeHx7PB61ql6YuUpz3vvcGLOaz+eboihuMTdoEELAT7VzrvHer6217ygUkW9mPh8Oh5Wqrp1z+VODEEJGRBsk0UhVbyJSo9BaC0rEzGU6BLE/BIBorW222+0lhHB1zi1TCjEGFCKSRYppgzKZWDJzNzU+3vtaRMqICGieEBDRFVynEHjvG2bOoA0RLZ8QwIH7/V5hMugQUWatPYmIMcZ8qCqErIBksVjk0YmXLkBUKN7BNOYMZ1KhJ22Me+CcGyxRLA4hnP/dAxSOOSYiglanUSrugMJY8d1ud0Wsp5OPnRm4kHbd7/fL2WxWgUqk1bZtHhu+ROC9h7dYoMYYc1FV7D/2HvexgjP4nlzlODUVqb9Kcs51K91b/SkiRUQz0KBvEg8Ft6E93B8IiPe2bauUyi/+rgAgQT9dmQAAAABJRU5ErkJggg==);
+}
+.noborder::after {
+  border-radius: 98rpx;
+  border: 0;
 }
