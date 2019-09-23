@@ -291,6 +291,7 @@ Page({
       cardData["status"] = 2
       cardData["visit_count"] = 1
       cardData["type"] = "邻里"
+      cardData["reason"] = ""
       wx.showLoading({
         title: '正在新建...'
       })
