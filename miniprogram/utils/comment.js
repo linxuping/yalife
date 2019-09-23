@@ -52,7 +52,7 @@ class Comment {
         console.log(res.data);
         for (var i=0; i<res.data.length; i++) {
           res.data[i].show = true;
-          if (res.data[i].status==2 && res.data[i]._openid!=app.globalData.openid) {
+          if (res.data[i].status>=2 && res.data[i]._openid!=app.globalData.openid) {
             res.data[i].show = false;
           }
         }
@@ -62,6 +62,33 @@ class Comment {
         console.log(err);
       }
     })
+  };
+  
+  static audit(cardId, status, reason) {
+    db.collection('comment').doc(cardId).get({
+      success: res => {
+        console.log('comment get: ');
+        console.log(res.data);
+        if (res.data.length > 0) {
+          var card = res.data[0];
+          db.collection('comment').doc(cardId).update({
+            data: {
+              status: status,
+              reason: reason
+            },
+            success: function(res){
+              var message = "审核通过！";
+              if (status == 3) {
+                message = "审核不通过！";
+              }
+              app.sendMessage(card._openid, "评论审核结果", message, cardId); 
+            }
+          }) 
+        }
+      }
+    }) 
+    
+
   };
 }
 module.exports = Comment;
