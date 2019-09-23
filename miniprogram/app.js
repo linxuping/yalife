@@ -215,7 +215,7 @@ App({
       }
     });
   },
-  sendMessage: function (openid, title, message) {
+  sendMessage: function (openid, title, message, cardId) {
     console.log("sendMessage: ");
     //demo: app.sendMessage(res.result.openid, "title", "msg...");
     var page = this;
@@ -239,7 +239,8 @@ App({
                 openid: openid,
                 formid: formid,
                 title: title,
-                message: message
+                message: message,
+                cardid: cardId
               },
               fail: function (res) {
                 console.log(res);
