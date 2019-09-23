@@ -1,5 +1,5 @@
+var db = wx.cloud.database();
 const app = getApp()
-
 
 function formatDate(time) {
   var date = new Date(time);
@@ -43,11 +43,15 @@ class Comment {
 
   static fetch(cardId, cb) {
     db.collection('comment').orderBy('create_time', 'desc').where({
-      card_id: cardId
+      card_id: cardId,
+      status: _.gte(0)
     }).get({
       success: res => {
         console.log("fetch comment result: ");
         console.log(res.data);
+        for (var i=0; i<res.data.length; i++) {
+          res.data[i].mine = (res.data[i]._openid == app.globalData.openid);
+        }
         cb(res)
       },
       fail: err => {
