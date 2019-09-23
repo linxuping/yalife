@@ -1,3 +1,5 @@
+const app = getApp()
+
 
 function formatDate(time) {
   var date = new Date(time);
@@ -39,26 +41,19 @@ class Comment {
     }) 
   };
 
-  /**
-   * 发起网络请求
-   * @param {string} url  
-   * @param {object} params 
-   * @return {Promise} 
-   */
-  static request(url, params, method = "GET", type = "json") {
-    console.log("向后端传递的参数", params);
-    return new Promise((resolve, reject) => {
-      let opts = {
-        url: url,
-        data: Object.assign({}, params),
-        method: method,
-        header: { 'Content-Type': type },
-        success: resolve,
-        fail: reject
+  static fetch(cardId, cb) {
+    db.collection('comment').orderBy('create_time', 'desc').where({
+      card_id: cardId
+    }).get({
+      success: res => {
+        console.log("fetch comment result: ");
+        console.log(res.data);
+        cb(res)
+      },
+      fail: err => {
+        console.log(err);
       }
-      console.log("请求的URL", opts.url);
-      wx.request(opts);
-    });
+    })
   };
 }
 module.exports = Comment;
