@@ -52,7 +52,7 @@ class Comment {
         for (var i=0; i<res.data.length; i++) {
           res.data[i].mine = (res.data[i]._openid == app.globalData.openid);
         }
-        cb(res)
+        cb(res.data)
       },
       fail: err => {
         console.log(err);
