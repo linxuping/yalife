@@ -2,7 +2,7 @@
 <view class="container" style="margin-left:8px;margin-right:8px;margin-top:35px">
   <text>{{card.content}}</text>
   <image src="{{card.imgurl}}" wx:if="{{card.imgurl!=''}}" style="margin:8px;width:95%;margin-top:16px" mode="aspectFit"></image>
-  <text style="margin-top:16px">{{card.address}}</text>
+  <text class="address" style="margin-top:16px;color:blue">{{card.address}}</text>
   <navigator url="/pages/index/index" open-type="navigate" >
     <image style="width:30px;height:30px;position:fixed;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" ></image>
   </navigator>
