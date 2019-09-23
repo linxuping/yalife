@@ -9,7 +9,8 @@ Page({
    */
   data: {
     cardList: [],
-    openid: ""
+    openid: "",
+    defaultImg: "../../images/default.png"
   },
 
   /**
