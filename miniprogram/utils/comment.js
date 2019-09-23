@@ -26,6 +26,7 @@ class Comment {
         card_id: cardId,
         content: content,
         status: 2,
+        reason: "",
         create_time: formatDate(new Date().getTime())
       }
     }).then(res => {
