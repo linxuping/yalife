@@ -51,7 +51,10 @@ class Comment {
         console.log("fetch comment result: ");
         console.log(res.data);
         for (var i=0; i<res.data.length; i++) {
-          res.data[i].mine = (res.data[i]._openid == app.globalData.openid);
+          res.data[i].show = true;
+          if (res.data[i].status==2 && res.data[i]._openid!=app.globalData.openid) {
+            res.data[i].show = false;
+          }
         }
         cb(res.data)
       },
