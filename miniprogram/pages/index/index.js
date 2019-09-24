@@ -302,11 +302,28 @@ Page({
         success: res => {
           console.log("get tags: ");
           console.log(res.data);
-          var ret = {};
+          var dic = {};
           for (var i=0; i<res.data.length; i++) {
-            
+            var tmpTags = res.data[i].tags;
+            if (tmpTags==undefined || tmpTags.length==0) {
+              continue
+            }
+            for (var j=0; i<tmpTags.length; j++) {
+              var tag = tmpTags[j];
+              if (dic[tag] == undefined) {
+                dic[tag] = 1
+              } else {
+                dic[tag] = dic[tag] + 1
+              }
+            }
           }
-          page.setData({ tags: [] });
+          var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
+          var tags = [];
+          for(var key in res2){
+            //console.log("key: " + res2[key] + " ,value: " + dic[res2[key]]);
+            tags.push(res2[key])
+          }
+          page.setData({ tags: tags });
           wx.hideLoading();
         },
         fail: err => {
