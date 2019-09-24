@@ -293,7 +293,7 @@ Page({
   getTags: function(latitude, longitude, showLoading) {
     if (showLoading) {
       wx.showLoading({
-        title: '正在加载...',
+        title: '正在分析最近的分享信息...',
       })
     }
     db.collection('attractions').where(cond).field({
