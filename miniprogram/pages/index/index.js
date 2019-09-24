@@ -105,7 +105,8 @@ Page({
     address: "",
     distanceDesc: "",
     typeImgHeight: 0,
-    type: 0
+    type: 0,
+    tags: []
   },
 
   selectTab(e) {
@@ -288,6 +289,31 @@ Page({
         app.globalData.address = address;
       }
     )
+  },
+  getTags: function(latitude, longitude, showLoading) {
+    if (showLoading) {
+      wx.showLoading({
+        title: '正在加载...',
+      })
+    }
+    db.collection('attractions').where(cond).field({
+        tags: true
+      }).get({
+        success: res => {
+          console.log("get tags: ");
+          console.log(res.data);
+          var ret = {};
+          for (var i=0; i<res.data.length; i++) {
+            
+          }
+          page.setData({ tags: [] });
+          wx.hideLoading();
+        },
+        fail: err => {
+          console.log(err);
+          wx.hideLoading();
+        }
+      })
   },
   clickSearch: function (e) {
     wx.pageScrollTo({
