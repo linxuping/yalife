@@ -1,0 +1,8 @@
+var timeConverter = {
+  getDateDiff: function (dateStr) {
+    return ""
+  }
+}
+module.exports = {
+  getDateDiff: timeConverter.getDateDiff
+}

@@ -14,6 +14,42 @@ function sort(arr){
   return arr.sort(function () { return 0.5 - Math.random() });
 }
 
+function getDateDiff(dateStr) {
+  var dateTimeStamp = Date.parse(dateStr.replace(/-/gi, "/"));
+  var minute = 1000 * 60;
+  var hour = minute * 60;
+  var day = hour * 24;
+  var halfamonth = day * 15;
+  var month = day * 30;
+  var now = new Date().getTime();
+  var diffValue = now - dateTimeStamp;
+  if (diffValue < 0) { return; }
+  var monthC = diffValue / month;
+  var weekC = diffValue / (7 * day);
+  var dayC = diffValue / day;
+  var hourC = diffValue / hour;
+  var minC = diffValue / minute;
+  var result = ""; //不加会异常？？？
+  if (monthC >= 1) {
+    result = "" + parseInt(monthC) + "月前";
+  }
+  else if (weekC >= 1) {
+    result = "" + parseInt(weekC).toString() + "周前";
+  }
+  else if (dayC >= 1) {
+    result = "" + parseInt(dayC) + "天前";
+  }
+  else if (hourC >= 1) {
+    result = "" + parseInt(hourC) + "小时前";
+  }
+  else if (minC >= 1) {
+    result = "" + parseInt(minC) + "分钟前";
+  } else{
+    result = "刚刚";
+  }
+  return result;
+}
+
 function yesterday(num, str) {
   var today = new Date();
   var nowTime = today.getTime();
@@ -105,6 +141,7 @@ Page({
     address: "",
     distanceDesc: "",
     typeImgHeight: 0,
+    typeImgHeight2: 0,
     type: 0
   },
 
@@ -156,7 +193,8 @@ Page({
         console.log(res.data);
         for (var i=0; i<res.data.length; i++) {
           if (res.data[i].address) {
-            res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "")
+            res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+            res.data[i].create_time = getDateDiff(res.data[i].create_time);
           }
           /*db.collection('attractions').doc(res.data[i]._id).update({
             // data 传入需要局部更新的数据
@@ -196,7 +234,8 @@ Page({
     wx.getSystemInfo({
       success: function (res) {
         page.setData({
-          typeImgHeight: res.windowWidth/6
+          typeImgHeight: res.windowWidth/6,
+          typeImgHeight2: res.windowWidth/2*3/4
         }); 
       }
     });
