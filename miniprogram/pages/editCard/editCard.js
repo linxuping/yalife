@@ -27,6 +27,7 @@ Page({
     latitude: 0,
     longitude: 0,
     imgurl: "",
+    imgurls: [],
     content: ""
   },
 
@@ -63,6 +64,7 @@ Page({
               latitude: card.latitude,
               longitude: card.longitude,
               imgurl: card.imgurl,
+              imgurls: card.imgurls || [card.imgurl],
               content: card.content
             })
 
@@ -78,7 +80,6 @@ Page({
                 }
               })
             }
-
           }
         },
         fail: err => {
@@ -188,7 +189,7 @@ Page({
   chooseImage: function () {
     var page = this;
     wx.chooseImage({
-      count: 1, // 默认9 
+      count: 9, // 默认9 
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有 
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有 
       success: function (res) {
@@ -204,16 +205,24 @@ Page({
         wx.showLoading({
           title: '文件上传中...',
         })
-        for (var i = 0; i < res.tempFilePaths.length; i++) {
+        var imgsCount = res.tempFilePaths.length;
+        var imgs = [];
+        for (var i = 0; i < imgsCount; i++) {
           wx.cloud.uploadFile({
             cloudPath: timestamp+'.'+i+'.png',
             filePath: res.tempFilePaths[i], // 文件路径
           }).then(res => {
             // get resource ID
             console.log("img uploaded.")
-            console.log(res)
-            page.setData({ imgurl: res.fileID });
-            wx.hideLoading()
+            console.log(res)            
+            imgs.push(res.fileID);
+            if (imgs.length >= imgsCount) {
+              page.setData({ imgurl:imgs[0], imgurls: imgs });
+              setTimeout(function () {
+                wx.hideLoading();
+              }, 1000);
+              
+            }
           }).catch(error => {
             // handle error
             console.log(error)
@@ -236,6 +245,9 @@ Page({
           longitude: res.longitude
         });
         //page.onUpdateLocation(res.latitude, res.longitude);
+        wx.showToast({
+          title: '修改成功！',
+        })
       },
     })
   },
@@ -276,6 +288,7 @@ Page({
       latitude: page.data.latitude,
       longitude: page.data.longitude,
       imgurl: page.data.imgurl,
+      imgurls: page.data.imgurls,
       content: page.data.content,
       update_time: new Date //formatTime(new Date)
     };

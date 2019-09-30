@@ -108,12 +108,11 @@
     <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
     <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
     <view class="divLine"></view>
-    <view style="">
-      <text >我的位置：</text><text class="address" style="color:blue">{{address}}</text>
-      <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;" bindtap="choosePos">修正我的位置</button>
+    <view style="text-align:center" bindtap="choosePos">
+      <text >我的位置：</text><text class="address addressAfter" style="color:blue">{{address}}</text>
+      <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige; display:none" bindtap="choosePos">修正我的位置</button>
     </view>
     
-
     <button style="margin:30rpx;display:none" bindtap="typeSearch">搜索</button>
     <contact-button style="position:fixed;bottom:16px;right:16px">联系我</contact-button>
     <view style="position:fixed;bottom:16px;right:16px;display:none"><text style="color:#CDCDCD">客服微信号：lttlovefm</text></view>

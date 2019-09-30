@@ -326,6 +326,9 @@ Page({
         app.globalData.latitude = res.latitude;
         app.globalData.longitude = res.longitude;
         app.globalData.address = address;
+        wx.showToast({
+          title: '修改成功！',
+        })
       }
     )
   },

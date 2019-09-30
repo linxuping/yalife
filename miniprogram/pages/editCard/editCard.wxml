@@ -6,13 +6,16 @@
     <textarea placeholder="求助/转卖什么？联系方式是什么？" style="margin-top:10px;width:100%;border:1px;text-align:left;left:1px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
     <button style="margin:30rpx;" bindtap="chooseImage">上传图片</button> 
     <view>
-    <image src="{{imgurl}}" wx:if="{{imgurl!=''}}" mode="aspectFit"></image>
+    <image src="{{imgurl}}" wx:if="{{imgurl!=''}}" mode="aspectFit" style="display:none"></image>
+
+    <image src="{{item}}" style="width:100%" mode="aspectFit" wx:for="{{imgurls}}"></image>
+
     </view>     
-    <text style="bottom-margin:20px;">
+    <view style="bottom-margin:20px;" bindtap="choosePos">
       <text>我的位置：</text>
       <text class="address" style="color: blue">{{address}}</text>
-    </text>
-    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;" bindtap="choosePos">修正位置,方便附近人找我</button>
+    </view>
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;display:none" bindtap="choosePos">修正位置,方便附近人找我</button>
   </view>
   <form bindsubmit="updateCard" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">
     <button formType="submit">更新卡片</button>
