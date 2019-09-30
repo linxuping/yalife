@@ -290,7 +290,7 @@ Page({
       imgurl: page.data.imgurl,
       imgurls: page.data.imgurls,
       content: page.data.content,
-      update_time: new Date //formatTime(new Date)
+      update_time: formatTime(new Date) //formatTime(new Date)
     };
     if (page.data.latitude && page.data.longitude) {
       cardData["location"] = db.Geo.Point(page.data.longitude, page.data.latitude)

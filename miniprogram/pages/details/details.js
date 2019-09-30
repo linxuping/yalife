@@ -32,6 +32,9 @@ Page({
           console.log(res.data);
           if (res.data.length > 0) {
             let card = res.data[0]
+            if (card.update_time.toString().indexOf("-") > 0) {
+              card.create_time = card.update_time;
+            }
             page.setData({
               card: card
             });

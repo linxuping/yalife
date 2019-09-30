@@ -195,7 +195,13 @@ Page({
         for (var i=0; i<res.data.length; i++) {
           if (res.data[i].address) {
             res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
-            res.data[i].create_time = getDateDiff(res.data[i].create_time);
+            console.log(res.data[i].update_time.toString());
+            if (res.data[i].update_time.toString().indexOf("-") > 0) {
+              //console.log(res.data[i].update_time);
+              res.data[i].create_time = getDateDiff(res.data[i].update_time);
+            } else {
+              res.data[i].create_time = getDateDiff(res.data[i].create_time);
+            }
           }
           /*db.collection('attractions').doc(res.data[i]._id).update({
             // data 传入需要局部更新的数据
