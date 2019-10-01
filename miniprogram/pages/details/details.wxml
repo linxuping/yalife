@@ -1,8 +1,11 @@
 <!--miniprogram/pages/editCard/editCard.wxml-->
 <view class="container" style="margin-left:8px;margin-right:8px;margin-top:35px">
-  <text>{{card.content}}</text>
-  <image src="{{item}}" wx:for="{{card.imgurls || [card.imgurl]}}" style="margin:8px;width:95%;margin-top:16px" mode="aspectFit"></image>
-  <view style="width:95%;text-align:right">
+  <text class="text-firstline">{{card.content}}</text>
+  <view style="width:95%">
+    <image src="{{item}}" wx:for="{{card.imgurls || [card.imgurl]}}" style="margin:2px;width:100%" mode="widthFix"></image>
+  </view>
+  
+  <view style="width:95%;text-align:right;font-size:30rpx">
     最后更新：<text>{{card.create_time}}</text>
   </view>
   <text class="address" style="margin-top:16px;color:blue">{{card.address}}</text>
