@@ -2,8 +2,8 @@
 <view class="container">
   <image style="width:30px;height:30px;position:fixed;top:4px;left:4px;z-index:1000" src="../../images/back.png" mode="aspectFit" bindtap="goBack"></image>
 
-  <view style="width:90%;margin-top:35px;margin-bottom:80px;text-align:center">
-    <textarea placeholder="求助/转卖什么？联系方式是什么？" style="margin-top:10px;width:100%;border:1px;text-align:left;left:1px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
+  <view style="width:95%;margin-top:35px;margin-bottom:80px;text-align:center">
+    <textarea placeholder="求助/转卖什么？联系方式是什么？" style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">增加图片</button> 
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:else>更换图片</button> 
     <view>
