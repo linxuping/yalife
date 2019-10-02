@@ -21,8 +21,8 @@
       </view>
     </navigator>
   </block>
-  <view style="height:200px;width:100%;align:left">
-    <text>联系管理员</text>
+  <view style="height:200px;width:100%;align:left" wx:if="{{loaded}}">
+    <text style="margin-left:8px">联系管理员</text>
     <contact-button style="color:green;margin-top:30px;z-index:1011"></contact-button>
   </view>
   <view class="add-btn" style="width:150%;text-align:center">

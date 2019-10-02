@@ -1,6 +1,5 @@
 <!--index.wxml-->
-<view class="container">
-
+<view class="{{!!showGoods? 'container':''}}" >
   <!-- 用户 openid -->
   <view class="userinfo" style="display:none">
     <button 
@@ -21,7 +20,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address+' '+distanceDesc}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address+' '+distanceDesc+' '+(type || '全部')}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
 
       </view>
     </view>

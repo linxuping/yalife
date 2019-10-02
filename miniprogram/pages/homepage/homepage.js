@@ -10,6 +10,7 @@ Page({
   data: {
     cardList: [],
     openid: "",
+    loaded: false,
     defaultImg: "../../images/default.png"
   },
 
@@ -78,6 +79,11 @@ Page({
         page.setData({
           cardList: res.data
         })
+        setTimeout(function () {
+          page.setData({
+            loaded: true
+          })
+        }, 1000);
       },
       fail: err => {
         console.log(err);

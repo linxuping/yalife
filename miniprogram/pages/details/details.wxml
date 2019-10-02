@@ -2,7 +2,7 @@
 <view class="container" style="margin-left:8px;margin-right:8px;margin-top:35px">
   <text class="text-firstline">{{card.content}}</text>
   <view style="width:95%">
-    <image src="{{item}}" wx:for="{{card.imgurls || [card.imgurl]}}" style="margin:2px;width:100%" mode="widthFix"></image>
+    <image src="{{item}}" wx:if="{{!!item}}" wx:for="{{card.imgurls || [card.imgurl]}}" style="margin:2px;width:100%" mode="widthFix"></image>
   </view>
   
   <view style="width:95%;text-align:right;font-size:30rpx">

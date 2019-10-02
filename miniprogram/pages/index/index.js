@@ -6,7 +6,7 @@ var types = [];
 //var types_titles = {};
 var pages = 0;
 var db = wx.cloud.database();
-var startSize = 100000
+var startSize = 15000 //15KM
 
 function sort(arr){
   var d=new Date();
@@ -139,10 +139,11 @@ Page({
     ],
     types_class: [],
     address: "",
-    distanceDesc: "",
+    distance: 15000,
+    distanceDesc: "15km内",
     typeImgHeight: 0,
     typeImgHeight2: 0,
-    type: 0,
+    type: "",
     tags: []
   },
 
@@ -214,6 +215,22 @@ Page({
         }
         page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
         wx.hideLoading();
+        if (res.data.length == 0) {
+          wx.showModal({
+            title: '附近未有发布条目😊',
+            content: '',
+            cancelText: '查看别的',
+            confirmText: '我来发布',
+            success(res) {
+              if (res.cancel) {
+              } else if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/editCard/editCard',
+                })
+              }
+            }
+          })
+        }
       },
       fail: err => {
         console.log(err);

@@ -4,11 +4,12 @@
 
   <view style="width:90%;margin-top:35px;margin-bottom:80px;text-align:center">
     <textarea placeholder="求助/转卖什么？联系方式是什么？" style="margin-top:10px;width:100%;border:1px;text-align:left;left:1px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
-    <button style="margin:30rpx;" bindtap="chooseImage">上传图片</button> 
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">增加图片</button> 
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:else>更换图片</button> 
     <view>
     <image src="{{imgurl}}" wx:if="{{imgurl!=''}}" mode="aspectFit" style="display:none"></image>
 
-    <image src="{{item}}" style="width:100%" mode="aspectFit" wx:for="{{imgurls}}"></image>
+    <image src="{{item}}" wx:if="{{!!item}}" style="width:100%" mode="aspectFit" wx:for="{{imgurls}}"></image>
 
     </view>     
     <view style="bottom-margin:20px;" bindtap="choosePos">
