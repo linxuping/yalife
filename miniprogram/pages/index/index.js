@@ -6,6 +6,7 @@ var types = [];
 //var types_titles = {};
 var pages = 0;
 var db = wx.cloud.database();
+const _ = db.command
 var startSize = 15000 //15KM
 
 function sort(arr){
@@ -144,7 +145,9 @@ Page({
     typeImgHeight: 0,
     typeImgHeight2: 0,
     type: "",
-    tags: []
+    tags: [],
+    index: 2, //15km
+    array: ['3km', '8km', '15km'],
   },
 
   selectTab(e) {
@@ -162,7 +165,21 @@ Page({
       current: index
     })
   },
-
+  bindPickerChange: function (e) {
+    var page = this;
+    console.log('picker发送选择改变，携带值为', e.detail.value);//index为数组点击确定后选择的item索引
+    var distance = 15000;
+    if (e.detail.value == 0) {
+      distance = 3000;
+    } else if(e.detail.value == 1) {
+      distance = 8000;
+    }
+    page.setData({
+      index: e.detail.value,
+      distance: distance
+    })
+    page.getTags(true);
+  },
   onLoadCards: function (openid, latitude, longitude, dfrom, dto) {
     if (openid == "") {
       console.log("no openid");
@@ -171,7 +188,6 @@ Page({
     var page = this;
     console.log(page.data);
     const db = wx.cloud.database()
-    const _ = db.command
     if (dto == 0) {
       dto = 100000000;
     }
@@ -183,7 +199,7 @@ Page({
       })
     };
     if (page.data.type && page.data.type.length > 0) {
-      cond.type = page.data.type;
+      cond.tags = page.data.type;
     }
     cond.status = 1
     wx.showLoading({
@@ -196,7 +212,7 @@ Page({
         for (var i=0; i<res.data.length; i++) {
           if (res.data[i].address) {
             res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
-            console.log(res.data[i].update_time.toString());
+            //console.log(res.data[i].update_time.toString());
             if (res.data[i].update_time.toString().indexOf("-") > 0) {
               //console.log(res.data[i].update_time);
               res.data[i].create_time = getDateDiff(res.data[i].update_time);
@@ -219,7 +235,7 @@ Page({
           wx.showModal({
             title: '附近未有发布条目😊',
             content: '',
-            cancelText: '查看别的',
+            cancelText: '暂不谢谢',
             confirmText: '我来发布',
             success(res) {
               if (res.cancel) {
@@ -236,7 +252,8 @@ Page({
         console.log(err);
         wx.hideLoading();
       }
-    })
+    });
+    page.getTags();
   },
 
   onLoad: function() {
@@ -346,56 +363,77 @@ Page({
           latitude: res.latitude, 
           longitude: res.longitude
         });
+        page.getTags(true);
         app.globalData.latitude = res.latitude;
         app.globalData.longitude = res.longitude;
         app.globalData.address = address;
-        wx.showToast({
+        /*wx.showToast({
           title: '修改成功！',
-        })
+        })*/
       }
     )
   },
-  getTags: function(latitude, longitude, showLoading) {
+  getTags: function(showLoading) {
+    var page = this;
     if (showLoading) {
       wx.showLoading({
         title: '正在分析最近的分享信息...',
       })
     }
-    db.collection('attractions').where(cond).field({
-        tags: true
-      }).get({
-        success: res => {
-          console.log("get tags: ");
-          console.log(res.data);
-          var dic = {};
-          for (var i=0; i<res.data.length; i++) {
-            var tmpTags = res.data[i].tags;
-            if (tmpTags==undefined || tmpTags.length==0) {
-              continue
-            }
-            for (var j=0; i<tmpTags.length; j++) {
-              var tag = tmpTags[j];
-              if (dic[tag] == undefined) {
-                dic[tag] = 1
-              } else {
-                dic[tag] = dic[tag] + 1
-              }
+    console.log("this.data: ");
+    console.log(page.data);
+    var cond = {
+      location: _.geoNear({
+        geometry: db.Geo.Point(page.data.longitude, page.data.latitude),
+        minDistance: 0,
+        maxDistance: parseInt(page.data.distance),
+      }),
+      status: _.gte(0)
+    };
+    db.collection('attractions').where(cond).get({
+      success: res => {
+        console.log("get tags: ");
+        console.log(res.data);
+        var dic = {};
+        for (var i=0; i<res.data.length; i++) {
+          console.log("item.tags: ");
+          console.log(res.data[i].tags);
+          var tmpTags = res.data[i].tags;
+          if (tmpTags==undefined || tmpTags.length==0) {
+            continue
+          }
+          for (var j=0; j<tmpTags.length; j++) {
+            var tag = tmpTags[j];
+            if (dic[tag] == undefined) {
+              dic[tag] = 1
+            } else {
+              dic[tag] = dic[tag] + 1
             }
           }
-          var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
-          var tags = [];
-          for(var key in res2){
-            //console.log("key: " + res2[key] + " ,value: " + dic[res2[key]]);
-            tags.push(res2[key])
-          }
-          page.setData({ tags: tags });
-          wx.hideLoading();
-        },
-        fail: err => {
-          console.log(err);
-          wx.hideLoading();
         }
-      })
+        console.log("dic: ");
+        console.log(dic);
+        var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
+        var tags = [];
+        for(var key in res2){
+          console.log(">>> key: " + res2[key] + " ,value: " + dic[res2[key]]);
+          tags.push(res2[key])
+        }
+        if (tags.length > 0) {
+          tags.push("全部");         
+        } else {
+          wx.showToast({
+            title: '未搜到分享信息...',
+          })
+        }
+        page.setData({ tags: tags }); 
+        wx.hideLoading();
+      },
+      fail: err => {
+        console.log(err);
+        wx.hideLoading();
+      }
+    })
   },
   clickSearch: function (e) {
     wx.pageScrollTo({

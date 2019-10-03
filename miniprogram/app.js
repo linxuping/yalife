@@ -179,6 +179,11 @@ App({
       }
     })
   },
+  isAdmin() {
+    //return false;
+    console.log("isAdmin: " + this.globalData.openid);
+    return this.globalData.openid == "oV5MQ5YBim_nRH66WxfWLGVcW7yc";
+  },
   saveFormid: function(formid) {
     var page = this;
     var db = wx.cloud.database();

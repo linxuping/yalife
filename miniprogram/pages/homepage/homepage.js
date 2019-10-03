@@ -69,10 +69,15 @@ Page({
     var page = this;
     console.log(page.data);
     const _ = db.command
-    db.collection('attractions').orderBy('create_time', 'desc').where({
-      status: _.gt(0),
-      _openid: page.data.openid
-    }).get({
+    var cond = {
+      status: _.gt(0)
+    };
+    console.log("app.globalData: ");
+    console.log(app.isAdmin());
+    if (!app.isAdmin()) {
+      cond._openid = page.data.openid
+    }
+    db.collection('attractions').orderBy('create_time', 'desc').where(cond).get({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);

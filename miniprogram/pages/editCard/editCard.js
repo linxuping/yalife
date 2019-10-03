@@ -28,7 +28,14 @@ Page({
     longitude: 0,
     imgurl: "",
     imgurls: [],
-    content: ""
+    content: "",
+    index: 0,
+    array: ['二手','招聘','求助','邻里','全部'],
+    //array: ['家具', '化妆品', '图书', '衣鞋', '电器', '零食', '保姆', '租房/车位', '其他二手', '招聘','求助','邻里','全部'],
+    index2: 0,
+    array2: ['家具', '化妆品', '图书', '衣鞋', '电器', '零食', '保姆', '租房/车位', '招聘', '求助', '邻里', '全部'],
+    isAdmin: false,
+    tags: []
   },
 
   /**
@@ -39,6 +46,9 @@ Page({
     wx.setNavigationBarTitle({
       title: '新建条目发布'
     })
+    page.setData({
+      isAdmin: app.isAdmin()
+    });
 
     console.log(options);
     console.log(options.id);
@@ -65,7 +75,8 @@ Page({
               longitude: card.longitude,
               imgurl: card.imgurl,
               imgurls: card.imgurls || [card.imgurl],
-              content: card.content
+              content: card.content,
+              isAdmin: app.isAdmin(),
             })
 
             if (card.address == "") {
@@ -111,7 +122,44 @@ Page({
     wx.hideShareMenu({
     })
   },
-
+  bindPickerChange: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value);//index为数组点击确定后选择的item索引
+    this.setData({
+      index: e.detail.value
+    })
+  },
+  bindPickerChange2: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value);//index为数组点击确定后选择的item索引
+    this.setData({
+      index2: e.detail.value
+    })
+  },
+  getInput: function (e) {
+    var page = this;
+    if (e.detail.value.indexOf(",") == -1) {
+      return
+    }
+    var tags = e.detail.value.split(",");
+    if (!page.data.card.tags || page.data.card.tags.length == 0) {
+      tags.push(page.data.array[ page.data.index ]);
+    }
+    console.log(tags);
+    page.setData({
+      tags: tags
+    });
+  },
+  offline: function(e) {
+    this.data.card.status = 0;
+    this.setData({
+      card: this.data.card
+    });
+  },
+  online: function (e) {
+    this.data.card.status = 1;
+    this.setData({
+      card: this.data.card
+    });
+  },
   onUpdateLocation: function (latitude, longitude) {
     var page = this;
     let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
@@ -336,7 +384,8 @@ Page({
     console.log(opType);
     console.log(page.data.cardId);
     if (opType == "update" && page.data.cardId.length>0){
-      cardData.status = page.data.card.status,
+      cardData.status = page.data.card.status;
+      cardData.tags = page.data.tags;
       //update
       wx.showLoading({
         title: '正在更新...'

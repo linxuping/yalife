@@ -20,7 +20,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address+' '+distanceDesc+' '+(type || '全部')}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{address+' '+distanceDesc+' '+(type || '全部')}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
 
       </view>
     </view>
@@ -34,30 +34,33 @@
     </navigator>
   </view>
 
-  <view wx:if="{{showGoods}}" style="width:95%;text-align:center;margin-top:8px;background-color:#f0f0f0">
-    <image mode="aspectFit" src="../../images/second.png" data-type="二手" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
-    <image mode="aspectFit" src="../../images/employ.png" data-type="招聘" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
-    <image mode="aspectFit" src="../../images/help.png" data-type="求助" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
-    <image mode="aspectFit" src="../../images/neibor.png" data-type="邻里" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
-    <image mode="aspectFit" src="../../images/all.png" data-type="全部" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+  <view style="width:95%">
+    <view wx:if="{{showGoods}}" style="text-align:center;margin-top:8px;background-color:#f0f0f0">
+      <image mode="aspectFit" src="../../images/second.png" data-type="二手" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+      <image mode="aspectFit" src="../../images/employ.png" data-type="招聘" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+      <image mode="aspectFit" src="../../images/help.png" data-type="求助" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+      <image mode="aspectFit" src="../../images/neibor.png" data-type="邻里" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+      <image mode="aspectFit" src="../../images/all.png" data-type="全部" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
+    </view>
+    <view wx:if="{{showGoods}}" style="text-align:center;background-color:#f0f0f0">
+      <view class="typeBtn" data-type="二手">
+        <text>二手</text>
+      </view>
+      <view class="typeBtn">
+        <text>招聘</text>
+      </view>
+      <view class="typeBtn">
+        <text>求助</text>
+      </view>
+      <view class="typeBtn">
+        <text>邻里</text>
+      </view>
+      <view class="typeBtn">
+        <text>全部</text>
+      </view>
+    </view>  
   </view>
-  <view wx:if="{{showGoods}}" style="width:95%;text-align:center;background-color:#f0f0f0">
-    <view class="typeBtn" data-type="二手">
-      <text>二手</text>
-    </view>
-    <view class="typeBtn">
-      <text>招聘</text>
-    </view>
-    <view class="typeBtn">
-      <text>求助</text>
-    </view>
-    <view class="typeBtn">
-      <text>邻里</text>
-    </view>
-    <view class="typeBtn">
-      <text>全部</text>
-    </view>
-  </view>
+
 
 <view class="parent">
   <view class="card child" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id">
@@ -68,17 +71,18 @@
             <text class="textLimitwithImg" wx:if="{{item.imgurl}}">{{item.content}}</text>
             <text class="textLimitwithoutImg" wx:else>{{item.content}}</text>
           </view>
-          
-          <view class="title address" style="text-align:right">{{item.address}}</view>
-          <text class="typeStyle">{{item.type}}</text>
-          <view class="title" style="text-align:right">{{(item.create_time)}}</view>
+          <view style="width:auto">
+            <text class="typeStyle">{{item.type}}</text>
+            <view class="title" style="text-align:right">{{(item.create_time)}}</view>          
+          </view>
+          <view class="title address oneLine" style="text-align:right">{{item.address}}</view>
+          <view></view><view></view><view></view>
       </view>
     </navigator>
   </view>
 </view>
 
-  <view class="search-types"  style="width:95%">
-
+<view class="search-types"  style="align:center">
   <view wx:if="{{showTypes}}" style="height:100px;display:none">
     <scroll-view class="tab-list" scroll-x scroll-with-animation>
       <view wx:for="{{tabList}}" class="tab-item {{curTab===index ? 'selected-tab':''}}" data-index="{{index}}" bindtap="selectTab">{{item.name}}</view>
@@ -102,16 +106,33 @@
   </view>
 
   <view wx:if="{{showTypes}}" style="text-align:left">
-    <text style="display:block;margin-bottom:12px">请选择距离范围（内）：</text>
-    <button class="goodbutton" data-distance="3000" bindtap="typeSearch">3km</button>
-    <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
-    <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
+    <view style="display:none"> 
+      <text style="display:block;margin-bottom:12px;margin-left:8px">请选择距离范围（内）：</text>
+      <button class="goodbutton" data-distance="3000" bindtap="typeSearch">3km</button>
+      <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
+      <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
+    </view>
+
+    <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" style="margin-top:16px">
+      <view style="bottom-margin:20px; margin-left:8px" bindtap="">
+        <text>选择距离范围（内）：</text>
+        <text class="modify" style="color: blue">{{array[index]}}</text>
+      </view>
+    </picker>
+
     <view class="divLine"></view>
-    <view style="text-align:center" bindtap="choosePos">
+    <view style="text-align:left;margin-left:8px" bindtap="choosePos">
       <text >我的位置：</text><text class="address addressAfter" style="color:blue">{{address}}</text>
       <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige; display:none" bindtap="choosePos">修正我的位置</button>
     </view>
-    
+    <view class="divLine"></view>
+    <text style="margin-left:8px">关键字搜索：</text>
+    <view>
+      <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}">
+        <text style="margin:10px">{{item}}</text>
+      </view>    
+    </view>
+
     <button style="margin:30rpx;display:none" bindtap="typeSearch">搜索</button>
     <contact-button style="position:fixed;bottom:16px;right:16px">联系我</contact-button>
     <view style="position:fixed;bottom:16px;right:16px;display:none"><text style="color:#CDCDCD">客服微信号：lttlovefm</text></view>
