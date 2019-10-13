@@ -41,6 +41,6 @@
     <button formType="submit">修改</button>
   </form>
   <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
-    <button formType="submit">新增</button>
+    <button formType="submit">发布</button>
   </form>
 </view>

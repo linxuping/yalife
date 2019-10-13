@@ -54,6 +54,7 @@ Page({
     console.log(options.id);
 
     if (options.id != undefined) {
+      app.addEventLog("into card.update", options.id);
       page.setData({
         cardId: options.id
       });
@@ -356,6 +357,7 @@ Page({
       wx.showLoading({
         title: '正在新建...'
       })
+      app.addEventLog("add card");
       db.collection('attractions').add({
         // data 字段表示需新增的 JSON 数据
         data: cardData,
@@ -384,13 +386,14 @@ Page({
     console.log(opType);
     console.log(page.data.cardId);
     if (opType == "update" && page.data.cardId.length>0){
-      cardData.status = page.data.card.status;
+      cardData.status = 2; //page.data.card.status;
       cardData.tags = page.data.tags;
       //update
       wx.showLoading({
         title: '正在更新...'
       })
       console.log(123456);
+      app.addEventLog("update card");
       db.collection('attractions').doc(this.data.cardId).update({
         data: cardData,
         success: function (res) {

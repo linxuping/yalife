@@ -33,6 +33,8 @@ Page({
       }
     });
 
+    app.addEventLog("into homepage");
+
     /*wx.cloud.callFunction({
       name: 'message',
       data: {
@@ -174,6 +176,7 @@ Page({
   },
 
   goAddPage: function () {
+    app.addEventLog("into homepage.add");
     wx.redirectTo({
       url: '/pages/editCard/editCard'
     })

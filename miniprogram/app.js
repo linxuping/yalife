@@ -270,5 +270,31 @@ App({
         }
       }
     });
+  },
+  addEventLog: function (ev, arg1, arg2) {
+    var page = this;
+    var db = wx.cloud.database();
+    const _ = db.command
+    db.collection('user_log').add({
+      // data 字段表示需新增的 JSON 数据
+      data: {
+        event: ev,
+        arg1: arg1,
+        arg2: arg2,
+        create_time: formatTime(new Date)
+      },
+    })
   }
 })
+
+function formatTime(date) {
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+  var second = date.getSeconds()
+
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+}

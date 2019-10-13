@@ -178,9 +178,10 @@ Page({
       index: e.detail.value,
       distance: distance
     })
+    app.addEventLog("choose distance", distance);
     page.getTags(true);
   },
-  onLoadCards: function (openid, latitude, longitude, dfrom, dto) {
+  onLoadCards: function (openid, latitude, longitude, dfrom, dto, firstPage) {
     if (openid == "") {
       console.log("no openid");
       return
@@ -202,10 +203,16 @@ Page({
       cond.tags = page.data.type;
     }
     cond.status = 1
-    wx.showLoading({
-      title: '正在加载...',
-    })
-    db.collection('attractions').where(cond).get({
+    var query = db.collection('attractions').where(cond).orderBy("update_time", "desc");
+    if (firstPage) {
+      wx.showLoading({
+        title: '正在加载...',
+      })
+      query = query.limit(200)
+    } else {
+      query = query.skip(200)
+    }
+    query.get({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);
@@ -231,7 +238,7 @@ Page({
         }
         page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
         wx.hideLoading();
-        if (res.data.length == 0) {
+        if (res.data.length==0 && firstPage) {
           wx.showModal({
             title: '附近未有发布条目😊',
             content: '',
@@ -240,12 +247,16 @@ Page({
             success(res) {
               if (res.cancel) {
               } else if (res.confirm) {
+                app.addEventLog("into index.add.hint");
                 wx.redirectTo({
                   url: '/pages/editCard/editCard',
                 })
               }
             }
           })
+        } else if (firstPage) {
+          //是否为第一页，继续加载其他
+          //page.onLoadCards(openid, latitude, longitude, dfrom, dto, false);
         }
       },
       fail: err => {
@@ -321,7 +332,7 @@ Page({
             console.log(res);
             console.log('云函数获取到的openid: ', res.result.openid);
             app.globalData.openid = res.result.openid
-            page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize);
+            page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, true);
           }
         });
 
@@ -363,6 +374,7 @@ Page({
           latitude: res.latitude, 
           longitude: res.longitude
         });
+        app.addEventLog("choose pos", address);
         page.getTags(true);
         app.globalData.latitude = res.latitude;
         app.globalData.longitude = res.longitude;
@@ -570,6 +582,7 @@ Page({
       distance = event.currentTarget.dataset.distance;
     }
     console.log(distance);
+    app.addEventLog("type search", event.currentTarget.dataset.type, distance);
     var type = event.currentTarget.dataset.type;
     if (type == "全部" || type==undefined) {
       type = ""
@@ -582,7 +595,7 @@ Page({
     }
     var page = this;
     page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc, distance: distance,  type: type  });
-    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance));
+    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), true);
   },
   onReachBottom: function(){
     return;
@@ -608,7 +621,7 @@ Page({
         wx.hideLoading();
       }
     });*/
-    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000)
+    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000, true)
     wx.hideLoading();
   },
   update_goods_index: function(e) {
@@ -705,6 +718,7 @@ Page({
   },
   onShareAppMessage: function () {
     var page = this;
+    app.addEventLog("index share");
     return {
       title: page.data.goods[0].content,
       desc: '各种类别都有哦～',
@@ -721,6 +735,7 @@ Page({
     }
   },
   goAddPage: function () {
+    app.addEventLog("into index.add");
     wx.redirectTo({
       url: '/pages/editCard/editCard',
     })

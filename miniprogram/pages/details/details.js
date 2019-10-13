@@ -1,5 +1,6 @@
 // miniprogram/pages/details/details.js
 var db = wx.cloud.database();
+const app = getApp()
 
 Page({
 
@@ -39,7 +40,7 @@ Page({
             page.setData({
               card: card
             });
-            
+            app.addEventLog("into detail", card);
           }
         },
         fail: err => {
@@ -50,6 +51,7 @@ Page({
   },
   onShareAppMessage: function () {
     var page = this;
+    app.addEventLog("detail share", page.data.cardId);
     return {
       title: page.data.card.address,
       desc: '各种类别都有哦～',

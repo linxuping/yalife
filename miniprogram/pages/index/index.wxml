@@ -34,7 +34,7 @@
     </navigator>
   </view>
 
-  <view style="width:95%">
+  <view style="width:95%;display:none">
     <view wx:if="{{showGoods}}" style="text-align:center;margin-top:8px;background-color:#f0f0f0">
       <image mode="aspectFit" src="../../images/second.png" data-type="二手" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
       <image mode="aspectFit" src="../../images/employ.png" data-type="招聘" style="height:{{typeImgHeight}}px;" class="typeBtn" bindtap="typeSearch"></image>
