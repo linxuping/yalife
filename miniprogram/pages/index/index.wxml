@@ -62,7 +62,7 @@
   </view>
 
 
-<view class="parent">
+<view class="{{goods.length>1 ? 'parent':'parent-one'}}">
   <view class="card child" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id">
     <navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >
       <view style="margin:2px">

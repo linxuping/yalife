@@ -49,6 +49,10 @@ Page({
     page.setData({
       isAdmin: app.isAdmin()
     });
+    wx.showModal({
+      title: 'openid',
+      content: app.globalData.openid,
+    })
 
     console.log(options);
     console.log(options.id);
@@ -160,6 +164,7 @@ Page({
     this.setData({
       card: this.data.card
     });
+    app.sendMessage(this.data.card._openid, "title222", "msg222...");
   },
   onUpdateLocation: function (latitude, longitude) {
     var page = this;
@@ -338,7 +343,8 @@ Page({
       imgurl: page.data.imgurl,
       imgurls: page.data.imgurls,
       content: page.data.content,
-      update_time: formatTime(new Date) //formatTime(new Date)
+      update_time: formatTime(new Date), //formatTime(new Date)
+      sort_time:   new Date
     };
     if (page.data.latitude && page.data.longitude) {
       cardData["location"] = db.Geo.Point(page.data.longitude, page.data.latitude)

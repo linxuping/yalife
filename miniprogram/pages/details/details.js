@@ -53,7 +53,7 @@ Page({
     var page = this;
     app.addEventLog("detail share", page.data.cardId);
     return {
-      title: page.data.card.address,
+      title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
       desc: '各种类别都有哦～',
       path: '/pages/details/details?id='+page.data.cardId
     }

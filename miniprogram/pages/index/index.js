@@ -203,7 +203,7 @@ Page({
       cond.tags = page.data.type;
     }
     cond.status = 1
-    var query = db.collection('attractions').where(cond).orderBy("update_time", "desc");
+    var query = db.collection('attractions').where(cond).orderBy("sort_time", "desc");
     if (firstPage) {
       wx.showLoading({
         title: '正在加载...',

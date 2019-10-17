@@ -221,7 +221,7 @@ App({
     });
   },
   sendMessage: function (openid, title, message, cardId) {
-    console.log("sendMessage: ");
+    console.log("sendMessage1: ");
     //demo: app.sendMessage(res.result.openid, "title", "msg...");
     var page = this;
     var db = wx.cloud.database();
@@ -231,7 +231,7 @@ App({
       { _openid: openid }
     ).get({
       success: res => {
-        console.log('sendMessage: ');
+        console.log('sendMessage2: ');
         console.log(res.data);
 
         if (res.data.length > 0) {

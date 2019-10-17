@@ -3,7 +3,7 @@
   <image style="width:30px;height:30px;position:fixed;top:4px;left:4px;z-index:1000" src="../../images/back.png" mode="aspectFit" bindtap="goBack"></image>
 
   <view style="width:95%;margin-top:35px;margin-bottom:80px;text-align:center">
-    <textarea placeholder="求助/转卖什么？联系方式是什么？" style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
+    <textarea placeholder="求助/转卖什么？联系方式是什么？(最好写微信号，避免手机号码骚扰)" style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
 
   <view wx:if="{{isAdmin}}" style="margin-top:8px;border:solid red 1px">
     <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">

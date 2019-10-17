@@ -27,7 +27,7 @@ Page({
         page.setData({
           openid: res.result.openid
         });
-        page.onShow()
+        //page.onShow()
 
         //app.sendMessage(res.result.openid, "title", "msg...");
       }
@@ -77,15 +77,40 @@ Page({
     console.log("app.globalData: ");
     console.log(app.isAdmin());
     if (!app.isAdmin()) {
-      cond._openid = page.data.openid
+      cond._openid = app.globalData.openid
     }
-    db.collection('attractions').orderBy('create_time', 'desc').where(cond).get({
+    /*db.collection('attractions').orderBy('update_time', 'desc').where(cond).get({
       success: res => {
         console.log("geo result: ");
         console.log(res.data);
         page.setData({
           cardList: res.data
         })
+        setTimeout(function () {
+          page.setData({
+            loaded: true
+          })
+        }, 1000);
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })*/
+    page.getCardsRecursively(cond, 0, 20);
+  },
+  getCardsRecursively: function(cond, offset,limit){
+    var page = this;
+    db.collection('attractions').orderBy('sort_time', 'desc').where(cond).skip(offset).limit(limit).get({
+      success: res => {
+        console.log("cards: ");
+        console.log(res.data);
+        page.setData({
+          cardList: page.data.cardList.concat( res.data )
+        })
+        if (res.data.length == limit) {
+          console.log("getCardsRecursively: "+offset+" "+limit);
+          page.getCardsRecursively(cond, offset+limit, limit);
+        }
         setTimeout(function () {
           page.setData({
             loaded: true
