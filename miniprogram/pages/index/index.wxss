@@ -427,9 +427,11 @@ border-bottom: 5rpx solid #1aae18;
   -moz-column-count: 2;
   -webkit-column-count: 2;
   column-count: 2;
+  margin-top: 4px;
 }
 .parent-one { 
   width:50%;
+  margin-top: 4px;
 }
 .child {
   margin-top:4px;	

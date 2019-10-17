@@ -49,10 +49,10 @@ Page({
     page.setData({
       isAdmin: app.isAdmin()
     });
-    wx.showModal({
+    /*wx.showModal({
       title: 'openid',
       content: app.globalData.openid,
-    })
+    })*/
 
     console.log(options);
     console.log(options.id);
