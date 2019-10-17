@@ -26,7 +26,7 @@ class Wechat {
    * @return {Promise} 
    */
   static request(url, params, method = "GET", type = "json") {
-    console.log("向后端传递的参数", params);
+    //console.log("向后端传递的参数", params);
     return new Promise((resolve, reject) => {
       let opts = {
         url: url,
@@ -36,7 +36,7 @@ class Wechat {
         success: resolve,
         fail: reject
       }
-      console.log("请求的URL", opts.url);
+      //console.log("请求的URL", opts.url);
       wx.request(opts);
     });
   };

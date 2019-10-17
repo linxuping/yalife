@@ -187,7 +187,7 @@ Page({
       return
     }
     var page = this;
-    console.log(page.data);
+    //console.log(page.data);
     const db = wx.cloud.database()
     if (dto == 0) {
       dto = 100000000;
@@ -329,7 +329,7 @@ Page({
         wx.cloud.callFunction({
           name: 'login',
           complete: res => {
-            console.log(res);
+            //console.log(res);
             console.log('云函数获取到的openid: ', res.result.openid);
             app.globalData.openid = res.result.openid
             page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, true);
@@ -346,7 +346,7 @@ Page({
         }
 
         wechat.request(url, params).then(function (value) {
-            console.log(`fulfilled: ${value}`);
+            //console.log(`fulfilled: ${value}`);
             console.log(value.data.result);
             app.globalData.address = value.data.result.address_component.street_number;
           page.setData({ address: app.globalData.address});
@@ -392,8 +392,8 @@ Page({
         title: '正在分析最近的分享信息...',
       })
     }
-    console.log("this.data: ");
-    console.log(page.data);
+    //console.log("this.data: ");
+    //console.log(page.data);
     var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(page.data.longitude, page.data.latitude),
@@ -408,8 +408,8 @@ Page({
         console.log(res.data);
         var dic = {};
         for (var i=0; i<res.data.length; i++) {
-          console.log("item.tags: ");
-          console.log(res.data[i].tags);
+          //console.log("item.tags: ");
+          //console.log(res.data[i].tags);
           var tmpTags = res.data[i].tags;
           if (tmpTags==undefined || tmpTags.length==0) {
             continue
@@ -423,12 +423,12 @@ Page({
             }
           }
         }
-        console.log("dic: ");
-        console.log(dic);
+        //console.log("dic: ");
+        //console.log(dic);
         var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
         var tags = [];
         for(var key in res2){
-          console.log(">>> key: " + res2[key] + " ,value: " + dic[res2[key]]);
+          //console.log(">>> key: " + res2[key] + " ,value: " + dic[res2[key]]);
           tags.push(res2[key])
         }
         if (tags.length > 0) {
