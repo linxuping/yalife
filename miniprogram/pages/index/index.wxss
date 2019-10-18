@@ -404,7 +404,7 @@ border-bottom: 5rpx solid #1aae18;
 }
 .typeStyle {
   float: left;
-  background-color: gray;
+  background-color:rgba(102, 102, 102, 0.397);
   color: white;
   border-radius: 4px;
   margin-bottom: 2px;
