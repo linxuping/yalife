@@ -128,7 +128,7 @@
     <view class="divLine"></view>
     <text style="margin-left:8px">关键字搜索：</text>
     <view>
-      <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}">
+      <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
         <text style="margin:10px">{{item}}</text>
       </view>    
     </view>

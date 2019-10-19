@@ -9,7 +9,7 @@
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
         <view style='width:128rpx; height:128rpx; margin:20rpx;'>
-          <image class='index-logo' style='width:128rpx; height:128rpx' src="{{item.imgurl || defaultImg}}"></image>
+          <image class='index-logo' style='width:128rpx; height:128rpx; border-radius:8px' src="{{item.imgurl || ((!!item.imgurls && item.imgurls.length>0)?item.imgurls[0]:defaultImg)}}"></image>
         </view>
         <!-- 右边内容 上下结构 -->
         <view style='width:100%'>
@@ -17,6 +17,7 @@
           <text class="cardStatus" wx:if="{{item.status==2}}">审核中</text>
           <text class="cardStatus" wx:if="{{item.status==1}}">在线</text>
           <text class='item_title' style="display:block;text-align:right">{{item.update_time}}</text>
+          <text class='item_title' style="" wx:if="{{isAdmin}}">{{item._id}}</text>
         </view>
       </view>
     </navigator>
@@ -28,5 +29,4 @@
   <view class="add-btn" style="width:150%;text-align:center">
     <image style="width:55px;height:55px;bottom:8px;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
   </view>
-  
 </view>

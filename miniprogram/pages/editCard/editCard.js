@@ -35,7 +35,8 @@ Page({
     index2: 0,
     array2: ['家具', '化妆品', '图书', '衣鞋', '电器', '零食', '保姆', '租房/车位', '招聘', '求助', '邻里', '全部'],
     isAdmin: false,
-    tags: []
+    tags: [],
+    loading: false
   },
 
   /**
@@ -47,7 +48,7 @@ Page({
       title: '新建条目发布'
     })
     page.setData({
-      isAdmin: app.isAdmin()
+      isAdmin: false //app.isAdmin()
     });
     /*wx.showModal({
       title: 'openid',
@@ -81,7 +82,7 @@ Page({
               imgurl: card.imgurl,
               imgurls: card.imgurls || [card.imgurl],
               content: card.content,
-              isAdmin: app.isAdmin(),
+              isAdmin: false //app.isAdmin(),
             })
 
             if (card.address == "") {
@@ -306,8 +307,18 @@ Page({
   },
 
   updateCard: function (event) {
+    console.log("update card.");
     var page = this;
     var opType = event.currentTarget.dataset.type;
+
+    if (page.data.loading) {
+      wx.showToast({
+        title: '正在上传图片...',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
 
     if (event.detail.formId != 'the formId is a mock one') {
 
@@ -327,6 +338,7 @@ Page({
     
 
     if (page.data.content == "") {
+      console.log("content empty...");
       wx.showToast({
         title: '发布内容为空！',
         icon: 'none',
@@ -363,6 +375,7 @@ Page({
       wx.showLoading({
         title: '正在新建...'
       })
+      page.setData({loading: true});
       app.addEventLog("add card");
       db.collection('attractions').add({
         // data 字段表示需新增的 JSON 数据
@@ -379,6 +392,7 @@ Page({
             url: '/pages/homepage/homepage',
           })
           wx.hideLoading();
+          page.setData({ loading: false });
         },
         fail: function (res) {
           console.log(res);
@@ -386,6 +400,7 @@ Page({
             title: '新增失败',
           })
           wx.hideLoading();
+          page.setData({ loading: false });
         }
       })
     } 

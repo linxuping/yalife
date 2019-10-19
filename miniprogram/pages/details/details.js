@@ -1,6 +1,7 @@
 // miniprogram/pages/details/details.js
 var db = wx.cloud.database();
 const app = getApp()
+const _ = db.command
 
 Page({
 
@@ -9,7 +10,11 @@ Page({
    */
   data: {
     cardId: 0,
-    card: undefined
+    card: undefined,
+    cardList: [],
+    latitudeShared: 0,
+    longitudeShared: 0,
+    defaultImg: "../../images/default.png"
   },
 
   /**
@@ -22,9 +27,10 @@ Page({
     })
     if (options.id != undefined) {
       page.setData({
-        cardId: options.id
+        cardId: options.id,
+        latitudeShared: options.latitude,
+        longitudeShared: options.longitude
       });
-      const _ = db.command
       db.collection('attractions').where({
         _id: options.id
       }).get({
@@ -37,9 +43,13 @@ Page({
               card.create_time = card.update_time;
             }
             console.log(card);
+            card.address = card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
             page.setData({
               card: card
             });
+
+            page.getCardsRelated();
+
             app.addEventLog("into detail", card);
           }
         },
@@ -55,49 +65,60 @@ Page({
     return {
       title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
       desc: '各种类别都有哦～',
-      path: '/pages/details/details?id='+page.data.cardId
+      path: '/pages/details/details?id=' + page.data.cardId + '&latitude=' + app.globalData.latitude + '&longitude=' + app.globalData.longitude
     }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  getCardsRelated: function (loadHigh) {
+    var page = this;
+    var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
+    var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
+    console.log("getCardsRelated: ");
+    console.log(longitude);
+    console.log(latitude);
+    var tags = !!page.data.card.tags ? page.data.card.tags:[];
+    if (!!loadHigh) {
+      tags = ["高"];
+    }
+    var cond = {
+      location: _.geoNear({
+        geometry: db.Geo.Point(parseFloat(longitude), parseFloat(latitude)),
+        minDistance: 0,
+        maxDistance: 15000,
+      }),
+      status: 1,
+      tags: _.in(tags)
+    };
+    console.log(cond);
+    db.collection('attractions').orderBy('sort_time', 'desc').where(cond).limit(10).get({
+      success: res => {
+        console.log("cards: ");
+        console.log(res.data);
+        for (var i=0; i<res.data.length; i++) {
+          res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+        }
+        if (page.data.cardList.length == 0){
+          page.setData({ cardList: page.data.cardList.concat(res.data) })
+        } else {
+          //加载高优，排重
+          var ids = []
+          for (var i=0; i<page.data.cardList.length; i++) {
+            ids.push(page.data.cardList[i]._id);
+          }
+          for (var i = 0; i < res.data.length; i++) {
+            if (ids.indexOf(res.data[i]._id) == -1) {
+              page.data.cardList.push(res.data[i]);
+            }
+          }
+          page.setData({ cardList: page.data.cardList })
+        }
+        
+        if (!loadHigh) {
+          page.getCardsRelated(1);
+        }
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  }
 })

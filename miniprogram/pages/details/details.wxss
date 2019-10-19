@@ -6,3 +6,38 @@
   text-align: left;
   line-height: 2em;
 }
+/* 分隔线--底部 */
+.line{
+    width: 90%;    /* 分隔线的长度 */
+    margin: auto;
+    height: 1px;    /* 分隔线粗细 */
+    text-align: center;
+    font-size: 24rpx;
+    color: #aaa;
+    background: #ccc;
+    margin-top: 40px;
+    margin-bottom: 22px;
+}
+.line span{
+    position: relative;
+    top: -8px;
+    background: #fff;
+    padding: 0px 10px;
+}
+.oneLine {
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-size: 30rpx;
+}
+.mulLine {
+  -webkit-line-clamp: 3;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
