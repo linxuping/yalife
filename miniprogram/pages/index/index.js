@@ -248,7 +248,7 @@ Page({
               if (res.cancel) {
               } else if (res.confirm) {
                 app.addEventLog("into index.add.hint");
-                wx.redirectTo({
+                wx.navigateTo({
                   url: '/pages/editCard/editCard',
                 })
               }
@@ -277,7 +277,7 @@ Page({
 
     var page = this;
     if (!wx.cloud) {
-      wx.redirectTo({
+      wx.navigateTo({
         url: '../chooseLib/chooseLib',
       })
       return
@@ -736,12 +736,12 @@ Page({
   },
   goAddPage: function () {
     app.addEventLog("into index.add");
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/editCard/editCard',
     })
   },
   goHomePage: function () {
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/homepage/homepage',
     })
   },

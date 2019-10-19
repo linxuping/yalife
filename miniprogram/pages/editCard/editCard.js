@@ -388,7 +388,7 @@ Page({
           wx.showToast({
             title: '新增成功',
           })
-          wx.redirectTo({
+          wx.navigateTo({
             url: '/pages/homepage/homepage',
           })
           wx.hideLoading();
@@ -421,7 +421,7 @@ Page({
           wx.showToast({
             title: '更新成功',
           })
-          wx.redirectTo({
+          wx.navigateTo({
             url: '/pages/homepage/homepage',
           })
           wx.hideLoading();
@@ -447,7 +447,7 @@ Page({
   goBack: function () {
     wx.navigateBack({
       fail: function(){
-        wx.redirectTo({
+        wx.navigateTo({
           url: '/pages/index/index',
         })
       }

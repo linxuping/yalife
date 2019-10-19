@@ -195,14 +195,14 @@ Page({
   },
 
   goMainPage: function(){
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/index/index'
     })
   },
 
   goAddPage: function () {
     app.addEventLog("into homepage.add");
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/editCard/editCard'
     })
   }

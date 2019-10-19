@@ -121,4 +121,9 @@ Page({
       }
     })
   },
+  goIndex: function() {
+    wx.navigateTo({
+      url: '/pages/index/index',
+    })
+  }
 })

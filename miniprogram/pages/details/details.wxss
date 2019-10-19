@@ -15,7 +15,7 @@
     font-size: 24rpx;
     color: #aaa;
     background: #ccc;
-    margin-top: 40px;
+    margin-top: 60px;
     margin-bottom: 22px;
 }
 .line span{
