@@ -469,7 +469,7 @@ border-bottom: 5rpx solid #1aae18;
 }
 
 .textLimitwithoutImg {
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 3;
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: break-all;

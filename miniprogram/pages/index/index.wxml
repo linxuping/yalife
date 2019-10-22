@@ -73,7 +73,7 @@
           </view>
           <view style="width:auto">
             <text class="typeStyle">{{item.type}}</text>
-            <view class="title" style="text-align:right">{{(item.create_time)}}</view>          
+            <view class="title" style="text-align:right; font-style:italic; font-size:25rpx">{{(item.create_time)}}</view>          
           </view>
           <view class="title address oneLine" style="text-align:right">{{item.address}}</view>
           <view></view><view></view><view></view>

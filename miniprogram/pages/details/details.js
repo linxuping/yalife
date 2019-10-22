@@ -44,6 +44,7 @@ Page({
             }
             console.log(card);
             card.address = card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+            card.imgurls = card.imgurls || [card.imgurl]
             page.setData({
               card: card
             });
@@ -125,5 +126,13 @@ Page({
     wx.navigateTo({
       url: '/pages/index/index',
     })
-  }
+  },
+  previewImage: function (e) {
+    var page = this;
+    var current = e.target.dataset.src;
+    wx.previewImage({
+      current: current, // 当前显示图片的http链接  
+      urls: page.data.card.imgurls // 需要预览的图片http链接列表  
+    })
+  },
 })
