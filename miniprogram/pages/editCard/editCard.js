@@ -159,13 +159,50 @@ Page({
     this.setData({
       card: this.data.card
     });
+    wx.cloud.callFunction({
+      name: 'sendmsg',
+      data: {
+        openid: page.data.card._openid, 
+        title: "title", 
+        message: "offline", 
+        cardId: page.data.card._id,
+        status: 0
+      },
+      success: res => {
+        // output: res.result === 3
+        console.log("sendmsg succ");
+      },
+      fail: err => {
+        // handle error
+        console.log(err);
+      }
+    })
   },
   online: function (e) {
+    var page = this;
     this.data.card.status = 1;
     this.setData({
       card: this.data.card
     });
-    app.sendMessage(this.data.card._openid, "title222", "msg222...");
+    //app.sendMessage(this.data.card._openid, "title222", "msg222...");
+    wx.cloud.callFunction({
+      name: 'sendmsg',
+      data: {
+        openid: page.data.card._openid, 
+        title: "title", 
+        message: "online", 
+        cardId: page.data.card._id,
+        status: 1
+      },
+      success: res => {
+        // output: res.result === 3
+        console.log("sendmsg succ");
+      },
+      fail: err => {
+        // handle error
+        console.log(err);
+      }
+    })
   },
   onUpdateLocation: function (latitude, longitude) {
     var page = this;
