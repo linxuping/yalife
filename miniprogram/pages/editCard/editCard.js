@@ -167,7 +167,7 @@ Page({
         title: page.data.card.content.substr(0, 66) || "[图片]",
         message: "审核不通过",  
         cardId: page.data.card._id,
-        status: 0
+        status: 3
       },
       success: res => {
         // output: res.result === 3
