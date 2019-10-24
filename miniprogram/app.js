@@ -221,8 +221,29 @@ App({
     });
   },
   sendMessage: function (openid, title, message, cardId) {
-    console.log("sendMessage1: ");
-    //demo: app.sendMessage(res.result.openid, "title", "msg...");
+    console.log("sendMessage: ");
+    wx.cloud.callFunction({
+      name: 'sendmsg',
+      data: {
+        openid: openid, 
+        title: title, 
+        message: message, 
+        cardId: cardId
+      },
+      success: res => {
+        // output: res.result === 3
+        console.log("sendmsg succ");
+      },
+      fail: err => {
+        // handle error
+        console.log(err);
+      },
+      complete: () => {
+        // ...
+      }
+    })    
+    return;
+    
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
