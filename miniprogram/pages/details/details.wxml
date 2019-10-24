@@ -9,7 +9,6 @@
     <text>{{card.create_time}}</text>
   </view>
 
-
   <view class="line" wx:if="{{cardList.length>1}}">
     <span>相关推荐</span>
   </view>

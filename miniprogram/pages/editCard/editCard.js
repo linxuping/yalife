@@ -154,23 +154,24 @@ Page({
       tags: tags
     });
   },
-  offline: function(e) {
+  offline: function (e) {
+    var page = this;
     this.data.card.status = 0;
     this.setData({
       card: this.data.card
     });
     wx.cloud.callFunction({
-      name: 'sendmsg',
+      name: 'audit',
       data: {
         openid: page.data.card._openid, 
-        title: "title", 
-        message: "offline", 
+        title: page.data.card.content || "[图片]",
+        message: "审核不通过",  
         cardId: page.data.card._id,
         status: 0
       },
       success: res => {
         // output: res.result === 3
-        console.log("sendmsg succ");
+        console.log("audit succ");
       },
       fail: err => {
         // handle error
@@ -185,18 +186,19 @@ Page({
       card: this.data.card
     });
     //app.sendMessage(this.data.card._openid, "title222", "msg222...");
+    console.log(page.data.card);
     wx.cloud.callFunction({
-      name: 'sendmsg',
+      name: 'audit',
       data: {
         openid: page.data.card._openid, 
-        title: "title", 
-        message: "online", 
+        title: page.data.card.content || "[图片]", 
+        message: "审核通过", 
         cardId: page.data.card._id,
         status: 1
       },
       success: res => {
         // output: res.result === 3
-        console.log("sendmsg succ");
+        console.log("audit succ");
       },
       fail: err => {
         // handle error
