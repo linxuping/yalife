@@ -24,12 +24,12 @@ exports.main = async (event, context) => {
     })*/
   
     console.log("sendMessage1: ");
+    console.log(event.openid);
     const _ = db.command
 
     db.collection('user_formid').where(
       { _openid: event.openid }
-    ).get({
-      success: res => {
+    ).get().then(res => {
         console.log('sendMessage2: ');
         console.log(res.data);
 
@@ -37,7 +37,9 @@ exports.main = async (event, context) => {
           var formids = res.data[0].formids;
           if (formids.length > 0) {
             var formid = formids[ formids.length-1 ]
-            wx.cloud.callFunction({
+            console.log("formid: ");
+            console.log(formid);
+            cloud.callFunction({
               name: 'message',
               data: {
                 openid: event.openid,
@@ -67,9 +69,10 @@ exports.main = async (event, context) => {
           }
 
         }
-      }
-    });
-    
+      })
+      .catch(err => {
+        console.error(err)
+      });
     
   } catch (e) {
     console.error(e)

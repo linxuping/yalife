@@ -16,61 +16,33 @@ exports.main = async (event, context) => {
     const _ = db.command
     
     db.collection('attractions').doc(event.cardId).update({
-      data: {
-        status: event.status
-      },
-      success: res => {
+        data: {
+          status: event.status,
+        }
+      }).then(res => {
+        console.log("sendMessage2: ");
         //推送
-        db.collection('user_formid').where(
-          { _openid: event.openid }
-        ).get({
-          success: res => {
-            console.log('sendMessage2: ');
-            console.log(res.data);
-
-            if (res.data.length > 0) {
-              var formids = res.data[0].formids;
-              if (formids.length > 0) {
-                var formid = formids[ formids.length-1 ]
-                wx.cloud.callFunction({
-                  name: 'message',
-                  data: {
-                    openid: event.openid,
-                    formid: formid,
-                    title: event.title,
-                    message: event.message,
-                    cardid: event.cardId
-                  },
-                  fail: function (res) {
-                    console.log(res);
-                  },
-                  complete: res => {
-                    console.log("message:")
-                    console.log(res);
-                  }
-                });
-                //删除数组尾部元素
-                db.collection('user_formid').doc(event.cardId).update({
-                  data: {
-                    formids: _.pop()
-                  },
-                  fail: res => {
-                    console.log('pop: ');
-                    console.log(res);
-                  }
-                })            
-              }
-
-            }
+        cloud.callFunction({
+          name: 'sendmsg',
+          data: {
+            openid: event.openid,
+            title: event.title,
+            message: event.message,
+            cardid: event.cardId
+          },
+          fail: function (res) {
+            console.log(res);
+          },
+          complete: res => {
+            console.log("message:")
+            console.log(res);
           }
         });
-
-      },
-      fail: res => {
-        console.log('pop: ');
+      })
+      .catch(res => {
+        console.log('catch: ');
         console.log(res);
-      }
-    })  
+      }); 
   } catch (e) {
     console.error(e)
   }
