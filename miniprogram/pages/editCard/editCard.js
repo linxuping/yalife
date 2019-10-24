@@ -164,7 +164,7 @@ Page({
       name: 'audit',
       data: {
         openid: page.data.card._openid, 
-        title: page.data.card.content || "[图片]",
+        title: page.data.card.content.substr(0, 66) || "[图片]",
         message: "审核不通过",  
         cardId: page.data.card._id,
         status: 0
@@ -191,7 +191,7 @@ Page({
       name: 'audit',
       data: {
         openid: page.data.card._openid, 
-        title: page.data.card.content || "[图片]", 
+        title: page.data.card.content.substr(0, 66) || "[图片]", 
         message: "审核通过", 
         cardId: page.data.card._id,
         status: 1
