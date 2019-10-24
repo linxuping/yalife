@@ -48,7 +48,7 @@ Page({
       title: '新建条目发布'
     })
     page.setData({
-      isAdmin: false //app.isAdmin()
+      isAdmin: app.isAdmin()
     });
     /*wx.showModal({
       title: 'openid',
@@ -82,7 +82,7 @@ Page({
               imgurl: card.imgurl,
               imgurls: card.imgurls || [card.imgurl],
               content: card.content,
-              isAdmin: false //app.isAdmin(),
+              isAdmin: app.isAdmin(),
             })
 
             if (card.address == "") {
