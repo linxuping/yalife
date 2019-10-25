@@ -36,7 +36,8 @@ Page({
     array2: ['家具', '化妆品', '图书', '衣鞋', '电器', '零食', '保姆', '租房/车位', '招聘', '求助', '邻里', '全部'],
     isAdmin: false,
     tags: [],
-    loading: false
+    loading: false,
+    reason: ""
   },
 
   /**
@@ -154,6 +155,12 @@ Page({
       tags: tags
     });
   },
+  getReason: function (e) {
+    var page = this;
+    page.setData({
+      reason: e.detail.value
+    });
+  },
   offline: function (e) {
     var page = this;
     this.data.card.status = 0;
@@ -165,7 +172,7 @@ Page({
       data: {
         openid: page.data.card._openid, 
         title: page.data.card.content.substr(0, 66) || "[图片]",
-        message: "审核不通过",  
+        message: "审核不通过("+page.data.reason+")",  
         cardId: page.data.card._id,
         status: 3
       },
