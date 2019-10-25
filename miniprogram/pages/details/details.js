@@ -53,7 +53,7 @@ Page({
             page.getCardsRelated();
 
             app.addEventLog("into detail", card);
-            recommend.track(options.id); //记录我看过的
+            
             /*recommend.get(function(cards){
               page.setData({ cardList: cards })
             });*/
