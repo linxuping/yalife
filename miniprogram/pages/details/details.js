@@ -84,7 +84,7 @@ Page({
       location: _.geoNear({
         geometry: db.Geo.Point(parseFloat(longitude), parseFloat(latitude)),
         minDistance: 0,
-        maxDistance: 15000,
+        maxDistance: page.globalData.distance || 15000,
       }),
       status: 1,
       tags: _.in(tags)
