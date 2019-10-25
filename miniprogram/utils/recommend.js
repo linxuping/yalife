@@ -28,6 +28,7 @@ class Recommend {
         console.log(res.data);
         if (res.data.length > 0) {
           var cardIds = res.data[0].cardids || []
+          cardIds.push(cardId);
           
           cond._id = _.nin(cardIds) //没有阅读过的卡片
           cond.tags =  _.in(tags)   //当前相关的标签
@@ -65,8 +66,22 @@ class Recommend {
             fail: err => {
               console.log(err);
             }
-          })          
+          })  
           
+          //更新track cardids
+          var len = cardIds.length;
+          console.log("recommend.len: ");
+          console.log(len);
+          if (len > 200) {
+            cardIds = cardIds.slice(1,len);
+          }
+          db.collection('user_track').where({
+            _openid: app.globalData.openid
+          }).update({
+            data: {
+              cardids: cardIds //待优化性能
+            }
+          });
         }
       }
     };  
