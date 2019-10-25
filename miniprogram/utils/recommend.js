@@ -60,17 +60,13 @@ class Recommend {
   };
   
   static track(cardId) {
-    db.collection('comment').add({
+    db.collection('user_track').where({
+      _openid: app.globalData.openid
+    }).update({
       data: {
-        card_id: cardId,
-        content: content,
-        status: 2,
-        reason: "",
-        create_time: formatDate(new Date().getTime())
+        tags: _.push([cardId])
       }
-    }).then(res => {
-      console.log(res)
-    }).catch(console.error) 
+    }) 
   };
   
 }
