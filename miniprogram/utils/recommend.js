@@ -58,5 +58,20 @@ class Recommend {
       }
     })
   };
+  
+  static trace(cardId) {
+    db.collection('comment').add({
+      data: {
+        card_id: cardId,
+        content: content,
+        status: 2,
+        reason: "",
+        create_time: formatDate(new Date().getTime())
+      }
+    }).then(res => {
+      console.log(res)
+    }).catch(console.error) 
+  };
+  
 }
 module.exports = Recommend;
