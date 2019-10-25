@@ -140,7 +140,7 @@ Page({
     ],
     types_class: [],
     address: "",
-    distance: 15000,
+    distance: app.globalData.distance, //15000,
     distanceDesc: "15km内",
     typeImgHeight: 0,
     typeImgHeight2: 0,
