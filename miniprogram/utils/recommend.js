@@ -20,47 +20,59 @@ class Recommend {
       }),
       status: 1
     };
-    
-    cond.tags =  _.in(tags)
-    db.collection('attractions').orderBy('priority', 'desc').orderBy('sort_time', 'desc').where(cond).limit(4).get({
+   
+    db.collection('user_track').where({
+      _openid: app.globalData.openid
+    }).get({
       success: res => {
-        console.log("cards.1: ");
         console.log(res.data);
-        for (var i=0; i<res.data.length; i++) {
-          res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
-        }
-        cards = res.data
-        
-        //2、非同标签下
-        
-        cond.tags =  _.nin(tags)
-        db.collection('attractions').orderBy('priority', 'desc').orderBy('sort_time', 'desc').where(cond).limit(4).get({
-          success: res => {
-            console.log("cards.2: ");
-            console.log(res.data);
-            for (var i=0; i<res.data.length; i++) {
-              res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+        if (res.data.length > 0) {
+          var cardIds = res.data[0].cardids || []
+          
+          cond._id = _.nin(cardIds) //没有阅读过的卡片
+          cond.tags =  _.in(tags)   //当前相关的标签
+          db.collection('attractions').orderBy('priority', 'desc').orderBy('sort_time', 'desc').where(cond).limit(4).get({
+            success: res => {
+              console.log("cards.1: ");
+              console.log(res.data);
+              for (var i=0; i<res.data.length; i++) {
+                res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+              }
+              cards = res.data
+
+              //2、非同标签下
+
+              cond.tags =  _.nin(tags)  //除了当前的其他标签
+              db.collection('attractions').orderBy('priority', 'desc').orderBy('sort_time', 'desc').where(cond).limit(4).get({
+                success: res => {
+                  console.log("cards.2: ");
+                  console.log(res.data);
+                  for (var i=0; i<res.data.length; i++) {
+                    res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+                  }
+                  cards = cards.concat(res.data)
+
+                  //返回渲染
+                  cb(cards);
+
+                },
+                fail: err => {
+                  console.log(err);
+                }
+              })
+
+            },
+            fail: err => {
+              console.log(err);
             }
-            cards = cards.concat(res.data)
-            
-            //返回渲染
-            cb(cards);
-            
-          },
-          fail: err => {
-            console.log(err);
-          }
-        })
-        
-      },
-      fail: err => {
-        console.log(err);
+          })          
+          
+        }
       }
-    })
+    };  
   };
   
   static track(cardId) {
-    
     db.collection('user_track').where({
       _openid: app.globalData.openid
     }).get({
