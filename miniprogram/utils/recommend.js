@@ -59,7 +59,7 @@ class Recommend {
     })
   };
   
-  static trace(cardId) {
+  static track(cardId) {
     db.collection('comment').add({
       data: {
         card_id: cardId,
