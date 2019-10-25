@@ -608,6 +608,7 @@ Page({
       distance = 0;
     } else {
       distanceDesc = distance/1000 + "km内"
+      app.globalData.distance = distance;
     }
     var page = this;
     page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc, distance: distance,  type: type  });
