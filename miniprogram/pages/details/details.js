@@ -1,6 +1,6 @@
 // miniprogram/pages/details/details.js
 var db = wx.cloud.database();
-var recommend = require("../../utils/recommend.js")
+var recommend = require("../../utils/recommend")
 const app = getApp()
 const _ = db.command
 
@@ -15,7 +15,8 @@ Page({
     cardList: [],
     latitudeShared: 0,
     longitudeShared: 0,
-    defaultImg: "../../images/default.png"
+    defaultImg: "../../images/default.png",
+    showHome: false,
   },
 
   /**
@@ -50,19 +51,26 @@ Page({
               card: card
             });
 
-            page.getCardsRelated();
+            //page.getCardsRelated();
 
             app.addEventLog("into detail", card);
             
-            /*recommend.get(function(cards){
-              page.setData({ cardList: cards })
-            });*/
+            var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
+            var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
+            recommend.get(card, latitude, longitude, function(cards){
+              console.log("recommend cb: ");
+              console.log(cards);
+              page.setData({ cardList: cards, showHome: true })
+            });
           }
         },
         fail: err => {
           console.log(err);
+          page.setData({ showHome: true })
         }
       }) 
+    } else {
+      page.setData({ showHome: true })
     }
   },
   onShareAppMessage: function () {
