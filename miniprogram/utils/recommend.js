@@ -60,14 +60,36 @@ class Recommend {
   };
   
   static track(cardId) {
+    
     db.collection('user_track').where({
       _openid: app.globalData.openid
-    }).update({
-      data: {
-        tags: _.push([cardId])
+    }).get({
+      success: res => {
+        console.log(res.data);
+        if (res.data.length > 0) {
+          var cardIds = res.data[0].cardids || []
+          cardIds.push(cardId);
+          var len = cardIds.length;
+          console.log(len);
+          if (len > 200) {
+            cardIds = cardIds.slice(1,len);
+          }
+
+          db.collection('user_track').where({
+            _openid: app.globalData.openid
+          }).update({
+            data: {
+              cardids: cardIds //待优化性能
+            }
+          });          
+          
+        }
+      },
+      fail: err => {
+        console.log(err);
       }
-    }) 
+    })
+    
   };
-  
 }
 module.exports = Recommend;
