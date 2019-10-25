@@ -418,6 +418,7 @@ Page({
       cardData["type"] = "邻里"
       cardData["reason"] = ""
       cardData["tags"] = [ "邻里" ]
+      cardData["priority"] = 0
       wx.showLoading({
         title: '正在新建...'
       })
