@@ -11,14 +11,15 @@ exports.main = async (event, context) => {
     console.log("sendMessage1: ");
     console.log(event.openid);
     const _ = db.command
-
-    db.collection('attractions').doc(event.cardId).update({
-      data: {
-        visit_count: _.inc(parseInt(Math.random()*10)%2+1)
-      },
-      success: console.log,
-      fail: console.error
-    })
+    for (var i=0; i<event.cardIds.length; i++) {
+      db.collection('attractions').doc(event.cardIds[i]).update({
+        data: {
+          visit_count: _.inc(parseInt(Math.random()*10)%2+1)
+        },
+        success: console.log,
+        fail: console.error
+      })
+    }
   } catch (e) {
     console.error(e)
   }
