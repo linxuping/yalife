@@ -30,8 +30,10 @@ class Recommend {
         console.log(res.data);
         var cardIds = [];
         var hasTrack = res.data.length > 0;
+        var trackId = "";
         if (hasTrack) {
-          cardIds = res.data[0].cardids || []
+          cardIds = res.data[0].cardids || [];
+          trackId = res.data[0]._id;
         }
         if (cardIds.indexOf(card._id) == -1) {
           cardIds.push(card._id);
@@ -93,12 +95,17 @@ class Recommend {
           //?
           console.log("update user_track");
           console.log(app.globalData.openid);
+          console.log(card._id);
           console.log(cardIds);
-          db.collection('user_track').where({
-            _openid: app.globalData.openid
-          }).update({
+          db.collection('user_track').doc(trackId).update({
             data: {
               cardids: cardIds //待优化性能
+            },
+            success: res => {
+              console.log("update ok.");
+            },
+            fail: err => {
+              console.error('[数据库] [更新记录] 失败：', err)
             }
           });         
         }

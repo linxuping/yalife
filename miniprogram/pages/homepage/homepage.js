@@ -157,7 +157,14 @@ Page({
   onShareAppMessage: function () {
 
   },
-
+  jumpEdit: function (event) {
+    var page = this;
+    console.log(event);
+    var cardId = event.currentTarget.dataset.cardid;
+    wx.navigateTo({
+      url: '/pages/editCard/editCard?id=' + cardId,
+    })
+  },
   onDeleteCard: function (event) {
     var page = this;
     console.log(event);

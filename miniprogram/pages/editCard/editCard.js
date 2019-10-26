@@ -199,8 +199,9 @@ Page({
       data: {
         openid: page.data.card._openid, 
         title: page.data.card.content.substr(0, 66) || "[图片]", 
-        message: "审核通过", 
+        message: "审核通过，已发布～", 
         cardId: page.data.card._id,
+        tags: page.data.tags,
         status: 1
       },
       success: res => {
