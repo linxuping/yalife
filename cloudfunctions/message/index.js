@@ -25,6 +25,7 @@ async function sendTemplateMessage(event) {
     templateId: templateId,
     formId: event.formid, //event.formId,
     page: page,
+    emphasisKeyword: "",
     data: {
       keyword1: {
         value: event.title,

@@ -195,11 +195,15 @@ Page({
     });
     //app.sendMessage(this.data.card._openid, "title222", "msg222...");
     console.log(page.data.card);
-    
+    var len = page.data.card.content.length;
+    var title = page.data.card.content.substr(0, 50);
+    if (len > 50) {
+      title += " ...";
+    }
     var args = {
       openid: page.data.card._openid,
-      title: page.data.card.content.substr(0, 66) || "[图片]",
-      message: "审核通过",
+      title: title || "[图片]",
+      message: "审核通过，请保持联系方式通畅哟～",
       cardId: page.data.card._id,
       tags: page.data.tags,
       status: 1
