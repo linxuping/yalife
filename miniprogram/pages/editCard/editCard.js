@@ -143,7 +143,8 @@ Page({
   },
   getInput: function (e) {
     var page = this;
-    if (e.detail.value.indexOf(",") == -1) {
+    //if (e.detail.value.indexOf(",") == -1) {
+    if (e.detail.value.length == 0) {
       return
     }
     var tags = e.detail.value.split(",");
@@ -194,18 +195,21 @@ Page({
     });
     //app.sendMessage(this.data.card._openid, "title222", "msg222...");
     console.log(page.data.card);
+    
+    var args = {
+      openid: page.data.card._openid,
+      title: page.data.card.content.substr(0, 66) || "[图片]",
+      message: "审核通过",
+      cardId: page.data.card._id,
+      tags: page.data.tags,
+      status: 1
+    };
     wx.cloud.callFunction({
       name: 'audit',
-      data: {
-        openid: page.data.card._openid, 
-        title: page.data.card.content.substr(0, 66) || "[图片]", 
-        message: "审核通过，已发布～", 
-        cardId: page.data.card._id,
-        tags: page.data.tags,
-        status: 1
-      },
+      data: args,
       success: res => {
         // output: res.result === 3
+        console.log(args);
         console.log("audit succ");
       },
       fail: err => {
