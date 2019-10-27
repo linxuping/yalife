@@ -70,6 +70,22 @@ exports.main = async (event, context) => {
                     console.log(res);
                   }
                 });
+
+                /*cloud.callFunction({
+                  name: 'kfmessage',
+                  data: args,
+                  success: res => {
+                    console.log(res);
+                  },
+                  fail: res => {
+                    console.log(res);
+                  },
+                  complete: () => {
+                    console.log("message:")
+                    console.log(res);
+                  }
+                });*/
+
               } catch (e) {
                 console.error(e)
               }

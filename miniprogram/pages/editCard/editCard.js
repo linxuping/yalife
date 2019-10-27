@@ -22,6 +22,7 @@ Page({
    */
   data: {
     card: undefined,
+    cardOld: undefined,
     cardId: 0,
     address: "",
     latitude: 0,
@@ -51,10 +52,6 @@ Page({
     page.setData({
       isAdmin: app.isAdmin()
     });
-    /*wx.showModal({
-      title: 'openid',
-      content: app.globalData.openid,
-    })*/
 
     console.log(options);
     console.log(options.id);
@@ -76,6 +73,7 @@ Page({
             let card = res.data[0]
             page.setData({
               card: card,
+              cardOld: card,
               cardId: card._id,
               address: card.address,
               latitude: card.latitude,
@@ -130,9 +128,11 @@ Page({
     })
   },
   bindPickerChange: function (e) {
+    var page = this;
     console.log('picker发送选择改变，携带值为', e.detail.value);//index为数组点击确定后选择的item索引
-    this.setData({
-      index: e.detail.value
+    page.setData({
+      index: e.detail.value,
+      tags: [ page.data.array[e.detail.value] ] 
     })
   },
   bindPickerChange2: function (e) {
@@ -426,7 +426,7 @@ Page({
       cardData["visit_count"] = 1
       cardData["type"] = "邻里"
       cardData["reason"] = ""
-      cardData["tags"] = [ "邻里" ]
+      cardData["tags"] = [ "二手" ]
       cardData["priority"] = 0
       wx.showLoading({
         title: '正在新建...'
@@ -463,6 +463,7 @@ Page({
     console.log(opType);
     console.log(page.data.cardId);
     if (opType == "update" && page.data.cardId.length>0){
+      
       cardData.status = 2; //page.data.card.status;
       cardData.tags = page.data.tags;
       //update
