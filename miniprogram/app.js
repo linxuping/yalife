@@ -1,5 +1,4 @@
 //app.js
-var errorCollect = require("utils/error")
 
 App({
   onLaunch: function () {
@@ -18,8 +17,9 @@ App({
     this.getOpenid()
   },//获取用户地理位置权限
   onError: function (err) {
-      // 上报错误
-      errorCollect.add(err);
+    // 上报错误
+    var errorCollect = require("utils/error")
+    errorCollect.add(err);
   },
   chooseLocation: function (cb) {
     var page = this;

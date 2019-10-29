@@ -291,7 +291,7 @@ Page({
     this.setData({
       types_class: types_class
     });
-
+    //throw new Error("Something bad happened.")
     var page = this;
     if (!wx.cloud) {
       wx.navigateTo({
