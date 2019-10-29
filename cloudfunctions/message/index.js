@@ -14,7 +14,8 @@ async function sendTemplateMessage(event) {
   } = cloud.getWXContext()
 
   // 接下来将新增模板、发送模板消息、然后删除模板
-  const templateId = 'pl9exbF9lRCnqDYTikZSqYat06rYmxll8BiUYq0ExQY'
+  const templateId = '5ItETFooNK2GRC4npi3dSqlTRfsx20dj7xFeeVmwPnI'
+  //'pl9exbF9lRCnqDYTikZSqYat06rYmxll8BiUYq0ExQY'
   var page = "pages/homepage/homepage";
   if (event.cardid.length > 0) {
     page = "pages/details/details?id=" + event.cardid

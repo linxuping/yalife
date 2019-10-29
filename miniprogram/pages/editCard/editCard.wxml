@@ -3,7 +3,7 @@
   <image style="width:30px;height:30px;position:fixed;top:4px;left:4px;z-index:1000" src="../../images/back.png" mode="aspectFit" bindtap="goBack"></image>
 
   <view style="width:95%;margin-top:35px;margin-bottom:80px;text-align:center">
-    <textarea placeholder="我要转卖(求助/**等)，联系方式..." style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000"></textarea>
+    <textarea placeholder="我要转卖(求助/**等)，联系方式..." style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000" auto-height="{{auto_height}}" bindblur='areablur' bindfocus='areafocus'></textarea>
 
   <view wx:if="{{isAdmin}}" style="margin-top:8px;border:solid red 1px">
     <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
@@ -29,8 +29,8 @@
       <text class="address modify" style="color: blue">{{address}}</text>
     </view>
 
-    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">增加图片</button> 
-    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:else>更换图片</button> 
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 
+    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:else>{{loading?'正在上传图片... ...':'更换图片'}}</button> 
     <view>
     <image src="{{imgurl}}" wx:if="{{imgurl!=''}}" mode="aspectFit" style="display:none"></image>
     <image src="{{item}}" wx:if="{{!!item}}" style="width:100%" mode="aspectFit" wx:for="{{imgurls}}"></image>
@@ -42,7 +42,6 @@
     <button formType="submit">修改</button>
   </form>
   <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
-    <button formType="submit" wx:if="{{loading==true}}">正在上传图片...</button>
-    <button formType="submit" wx:else>发布</button>
+    <button formType="submit">发布</button>
   </form>
 </view>

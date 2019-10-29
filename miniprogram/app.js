@@ -184,7 +184,7 @@ App({
   isAdmin() {
     //return false;
     console.log("isAdmin: " + this.globalData.openid);
-    var lis = ["oV5MQ5YBim_nRH66WxfWLGVcW7yc"];
+    var lis = ["oV5MQ5YBim_nRH66WxfWLGVcW7yc","of1Gv4kVHElVpbeBRNZzQ-VzFVMI"];
     return lis.indexOf(this.globalData.openid)>=0;
   },
   saveFormid: function(formid) {

@@ -38,7 +38,8 @@ Page({
     isAdmin: false,
     tags: [],
     loading: false,
-    reason: ""
+    reason: "",
+    auto_height: true
   },
 
   /**
@@ -314,7 +315,9 @@ Page({
         timestamp = timestamp / 1000;  
         wx.showLoading({
           title: '文件上传中...',
+          mask: true
         })
+        page.setData({ loading: true });
         var imgsCount = res.tempFilePaths.length;
         var imgs = [];
         for (var i = 0; i < imgsCount; i++) {
@@ -330,12 +333,14 @@ Page({
               page.setData({ imgurl:imgs[0], imgurls: imgs });
               setTimeout(function () {
                 wx.hideLoading();
+                page.setData({ loading: false });
               }, 1000);
             }
           }).catch(error => {
             // handle error
             console.log(error)
             wx.hideLoading()
+            page.setData({ loading: false });
           })
         }
       }
@@ -429,7 +434,8 @@ Page({
       cardData["tags"] = [ "二手" ]
       cardData["priority"] = 0
       wx.showLoading({
-        title: '正在新建...'
+        title: '正在新建...',
+        mask: true
       })
       page.setData({loading: true});
       app.addEventLog("add card");
@@ -468,7 +474,8 @@ Page({
       cardData.tags = page.data.tags;
       //update
       wx.showLoading({
-        title: '正在更新...'
+        title: '正在更新...',
+        mask: true
       })
       console.log(123456);
       app.addEventLog("update card");
@@ -509,8 +516,17 @@ Page({
         })
       }
     });
+  },
+  areablur: function () {
+    this.setData({
+      auto_height: false
+    })
+  },
+  areafocus: function () {
+    this.setData({
+      auto_height: true
+    })
   }
-
 })
 
 
