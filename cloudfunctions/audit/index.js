@@ -7,6 +7,25 @@ cloud.init()
  
 const db = cloud.database()
 // 云函数入口函数
+
+function save_err(openid, err) {
+   cloud.callFunction({
+     name: 'log_collect',
+     data: {
+       openid: openid,
+       message: err
+     },
+     success: res => {
+       console.log(res);
+     },
+     fail: res => {
+       console.log(res);
+     },
+     complete: () => {
+       console.log("save_err ok")
+     }
+   });
+}
  
 // event 为调用此云函数传递的参数，传递的参数可通过event.xxx得到
  
@@ -36,18 +55,7 @@ exports.main = async (event, context) => {
               var formid = formids[formids.length - 1]
               console.log("formid: ");
               console.log(formid);
-
               try {
-                //event.formid = formid;
-                //sendTemplateMessage(event);
-/*demo
-{
-  "cardid": "753391b25db3a5060060ce993897b66e",
-  "message": "审核通过",
-  "openid": "oV5MQ5aN_i_ea9dGxZOHHBC8Bosg",
-  "formid": "5a7d5dbc71bc469e8b2c13c3ea8ae014",
-  "title": "天韵"
-} */
                 var args = {
                   openid: event.openid,
                   formid: formid,
@@ -64,30 +72,16 @@ exports.main = async (event, context) => {
                   },
                   fail: res => {
                     console.log(res);
+                    save_err(event.openid, res);
                   },
                   complete: () => {
                     console.log("message:")
                     console.log(res);
                   }
                 });
-
-                /*cloud.callFunction({
-                  name: 'kfmessage',
-                  data: args,
-                  success: res => {
-                    console.log(res);
-                  },
-                  fail: res => {
-                    console.log(res);
-                  },
-                  complete: () => {
-                    console.log("message:")
-                    console.log(res);
-                  }
-                });*/
-
               } catch (e) {
                 console.error(e)
+                save_err(event.openid, e);
               }
 
               //删除数组尾部元素
@@ -98,6 +92,7 @@ exports.main = async (event, context) => {
                 fail: res => {
                   console.log('pop: ');
                   console.log(res);
+                  save_err(event.openid, res);
                 }
               })
             }
@@ -105,6 +100,7 @@ exports.main = async (event, context) => {
         })
         .catch(err => {
           console.error(err)
+          save_err(event.openid, err);
         });
 
         /*
@@ -129,9 +125,11 @@ exports.main = async (event, context) => {
       .catch(res => {
         console.log('catch: ');
         console.log(res);
+        save_err(event.openid, res);
       }); 
   } catch (e) {
     console.error(e)
+    save_err(event.openid, e);
   }
 }
 
