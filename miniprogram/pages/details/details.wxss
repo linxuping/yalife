@@ -5,6 +5,7 @@
 .text-firstline{
   text-align: left;
   line-height: 2em;
+  width: 95%;
 }
 /* 分隔线--底部 */
 .line{
