@@ -207,6 +207,7 @@ Page({
       message: "审核通过，请保持联系方式通畅哟～",
       cardId: page.data.card._id,
       tags: page.data.tags,
+      reason: "",
       status: 1
     };
     wx.cloud.callFunction({
