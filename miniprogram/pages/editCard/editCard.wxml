@@ -18,7 +18,7 @@
         <text class="modify" style="color: blue">{{array2[index2]}}</text>
       </view>
     </picker>  
-    <input placeholder="输入标签：a,b,c" style="border: solid 1px" bindinput="getInput" type="text" value="">{{ card.tags.join(",") }}</input>
+    <input placeholder="输入标签：a,b,c" style="border: solid 1px" bindinput="getInput" type="text" value="{{ card.tags }}"></input>
     <input placeholder="下线原因" style="border: solid 1px" bindinput="getReason" type="text"></input>
     <button wx:if="{{card.status==1}}" bindtap="offline">点击下线</button>
     <button wx:else bindtap="online">点击上线</button>
@@ -26,7 +26,7 @@
 
     <view style="bottom-margin:20px;margin-top:8px" bindtap="choosePos">
       <text>位置：</text>
-      <text class="address modify" style="color: blue">{{address}}</text>
+      <text class="address modify" style="color: blue">{{address.replace("广东省", "").replace("广州市", "").replace("番禺区", "")}}</text>
     </view>
 
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 

@@ -16,7 +16,7 @@
   <image style="width:55px;height:55px;position:fixed;bottom:4px;text-align:center;align-items: center;justify-content: center;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage" wx:if="{{showGoods}}"></image>
   
 
-  <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:100" wx:if="{{showGoods}}">
+  <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:999" wx:if="{{showGoods}}">
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
@@ -67,7 +67,7 @@
     <navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >
       <view style="margin:2px">
           <image mode="aspectFill" src="{{item.imgurl}}" wx:if="{{item.imgurl}}" style="border:4px;width:100%;border-radius:4px;max-height:{{typeImgHeight2}}px"/>
-          <view style="margin:2px">
+          <view style="margin:4px">
             <text class="textLimitwithImg" wx:if="{{item.imgurl}}">{{item.content}}</text>
             <text class="textLimitwithoutImg" wx:else>{{item.content}}</text>
           </view>

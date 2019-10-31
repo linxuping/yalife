@@ -30,7 +30,7 @@
   </block>
 
   <view wx:if="{{card && showHome}}">
-    <image style="width:40px;height:40px;top:4px;right:4px;margin-top:30px" src="../../images/home2.png" mode="aspectFit" bindtap="goIndex"></image>
+    <image style="width:40px;height:40px;top:4px;right:4px;margin-top:30px;z-index:999" src="../../images/home2.png" mode="aspectFit" bindtap="goIndex"></image>
   </view>
 
   <view style="height:100px"></view>
