@@ -409,24 +409,21 @@ Page({
         title: '正在分析最近的分享信息...',
       })
     }
-    //console.log("this.data: ");
-    //console.log(page.data);
+
     var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(page.data.longitude, page.data.latitude),
         minDistance: 0,
         maxDistance: parseInt(page.data.distance),
       }),
-      status: _.gte(0)
+      status: 1
     };
-    db.collection('attractions').where(cond).get({
+    db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
       success: res => {
         console.log("get tags: ");
         console.log(res.data);
         var dic = {};
         for (var i=0; i<res.data.length; i++) {
-          //console.log("item.tags: ");
-          //console.log(res.data[i].tags);
           var tmpTags = res.data[i].tags;
           if (tmpTags==undefined || tmpTags.length==0) {
             continue
@@ -440,12 +437,10 @@ Page({
             }
           }
         }
-        //console.log("dic: ");
-        //console.log(dic);
+
         var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
         var tags = [];
         for(var key in res2){
-          //console.log(">>> key: " + res2[key] + " ,value: " + dic[res2[key]]);
           tags.push(res2[key])
         }
         if (tags.length > 0) {
