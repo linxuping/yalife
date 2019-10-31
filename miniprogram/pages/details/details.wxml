@@ -23,7 +23,7 @@
         <!-- 右边内容 上下结构 -->
         <view style='width:100%'>
           <view class="mulLine" style="">{{item.content}}</view>
-          <view class="oneLine" style="text-align:right;margin-top:8px;margin-bottom:8px">{{item.address}}</view>
+          <view class="address oneLine" style="text-align:right;margin-top:8px;margin-bottom:8px">{{item.address}}</view>
         </view>
       </view>
     </navigator>

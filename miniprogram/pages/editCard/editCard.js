@@ -76,7 +76,7 @@ Page({
               card: card,
               cardOld: card,
               cardId: card._id,
-              address: card.address,
+              address: card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
               latitude: card.latitude,
               longitude: card.longitude,
               imgurl: card.imgurl,
@@ -107,7 +107,7 @@ Page({
       console.log("get location:");
       if (app.globalData.address) {
         page.setData({ 
-          address: app.globalData.address,
+          address: app.globalData.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
           latitude: app.globalData.latitude,
           longitude: app.globalData.longitude
         });
@@ -239,7 +239,7 @@ Page({
         title: value.data.result.address_component.street_number,
       })*/
       page.setData({ 
-        address: value.data.result.address_component.street_number,
+        address: value.data.result.address_component.street_number.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
         latitude: latitude,
         longitude: longitude
       });

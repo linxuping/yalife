@@ -263,6 +263,7 @@ Page({
             confirmText: '我来发布',
             success(res) {
               if (res.cancel) {
+                //wx.navigateBack({ delta: 1 })
               } else if (res.confirm) {
                 app.addEventLog("into index.add.hint");
                 wx.navigateTo({
@@ -329,7 +330,18 @@ Page({
 
     //wx.getLocation({
     //  type: 'gcj02',
-    if (!app.globalData.latitude){
+    console.log("getLocation: ");
+    console.log(app.globalData.latitude);
+    console.log(app.globalData.longitude);
+    if (!!app.globalData.latitude && !!app.globalData.longitude && !!app.globalData.address){
+      page.setData({
+        latitude: app.globalData.latitude,
+        longitude: app.globalData.longitude,
+        address: app.globalData.address,
+        distance: app.globalData.distance
+      });
+      page.onLoadCards(app.globalData.openid, app.globalData.latitude, app.globalData.longitude, 0, app.globalData.distance, true);
+    } else {
       app.getLocation(
         function(res) {
           const latitude = res.latitude
@@ -367,7 +379,7 @@ Page({
               //console.log(`fulfilled: ${value}`);
               console.log(value.data.result);
               app.globalData.address = value.data.result.address_component.street_number;
-            page.setData({ address: app.globalData.address});
+              page.setData({ address: app.globalData.address});
             })
             .catch(function (value) {
               console.log(`rejected: ${value}`); // 'rejected: Hello World'
