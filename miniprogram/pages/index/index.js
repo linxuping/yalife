@@ -420,6 +420,61 @@ Page({
       }),
       status: 1
     };
+    var skip = 0;
+    var limit = 20;
+    var cards = [];
+    var loadTags = function(cb){
+      db.collection('attractions').where(cond).orderBy("sort_time", "desc").skip(skip).limit(limit).get({
+        success: res => {
+          console.log("load_tags: " + skip);
+          console.log(res.data);
+          if (res.data.length > 0) {
+            cards = cards.concat(res.data);
+            skip += limit; //继续翻页
+            loadTags(cb);
+          } else {
+            cb();
+          }
+        },
+        fail: err => {
+          console.log(err);
+          wx.hideLoading();
+        }
+      })
+    }
+    loadTags(function(){
+      var dic = {};
+      for (var i=0; i<cards.length; i++) {
+        var tmpTags = cards[i].tags;
+        if (tmpTags==undefined || tmpTags.length==0) {
+          continue
+        }
+        for (var j=0; j<tmpTags.length; j++) {
+          var tag = tmpTags[j];
+          if (dic[tag] == undefined) {
+            dic[tag] = 1
+          } else {
+            dic[tag] = dic[tag] + 1
+          }
+        }
+      }
+
+      var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
+      var tags = [];
+      for(var key in res2){
+        tags.push(res2[key])
+      }
+      if (tags.length > 0) {
+        tags.push("全部");         
+      } else {
+        wx.showToast({
+          title: '未搜到分享信息...',
+        })
+      }
+      page.setData({ tags: tags }); 
+      wx.hideLoading();
+    });
+    /*
     db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
       success: res => {
         console.log("get tags: ");
@@ -459,7 +514,7 @@ Page({
         console.log(err);
         wx.hideLoading();
       }
-    })
+    })*/
   },
   clickSearch: function (e) {
     wx.pageScrollTo({
