@@ -423,7 +423,7 @@ Page({
     var skip = 0;
     var limit = 20;
     var cards = [];
-    var loadTags = function(cb){
+    var loadTagPages = function(cb){
       db.collection('attractions').where(cond).orderBy("sort_time", "desc").skip(skip).limit(limit).get({
         success: res => {
           console.log("load_tags: " + skip);
@@ -431,8 +431,9 @@ Page({
           if (res.data.length > 0) {
             cards = cards.concat(res.data);
             skip += limit; //继续翻页
-            loadTags(cb);
-          } else {
+            loadTagPages(cb);
+          }
+          if (res.data.length < limit) {
             cb();
           }
         },
@@ -442,7 +443,7 @@ Page({
         }
       })
     }
-    loadTags(function(){
+    loadTagPages(function(){
       var dic = {};
       for (var i=0; i<cards.length; i++) {
         var tmpTags = cards[i].tags;
