@@ -329,51 +329,53 @@ Page({
 
     //wx.getLocation({
     //  type: 'gcj02',
-    app.getLocation(
-      function(res) {
-        const latitude = res.latitude
-        const longitude = res.longitude
-        const speed = res.speed
-        const accuracy = res.accuracy
-        page.setData({
-          latitude: res.latitude,
-          longitude: res.longitude      
-        });
-        
-        app.globalData.latitude = latitude;
-        app.globalData.longitude = longitude;
-
-        wx.cloud.callFunction({
-          name: 'login',
-          complete: res => {
-            //console.log(res);
-            console.log('云函数获取到的openid: ', res.result.openid);
-            app.globalData.openid = res.result.openid
-            page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, true);
-          }
-        });
-
-        //page.onLoadCards(page.data.openid, latitude, longitude, 0, startSize)
-        
-        let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
-        let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
-        let params = {
-          location: latitude + "," + longitude,
-          key
-        }
-
-        wechat.request(url, params).then(function (value) {
-            //console.log(`fulfilled: ${value}`);
-            console.log(value.data.result);
-            app.globalData.address = value.data.result.address_component.street_number;
-          page.setData({ address: app.globalData.address});
-          })
-          .catch(function (value) {
-            console.log(`rejected: ${value}`); // 'rejected: Hello World'
-            console.log(data)
+    if (!app.globalData.latitude){
+      app.getLocation(
+        function(res) {
+          const latitude = res.latitude
+          const longitude = res.longitude
+          const speed = res.speed
+          const accuracy = res.accuracy
+          page.setData({
+            latitude: res.latitude,
+            longitude: res.longitude      
           });
-      }
-    );
+
+          app.globalData.latitude = latitude;
+          app.globalData.longitude = longitude;
+
+          wx.cloud.callFunction({
+            name: 'login',
+            complete: res => {
+              //console.log(res);
+              console.log('云函数获取到的openid: ', res.result.openid);
+              app.globalData.openid = res.result.openid
+              page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, true);
+            }
+          });
+
+          //page.onLoadCards(page.data.openid, latitude, longitude, 0, startSize)
+
+          let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
+          let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
+          let params = {
+            location: latitude + "," + longitude,
+            key
+          }
+
+          wechat.request(url, params).then(function (value) {
+              //console.log(`fulfilled: ${value}`);
+              console.log(value.data.result);
+              app.globalData.address = value.data.result.address_component.street_number;
+            page.setData({ address: app.globalData.address});
+            })
+            .catch(function (value) {
+              console.log(`rejected: ${value}`); // 'rejected: Hello World'
+              console.log(data)
+            });
+        }
+      );
+    }
   },
   choosePos: function () {
     console.log("choose pos");
@@ -409,24 +411,77 @@ Page({
         title: '正在分析最近的分享信息...',
       })
     }
-    //console.log("this.data: ");
-    //console.log(page.data);
+
     var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(page.data.longitude, page.data.latitude),
         minDistance: 0,
         maxDistance: parseInt(page.data.distance),
       }),
-      status: 1 //_.gte(0)
+      status: 1
     };
-    db.collection('attractions').where(cond).get({
+    var skip = 0;
+    var limit = 20;
+    var cards = [];
+    var loadTagPages = function(cb){
+      db.collection('attractions').where(cond).orderBy("sort_time", "desc").skip(skip).limit(limit).get({
+        success: res => {
+          console.log("load_tags: " + skip);
+          console.log(res.data);
+          if (res.data.length > 0) {
+            cards = cards.concat(res.data);
+            skip += limit; //继续翻页
+            loadTagPages(cb);
+          }
+          if (res.data.length < limit) {
+            cb();
+          }
+        },
+        fail: err => {
+          console.log(err);
+          wx.hideLoading();
+        }
+      })
+    }
+    loadTagPages(function(){
+      var dic = {};
+      for (var i=0; i<cards.length; i++) {
+        var tmpTags = cards[i].tags;
+        if (tmpTags==undefined || tmpTags.length==0) {
+          continue
+        }
+        for (var j=0; j<tmpTags.length; j++) {
+          var tag = tmpTags[j];
+          if (dic[tag] == undefined) {
+            dic[tag] = 1
+          } else {
+            dic[tag] = dic[tag] + 1
+          }
+        }
+      }
+
+      var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
+      var tags = [];
+      for(var key in res2){
+        tags.push(res2[key])
+      }
+      if (tags.length > 0) {
+        tags.push("全部");         
+      } else {
+        wx.showToast({
+          title: '未搜到分享信息...',
+        })
+      }
+      page.setData({ tags: tags }); 
+      wx.hideLoading();
+    });
+    /*
+    db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
       success: res => {
         console.log("get tags: ");
         console.log(res.data);
         var dic = {};
         for (var i=0; i<res.data.length; i++) {
-          //console.log("item.tags: ");
-          //console.log(res.data[i].tags);
           var tmpTags = res.data[i].tags;
           if (tmpTags==undefined || tmpTags.length==0) {
             continue
@@ -440,12 +495,10 @@ Page({
             }
           }
         }
-        //console.log("dic: ");
-        //console.log(dic);
+
         var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
         var tags = [];
         for(var key in res2){
-          //console.log(">>> key: " + res2[key] + " ,value: " + dic[res2[key]]);
           tags.push(res2[key])
         }
         if (tags.length > 0) {
@@ -462,7 +515,7 @@ Page({
         console.log(err);
         wx.hideLoading();
       }
-    })
+    })*/
   },
   clickSearch: function (e) {
     wx.pageScrollTo({
