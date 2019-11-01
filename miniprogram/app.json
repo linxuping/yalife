@@ -26,5 +26,6 @@
     "scope.userLocation": {
       "desc": "有您的位置，才能推荐邻里的信息哦～"
     }
+  },"usingComponents": {
   }
 }
