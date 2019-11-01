@@ -248,8 +248,32 @@ Page({
       console.log(`rejected: ${value}`); // 'rejected: Hello World'
     });
   },
-  onBought: function () {
+  onFinish: function () {
     var page = this;
+    var status = !page.data.finished; //改成反状态
+    app.addEventLog("update card");
+    wx.showLoading({
+      title: '正在更新状态...',
+      mask: true
+    })
+    db.collection('attractions').doc(page.data.cardId).update({
+      data: {
+        finished: status
+      },
+      success: function (res) {
+        wx.showToast({
+          title: status?'更新状态：成交中':'更新状态：已成交',
+        })
+        wx.hideLoading();
+      },
+      fail: function (res) {
+        console.log(res);
+        wx.showToast({
+          title: '更新失败',
+        })
+        wx.hideLoading();
+      }
+    });
   },
 
   /**
@@ -437,6 +461,7 @@ Page({
       cardData["reason"] = ""
       cardData["tags"] = [ "二手" ]
       cardData["priority"] = 0
+      cardData["finished"] = 0
       wx.showLoading({
         title: '正在新建...',
         mask: true
