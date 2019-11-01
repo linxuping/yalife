@@ -433,7 +433,7 @@ Page({
       status: 1
     };
     var skip = 0;
-    var limit = 20;
+    var limit = 10;
     var cards = [];
     var loadTagPages = function(cb){
       db.collection('attractions').where(cond).orderBy("sort_time", "desc").skip(skip).limit(limit).get({
@@ -443,7 +443,9 @@ Page({
           if (res.data.length > 0) {
             cards = cards.concat(res.data);
             skip += limit; //继续翻页
-            loadTagPages(cb);
+            if (res.data.length == limit) {
+              loadTagPages(cb);
+            }
           }
           if (res.data.length < limit) {
             cb();
