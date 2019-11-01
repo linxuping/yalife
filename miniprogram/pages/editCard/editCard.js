@@ -250,7 +250,7 @@ Page({
   },
   onFinish: function () {
     var page = this;
-    var status = !page.data.finished; //改成反状态
+    var finished = (page.data.finished==1)? 0:1; //改成反状态
     app.addEventLog("update card");
     wx.showLoading({
       title: '正在更新状态...',
@@ -258,11 +258,11 @@ Page({
     })
     db.collection('attractions').doc(page.data.cardId).update({
       data: {
-        finished: status
+        finished: finished
       },
       success: function (res) {
         wx.showToast({
-          title: status?'更新状态：成交中':'更新状态：已成交',
+          title: finished==1?'已更新到状态：已成交':'已更新到状态：待成交',
         })
         wx.hideLoading();
       },
