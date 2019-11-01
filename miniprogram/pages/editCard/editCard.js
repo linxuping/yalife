@@ -256,7 +256,7 @@ Page({
       title: '正在更新状态...',
       mask: true
     })
-    db.collection('attractions').doc(page.data.cardId).update({
+    db.collection('attractions').doc(page.data.card._id).update({
       data: {
         finished: finished
       },
@@ -274,6 +274,42 @@ Page({
         wx.hideLoading();
       }
     });
+  },
+  onDeleteCard: function () {
+    var page = this;
+    var cardId = page.data.card._id;
+    console.log(cardId);
+    console.log(page.data.openid)
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      success: function (sm) {
+        if (sm.confirm) {
+          // 用户点击了确定 可以调用删除方法了
+          db.collection('attractions').doc(cardId).update({
+            data: {
+              status: 0
+            },
+            success: function (res) {
+              wx.showToast({
+                title: '删除成功',
+              })
+              wx.navigateTo({
+                url: '/pages/homepage/homepage',
+              })
+            },
+            fail: function (res) {
+              console.log(res);
+              wx.showToast({
+                title: '删除失败',
+              })
+            }
+          });
+        } else if (sm.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
   },
 
   /**
