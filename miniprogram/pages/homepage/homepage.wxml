@@ -4,7 +4,7 @@
   <open-data type="userAvatarUrl" class="testAvatar"></open-data>
   <open-data type="userNickName" lang="zh_CN"></open-data>
   <image style="width:30px;height:30px;position:absolute;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
-  <block class="" wx:for="{{cardList}}" wx:key="id">
+  <block class="" wx:for="{{cardList}}" wx:key="id" wx:if="{{item.status>0}}">
     <view bindlongpress="onDeleteCard" bindtap="jumpEdit" data-cardId="{{item._id}}" style="width:95%;background-color:#FEFEFE">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
@@ -17,8 +17,8 @@
           <text class="cardStatus" wx:if="{{item.status==2}}">审核中</text>
           <text class="cardStatus" wx:if="{{item.status==1}}">在线</text>
           <text class="cardStatus" wx:if="{{item.status>2}}">审核不通过</text>
-          <text class='item_title' style="display:block;text-align:right">{{item.update_time}}</text>
-          <text class='item_title' style="" wx:if="{{isAdmin}}">{{item._id}}</text>
+          <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
+          <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}</text>
           <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
         </view>
       </view>

@@ -14,7 +14,8 @@
   </view>
 
   <block class="" wx:for="{{cardList}}" wx:key="id" wx:if="{{item._id!=card._id}}">
-    <navigator url='/pages/details/details?id={{item._id}}' data-cardId="{{item._id}}" style="width:95%;background-color:#FEFEFE">
+    <!--<navigator url='/pages/details/details?id={{item._id}}' data-cardId="{{item._id}}" style="width:95%;background-color:#FEFEFE">-->
+    <view bindtap="goDetails" data-cardid="{{item._id}}" style="width:95%;background-color:#FEFEFE">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB;margin-top:8p;margin-bottom:8px'>
         <!--左边图片-->
         <view style='width:128rpx; height:128rpx; margin:20rpx;'>
@@ -26,7 +27,8 @@
           <view class="address oneLine" style="text-align:right;margin-top:8px;margin-bottom:8px">{{item.address}}</view>
         </view>
       </view>
-    </navigator>
+    </view>
+    <!--</navigator>-->
   </block>
 
   <view wx:if="{{card && showHome}}">

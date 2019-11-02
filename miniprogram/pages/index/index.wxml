@@ -64,7 +64,8 @@
 
 <view class="{{goods.length>1 ? 'parent':'parent-one'}}">
   <view class="card child" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id">
-    <navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >
+    <!--<navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >-->
+    <view data-cardid="{{item._id}}" url="/pages/details/details?id={{item._id}}" bindtap="goDetails" >
       <view style="margin:2px">
           <image mode="aspectFill" src="{{item.imgurl}}" wx:if="{{item.imgurl}}" style="border:4px;width:100%;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-left-radius:1px;border-bottom-right-radius:1px;max-height:{{typeImgHeight2}}px"/>
           <view style="margin:4px">
@@ -78,7 +79,8 @@
           <view class="title address oneLine" style="text-align:right">{{item.address}}</view>
           <view></view><view></view><view></view>
       </view>
-    </navigator>
+    </view>
+    <!--</navigator>-->
   </view>
 </view>
 

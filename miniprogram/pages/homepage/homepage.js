@@ -11,7 +11,10 @@ Page({
     cardList: [],
     openid: "",
     loaded: false,
-    defaultImg: "../../images/default.png"
+    defaultImg: "../../images/default.png",
+
+    isAdmin: false,
+    openid: ''
   },
 
   /**
@@ -33,22 +36,12 @@ Page({
       }
     });
 
+    page.setData({
+      isAdmin: app.isAdmin(),
+      openid: app.globalData.openid
+    });
+
     app.addEventLog("into homepage");
-
-    /*wx.cloud.callFunction({
-      name: 'message',
-      data: {
-        openid: "oV5MQ5YBim_nRH66WxfWLGVcW7yc",
-        formid: "8cc668a036094bfe917600556088cd8c",
-        title: "123",
-        message: "msg"
-      },
-      complete: res => {
-        console.log("message:")
-        console.log(res);
-      }
-    });*/
-
 
     wx.setNavigationBarTitle({
       title: '我发布了什么'
@@ -161,8 +154,16 @@ Page({
     var page = this;
     console.log(event);
     var cardId = event.currentTarget.dataset.cardid;
+    var url = '/pages/editCard/editCard?id=' + cardId;
     wx.navigateTo({
-      url: '/pages/editCard/editCard?id=' + cardId,
+      url: url,
+      fail: function (res) {
+        console.log("go editCard fail: ");
+        console.log(res);
+        wx.redirectTo({
+          url: url,
+        });
+      }
     })
   },
   onDeleteCard: function (event) {
@@ -185,7 +186,16 @@ Page({
               wx.showToast({
                 title: '删除成功',
               })
-              page.onShow()
+              //page.onShow()
+              for (var i=0; i<page.data.cardList.length; i++) {
+                if (page.data.cardList[i]._id == cardId) {
+                  page.data.cardList[i].status = 0
+                  break;
+                }
+              }
+              page.setData({
+                cardList: page.data.cardList
+              });
             },
             fail: function (res) {
               console.log(res);
@@ -202,15 +212,23 @@ Page({
   },
 
   goMainPage: function(){
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/index/index'
     })
   },
 
   goAddPage: function () {
     app.addEventLog("into homepage.add");
+    var url = '/pages/editCard/editCard';
     wx.navigateTo({
-      url: '/pages/editCard/editCard'
+      url: url,
+      fail: function (res) {
+        console.log("go editCard fail: ");
+        console.log(res);
+        wx.redirectTo({
+          url: url,
+        });
+      }
     })
   }
 })

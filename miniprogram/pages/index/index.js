@@ -266,7 +266,7 @@ Page({
                 //wx.navigateBack({ delta: 1 })
               } else if (res.confirm) {
                 app.addEventLog("into index.add.hint");
-                wx.navigateTo({
+                wx.redirectTo({
                   url: '/pages/editCard/editCard',
                 })
               }
@@ -479,15 +479,15 @@ Page({
       for(var key in res2){
         tags.push(res2[key])
       }
-      if (tags.length > 0) {
-        tags.push("全部");         
-      } else {
+      wx.hideLoading();
+      tags.push("全部"); 
+      if (tags.length == 0) {
         wx.showToast({
-          title: '未搜到分享信息...',
+          title: '附近未有分享信息～',
+          duration: 3000
         })
       }
       page.setData({ tags: tags }); 
-      wx.hideLoading();
     });
     /*
     db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
@@ -821,14 +821,38 @@ Page({
   },
   goAddPage: function () {
     app.addEventLog("into index.add");
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/editCard/editCard',
     })
   },
   goHomePage: function () {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/homepage/homepage',
+      success: function (res) {
+        console.log("goHomePage success: ");
+      },
+      fail: function (res) {
+        console.log("goHomePage fail: ");
+        console.log(res);
+      }
     })
+  },
+  goDetails: function (event){
+    var cardId = event.currentTarget.dataset.cardid;
+    var url = "/pages/details/details?id=" + cardId;
+    wx.navigateTo({
+      url: url,
+      success: function (res) {
+        console.log("goDetails success: ");
+      },
+      fail: function (res) {
+        console.log("goDetails fail: ");
+        console.log(res);
+        wx.redirectTo({
+          url: url,
+        });
+      }
+    })    
   },
 
   onGetOpenid: function() {

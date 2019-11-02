@@ -136,8 +136,15 @@ Page({
     })
   },
   goIndex: function() {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/index/index',
+      success: function (res) {
+        console.log("goIndex success: ");
+      },
+      fail: function (res) {
+        console.log("goIndex fail: ");
+        console.log(res);
+      }
     })
   },
   previewImage: function (e) {
@@ -146,6 +153,23 @@ Page({
     wx.previewImage({
       current: current, // 当前显示图片的http链接  
       urls: page.data.card.imgurls // 需要预览的图片http链接列表  
+    })
+  },
+  goDetails: function (event) {
+    var cardId = event.currentTarget.dataset.cardid;
+    var url = "/pages/details/details?id=" + cardId;
+    wx.navigateTo({
+      url: url,
+      success: function (res) {
+        console.log("goDetails success: ");
+      },
+      fail: function (res) {
+        console.log("goDetails fail: ");
+        console.log(res);
+        wx.redirectTo({
+          url: url,
+        });
+      }
     })
   },
 })

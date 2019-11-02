@@ -149,7 +149,7 @@ Page({
       return
     }
     var tags = e.detail.value.split(",");
-    if (!page.data.card.tags || page.data.card.tags.length == 0) {
+    if (!!page.data.card && (!page.data.card.tags || page.data.card.tags.length == 0)) {
       tags.push(page.data.array[ page.data.index ]);
     }
     console.log(tags);
@@ -277,7 +277,7 @@ Page({
   },
   onDeleteCard: function () {
     var page = this;
-    var cardId = page.data.card._id;
+    var cardId = page.data.cardId;
     console.log(cardId);
     console.log(page.data.openid)
     wx.showModal({
@@ -294,7 +294,7 @@ Page({
               wx.showToast({
                 title: '删除成功',
               })
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '/pages/homepage/homepage',
               })
             },
@@ -502,6 +502,10 @@ Page({
         title: '正在新建...',
         mask: true
       })
+      if (app.isAdmin()) { //admin直接添加上线
+        cardData["status"] = 1
+        cardData["tags"] = page.data.tags
+      }
       page.setData({loading: true});
       app.addEventLog("add card");
       db.collection('attractions').add({
@@ -515,7 +519,7 @@ Page({
           wx.showToast({
             title: '新增成功',
           })
-          wx.navigateTo({
+          wx.redirectTo({
             url: '/pages/homepage/homepage',
           })
           wx.hideLoading();
@@ -550,7 +554,7 @@ Page({
           wx.showToast({
             title: '更新成功',
           })
-          wx.navigateTo({
+          wx.redirectTo({
             url: '/pages/homepage/homepage',
           })
           wx.hideLoading();
@@ -576,7 +580,7 @@ Page({
   goBack: function () {
     wx.navigateBack({
       fail: function(){
-        wx.navigateTo({
+        wx.redirectTo({
           url: '/pages/index/index',
         })
       }

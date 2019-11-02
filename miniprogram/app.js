@@ -190,7 +190,7 @@ App({
   isAdmin() {
     //return false;
     console.log("isAdmin: " + this.globalData.openid);
-    var lis = ["oV5MQ5YBim_nRH66WxfWLGVcW7yc","of1Gv4kVHElVpbeBRNZzQ-VzFVMI"];
+    var lis = ["oV5MQ5YBim_nRH66WxfWLGVcW7yc", "of1Gv4kVHElVpbeBRNZzQ-VzFVMI","of1Gv4iy9Gh2wQnpp9o3vq45SVWk"];
     return lis.indexOf(this.globalData.openid)>=0;
   },
   saveFormid: function(formid) {

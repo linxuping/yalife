@@ -37,6 +37,7 @@
     </view>     
 
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;display:none" bindtap="choosePos">修正位置,方便附近人找我</button>
+    <text style="text-decoration:underline" wx:if="{{!!cardId}}" bindtap="onDeleteCard">删除此次发布</text>
   </view>
   <form bindsubmit="updateCard" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">
     <button formType="submit">修改</button>

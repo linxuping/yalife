@@ -49,6 +49,7 @@ class Recommend {
               res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
             }
             cards = res.data
+            cb(cards); //第一批更新
 
             //2、非同标签下
 
@@ -63,14 +64,12 @@ class Recommend {
                 cards = cards.concat(res.data)
 
                 //返回渲染
-                cb(cards);
-
+                cb(cards); //全部更新
               },
               fail: err => {
                 console.log(err);
               }
             })
-
           },
           fail: err => {
             console.log(err);
@@ -109,7 +108,6 @@ class Recommend {
             }
           });         
         }
-
       }, fail: res => {
         console.log(res);
       }
