@@ -36,4 +36,7 @@
   </view>
 
   <view style="height:100px"></view>
+  <view style="width:100%;text-align:left">
+    <contact-button wx:if="{{card && showHome}}" style="color:green;margin:12px;z-index:1011">投诉</contact-button>
+  </view>
 </view>
