@@ -6,6 +6,7 @@ cloud.init()
 // 云函数入口函数
  
 const db = cloud.database()
+const _ = db.command;
 // 云函数入口函数
 
 function save_err(openid, err) {
@@ -31,30 +32,26 @@ function save_err(openid, err) {
  
 exports.main = async (event, context) => {
   try {
-    console.log("sendMessage1: ");
-    const _ = db.command
+    console.log("prepare: ", event.status, event.reason || '', event.tags, event.cardId);
     
     db.collection('attractions').doc(event.cardId).update({
-        data: {
-          status: event.status,
-          reason: event.reason,
-          tags: event.tags
-        }
-      }).then(res => {
-        console.log("sendMessage2: ");
-
+      data: {
+        status: event.status,
+        reason: (event.reason || ""),
+        tags: (event.tags || [])
+      },
+      success: function(res){
+        console.log("已更新条目属性 ");
         db.collection('user_formid').where(
           { _openid: event.openid }
         ).get().then(res => {
-          console.log('sendMessage3: ');
-          console.log(res.data);
+          console.log('已获取fomid: ',event.openid,res.data);
 
           if (res.data.length > 0) {
             var formids = res.data[0].formids;
             if (formids.length > 0) {
               var formid = formids[formids.length - 1]
-              console.log("formid: ");
-              console.log(formid);
+              console.log("formid: ", formid);
               try {
                 var args = {
                   openid: event.openid,
@@ -63,7 +60,7 @@ exports.main = async (event, context) => {
                   message: event.message,
                   cardid: event.cardId
                 };
-                console.log(args);
+                console.log("发送message：", args);
                 cloud.callFunction({
                   name: 'message',
                   data: args,
@@ -89,6 +86,9 @@ exports.main = async (event, context) => {
                 data: {
                   formids: _.pop()
                 },
+                success: res => {
+                  console.log("已移除formid：");
+                },
                 fail: res => {
                   console.log('pop: ');
                   console.log(res);
@@ -96,41 +96,27 @@ exports.main = async (event, context) => {
                 }
               })
             }
+          } else {
+            console.log("formid为空");
           }
         })
         .catch(err => {
           console.error(err)
           save_err(event.openid, err);
         });
-
-        /*
-        //推送
-        cloud.callFunction({
-          name: 'sendmsg',
-          data: {
-            openid: event.openid,
-            title: event.title,
-            message: event.message,
-            cardid: event.cardId
-          },
-          fail: function (res) {
-            console.log(res);
-          },
-          complete: res => {
-            console.log("message:")
-            console.log(res);
-          }
-        });*/
-      })
-      .catch(res => {
-        console.log('catch: ');
-        console.log(res);
+      },
+      fail: function(res){
+        console.log("update fail: ", res);
         save_err(event.openid, res);
-      }); 
+      },
+      complete: function(res) {
+        console.log("complete.", res);
+      }
+    })
   } catch (e) {
-    console.error(e)
-    save_err(event.openid, e);
+    console.log("catch: ", e)
   }
+  console.log("end.");
 }
 
 //小程序模版消息推送

@@ -150,6 +150,9 @@ Page({
       return
     }
     var tags = e.detail.value.split(",");
+    if (e.detail.value.indexOf("，") > 0) {
+      tags = e.detail.value.split("，");
+    }
     if (!!page.data.card && (!page.data.card.tags || page.data.card.tags.length == 0)) {
       tags.push(page.data.array[ page.data.index ]);
     }
@@ -542,6 +545,10 @@ Page({
       
       cardData.status = 2; //page.data.card.status;
       cardData.tags = page.data.tags;
+      if (app.isAdmin()) { //admin直接添加上线
+        cardData["status"] = 1
+        cardData["tags"] = page.data.tags
+      }
       //update
       wx.showLoading({
         title: '正在更新...',

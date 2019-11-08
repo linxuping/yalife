@@ -3,7 +3,7 @@
   <image style="width:30px;height:30px;position:fixed;top:4px;left:4px;z-index:1000" src="../../images/back.png" mode="aspectFit" bindtap="goBack"></image>
 
   <view style="width:95%;margin-top:35px;margin-bottom:80px;text-align:center">
-    <textarea placeholder="我要转卖(求助/**等)，联系方式..." style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000" auto-height="{{auto_height}}" bindblur='areablur' bindfocus='areafocus'></textarea>
+    <textarea placeholder="邻居您好，在这里可以分享二手、赠送、招聘、求助、租借转让、爱心行动等邻里信息。末尾附带联系方式哦～" style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000" auto-height="{{auto_height}}" bindblur='areablur' bindfocus='areafocus'></textarea>
 
   <view wx:if="{{isAdmin}}" style="margin-top:8px;border:solid red 1px">
     <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">

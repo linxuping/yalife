@@ -76,10 +76,12 @@ Page({
   onShareAppMessage: function () {
     var page = this;
     app.addEventLog("detail share", page.data.cardId);
+    var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
+    var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
     return {
       title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
       desc: '各种类别都有哦～',
-      path: '/pages/details/details?id=' + page.data.cardId + '&latitude=' + app.globalData.latitude + '&longitude=' + app.globalData.longitude
+      path: '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude
     }
   },
   getCardsRelated: function (loadHigh) {
@@ -156,8 +158,11 @@ Page({
     })
   },
   goDetails: function (event) {
+    var page = this;
     var cardId = event.currentTarget.dataset.cardid;
-    var url = "/pages/details/details?id=" + cardId;
+    var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
+    var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
+    var url = "/pages/details/details?id=" + cardId + "&latitude=" + latitude + "&longitude=" + longitude;
     wx.navigateTo({
       url: url,
       success: function (res) {

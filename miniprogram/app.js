@@ -93,7 +93,7 @@ App({
             if (!statu['scope.userLocation']) {
               wx.showModal({
                 title: '是否授权当前位置',
-                content: '需要获取您的地理位置，请确认授权，否则地图功能将无法使用',
+                content: '需要获取您的地理位置，请确认授权，否则无法推荐附近的分享信息～',
                 success: function (tip) {
                   if (tip.confirm) {
                     wx.openSetting({
@@ -179,11 +179,16 @@ App({
     let page = this;
     wx.cloud.callFunction({
       name: 'login',
+      success: res => {
+        console.log("login success: ", res)
+      },
+      fail: res => {
+        console.log("login fail: ", res)
+      },
       complete: res => {
-        //console.log("call getopenid: ")
-        //console.log(res)
-        console.log('云函数获取到的openid: ', res.result.openId)
-        page.globalData['openid'] = res.result.openId;
+        console.log("login complete: ", res)
+        console.log('云函数获取到的openid: ', res.result.openid)
+        page.globalData['openid'] = res.result.openid;
       }
     })
   },

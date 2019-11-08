@@ -6,6 +6,7 @@
   text-align: left;
   line-height: 2em;
   width: 95%;
+  font-size: 45rpx;
 }
 /* 分隔线--底部 */
 .line{
