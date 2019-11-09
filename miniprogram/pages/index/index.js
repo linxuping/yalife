@@ -316,7 +316,7 @@ Page({
     });
   },
 
-  onLoad: function() {
+  onLoad: function (options) {
     var page = this;
     //app.getPermission(page);
 
@@ -330,6 +330,14 @@ Page({
         url: '../chooseLib/chooseLib',
       })
       return
+    }
+
+    //从分享详情传递到首页
+    if (!app.globalData.latitude && !!options.latitude && !app.globalData.longitude && !!options.longitude) {
+      console.log("options update app.globalData: ", app.globalData);
+      app.globalData.latitude = parseFloat( options.latitude );
+      app.globalData.longitude = parseFloat( options.longitude );
+      app.globalData.address = decodeURIComponent(options.address);      
     }
     
     wx.getSystemInfo({
@@ -361,9 +369,10 @@ Page({
 
     //wx.getLocation({
     //  type: 'gcj02',
-    console.log("getLocation: ");
+    console.log("check location: ");
     console.log(app.globalData.latitude);
     console.log(app.globalData.longitude);
+    console.log(app.globalData.address);
     if (!!app.globalData.latitude && !!app.globalData.longitude && !!app.globalData.address){
       page.setData({
         latitude: app.globalData.latitude,
@@ -373,6 +382,7 @@ Page({
       });
       page.onLoadCards(app.globalData.openid, app.globalData.latitude, app.globalData.longitude, 0, app.globalData.distance, 20, 0, true, []);
     } else {
+      console.log("app.getLocation start.");
       app.getLocation(
         function(res) {
           const latitude = res.latitude

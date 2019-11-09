@@ -15,6 +15,7 @@ Page({
     cardList: [],
     latitudeShared: 0,
     longitudeShared: 0,
+    addressShared: "",
     defaultImg: "../../images/default.png",
     showHome: false,
   },
@@ -28,11 +29,17 @@ Page({
       title: "邻里小事"
     })
     if (options.id != undefined) {
+      console.log("options: ", options);
       page.setData({
         cardId: options.id,
         latitudeShared: options.latitude,
-        longitudeShared: options.longitude
+        longitudeShared: options.longitude,
+        addressShared: decodeURIComponent(options.address)
       });
+      app.globalData.latitudeShared = options.latitude;
+      app.globalData.longitudeShared = options.longitude;
+      app.globalData.addressShared = decodeURIComponent(options.address);
+      console.log("app.globalData update: ", app.globalData);
       db.collection('attractions').where({
         _id: options.id
       }).get({
@@ -57,6 +64,7 @@ Page({
             
             var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
             var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
+            var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
             recommend.get(card, latitude, longitude, function(cards){
               console.log("recommend cb: ");
               console.log(cards);
@@ -78,10 +86,11 @@ Page({
     app.addEventLog("detail share", page.data.cardId);
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
+    var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
     return {
       title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
       desc: '各种类别都有哦～',
-      path: '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude
+      path: '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude + '&address=' + encodeURIComponent(address)
     }
   },
   getCardsRelated: function (loadHigh) {
@@ -138,8 +147,14 @@ Page({
     })
   },
   goIndex: function() {
+    var page = this;
+    var url = '/pages/index/index';
+    var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
+    var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
+    var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
+    url += "?latitude=" + latitude + "&longitude=" + longitude + '&address=' + encodeURIComponent(address);
     wx.redirectTo({
-      url: '/pages/index/index',
+      url: url,
       success: function (res) {
         console.log("goIndex success: ");
       },
@@ -162,7 +177,8 @@ Page({
     var cardId = event.currentTarget.dataset.cardid;
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
-    var url = "/pages/details/details?id=" + cardId + "&latitude=" + latitude + "&longitude=" + longitude;
+    var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
+    var url = "/pages/details/details?id=" + cardId + "&latitude=" + latitude + "&longitude=" + longitude + '&address=' + encodeURIComponent(address);
     wx.navigateTo({
       url: url,
       success: function (res) {
