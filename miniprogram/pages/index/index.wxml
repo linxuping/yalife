@@ -27,7 +27,7 @@
     <image style="width:30px;height:30px;margin-left:4px" src="../../images/mine.png" mode="aspectFit" bindtap="goHomePage"></image>
   </view>
 
-  <view class="uploader" wx:for="{{goods}}" wx:if="{{showGoods}}" style="display:none">
+  <view class="uploader" wx:for="{{goods}}" wx:key="key" wx:if="{{showGoods}}" style="display:none">
     <navigator url="../addFunction/addFunction" open-type="navigate" class="uploader-text">
       <image src="{{item.imgurl}}" style="width:100px;height:100px"></image>
       <text>{{item.title}}</text>
@@ -63,7 +63,7 @@
 
 
 <view class="{{goods.length>1 ? 'parent':'parent-one'}}">
-  <view class="card child" wx:for="{{goods}}" wx:if="{{showGoods}}" wx:key="_id">
+  <view class="card child" wx:for="{{goods}}" wx:key="key" wx:if="{{showGoods}}" wx:key="_id">
     <!--<navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >-->
     <view data-cardid="{{item._id}}" url="/pages/details/details?id={{item._id}}" bindtap="goDetails" >
       <view style="margin:2px">

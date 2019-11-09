@@ -180,6 +180,7 @@ Page({
         title: page.data.card.content.substr(0, 66) || "[图片]",
         message: "审核不通过("+page.data.reason+")",  
         cardId: page.data.card._id,
+        reason: page.data.reason,
         status: 3
       },
       success: res => {

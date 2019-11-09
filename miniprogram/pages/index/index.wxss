@@ -423,7 +423,7 @@ border-bottom: 5rpx solid #1aae18;
   border: 0;
 }
 .parent { 
-  width:100%;
+  width:95%;
   -moz-column-count: 2;
   -webkit-column-count: 2;
   column-count: 2;

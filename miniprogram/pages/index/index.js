@@ -96,6 +96,22 @@ function goods_distinct(goods){
   return result;
 }
 
+function reRotateList(lis) {
+  var len = lis.length;
+  if (len <= 4) {
+    return lis
+  }
+  var a = parseInt(len * 1 / 4);
+  var b = parseInt(len * 2 / 4);
+  var c = parseInt(len * 3 / 4);
+  var lis2 = [];
+  lis2 = lis2.concat(lis.slice(0, a));
+  lis2 = lis2.concat(lis.slice(b, c));
+  lis2 = lis2.concat(lis.slice(a, b));
+  lis2 = lis2.concat(lis.slice(c, len));
+  return lis2
+}
+
 Page({
   data: {
     avatarUrl: './user-unlogin.png',
@@ -144,7 +160,7 @@ Page({
     distanceDesc: "15km内",
     typeImgHeight: 0,
     typeImgHeight2: 0,
-    type: "",
+    type: "二手",
     tags: [],
     index: 2, //15km
     array: ['3km', '8km', '15km'],
@@ -181,14 +197,13 @@ Page({
     app.addEventLog("choose distance", distance);
     page.getTags(true);
   },
-  onLoadCards: function (openid, latitude, longitude, dfrom, dto, firstPage) {
+  onLoadCards: function (openid, latitude, longitude, dfrom, dto, limit, offset, firstPage, lis) {
     if (openid == "") {
       console.log("no openid");
       return
     }
     var page = this;
     //console.log(page.data);
-    const db = wx.cloud.database()
     if (dto == 0) {
       dto = 100000000;
     }
@@ -208,9 +223,9 @@ Page({
       wx.showLoading({
         title: '正在加载...',
       })
-      query = query.limit(200)
+      query = query.limit(limit)
     } else {
-      query = query.skip(200)
+      query = query.skip(offset)
     }
     query.get({
       success: res => {
@@ -229,16 +244,17 @@ Page({
             }
           }
           cardIds.push(res.data[i]._id);
-          /*db.collection('attractions').doc(res.data[i]._id).update({
-            // data 传入需要局部更新的数据
-            data: {
-              visit_count: _.inc(parseInt(Math.random()*10)%2+1)
-            },
-            success: console.log,
-            fail: console.error
-          })*/
         }
-        if (cardIds.length > 0) {
+/*
+        var goods2 = reRotateList(goods_distinct(res.data));
+        console.log(">>> >>>");
+        //console.log(goods_distinct(res.data));
+        console.log(res.data.length, goods2.length);
+        console.log("<<< <<<");
+        page.setData({ goods: page.data.goods.concat(goods2) });
+        wx.hideLoading();
+*/
+        /*if (cardIds.length > 0) {
           wx.cloud.callFunction({
             name: 'visit_count',
             data: {
@@ -252,10 +268,10 @@ Page({
               console.log(err);
             }
           })
-        }
-        page.setData({ goods: page.data.goods.concat(goods_distinct(res.data)) });
-        wx.hideLoading();
+        }*/
+
         if (res.data.length==0 && firstPage) {
+          wx.hideLoading();
           wx.showModal({
             title: '附近未有发布条目😊',
             content: '',
@@ -273,8 +289,24 @@ Page({
             }
           })
         } else if (firstPage) {
-          //是否为第一页，继续加载其他
-          //page.onLoadCards(openid, latitude, longitude, dfrom, dto, false);
+          //是否为第一页，继续加载 第二页
+          //page.onLoadCards(openid, latitude, longitude, dfrom, dto, limit, offset+limit, false);
+        }
+
+        //
+        var len = res.data.length;
+        lis = lis.concat( reRotateList(res.data) );
+        if (len < limit) {
+          console.log("page loaded: ", lis.length);
+          page.setData({ goods:goods_distinct(lis) });
+          wx.hideLoading();
+        } else {
+          console.log("page loading: ",offset+limit, limit);
+          page.onLoadCards(openid, latitude, longitude, dfrom, dto, limit, offset + limit, false, lis);
+        }
+
+        if (firstPage) {
+          page.getTags();
         }
       },
       fail: err => {
@@ -282,7 +314,6 @@ Page({
         wx.hideLoading();
       }
     });
-    page.getTags();
   },
 
   onLoad: function() {
@@ -340,7 +371,7 @@ Page({
         address: app.globalData.address,
         distance: app.globalData.distance
       });
-      page.onLoadCards(app.globalData.openid, app.globalData.latitude, app.globalData.longitude, 0, app.globalData.distance, true);
+      page.onLoadCards(app.globalData.openid, app.globalData.latitude, app.globalData.longitude, 0, app.globalData.distance, 20, 0, true, []);
     } else {
       app.getLocation(
         function(res) {
@@ -362,7 +393,7 @@ Page({
               //console.log(res);
               console.log('云函数获取到的openid: ', res.result.openid);
               app.globalData.openid = res.result.openid
-              page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, true);
+              page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, 20, 0, true, []);
             }
           });
 
@@ -420,7 +451,7 @@ Page({
     var page = this;
     if (showLoading) {
       wx.showLoading({
-        title: '正在分析最近的分享信息...',
+        title: '分析最近信息...',
       })
     }
 
@@ -530,6 +561,18 @@ Page({
         wx.hideLoading();
       }
     })*/
+  },
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+    this.getTags();
+  },
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    this.getTags();
   },
   clickSearch: function (e) {
     wx.pageScrollTo({
@@ -669,8 +712,13 @@ Page({
     app.addEventLog("type search", event.currentTarget.dataset.type, distance);
     var type = event.currentTarget.dataset.type;
     if (type == "全部" || type==undefined) {
-      type = ""
+      type = "" 
     }
+    /*if (type == "全部" ) {
+      type = "" 
+    } else if (!type) {
+      type = "二手" //避免一次加载全部，预加载 二手
+    }*/
     var distanceDesc = ""
     if (distance==undefined || distance.length==0 || distance==0) {
       distance = 0;
@@ -680,7 +728,7 @@ Page({
     }
     var page = this;
     page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc, distance: distance,  type: type  });
-    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), true);
+    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), 20, 0, true, []);
   },
   onReachBottom: function(){
     return;
@@ -706,7 +754,7 @@ Page({
         wx.hideLoading();
       }
     });*/
-    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000, true)
+    page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, 5000+pages*1000, 20, 0, true, [])
     wx.hideLoading();
   },
   update_goods_index: function(e) {

@@ -89,6 +89,7 @@ Page({
         console.log(err);
       }
     })*/
+    page.setData({ cardList:[] })
     page.getCardsRecursively(cond, 0, 20);
   },
   getCardsRecursively: function(cond, offset,limit){

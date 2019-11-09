@@ -310,6 +310,9 @@ App({
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
+    if (page.isAdmin) {
+      return;
+    }
     db.collection('user_log').add({
       // data 字段表示需新增的 JSON 数据
       data: {
