@@ -32,14 +32,18 @@ Page({
       console.log("options: ", options);
       page.setData({
         cardId: options.id,
-        latitudeShared: options.latitude,
-        longitudeShared: options.longitude,
+        latitudeShared: parseFloat( options.latitude ),
+        longitudeShared: parseFloat( options.longitude ),
         addressShared: decodeURIComponent(options.address)
       });
-      app.globalData.latitudeShared = options.latitude;
-      app.globalData.longitudeShared = options.longitude;
-      app.globalData.addressShared = decodeURIComponent(options.address);
-      console.log("app.globalData update: ", app.globalData);
+
+      if (!!options.latitude && !!options.longitude) {
+        app.globalData.latitude = parseFloat( options.latitude );
+        app.globalData.longitude = parseFloat( options.longitude );
+        app.globalData.address = decodeURIComponent(options.address);
+        console.log("app.globalData update: ", app.globalData);        
+      }
+
       db.collection('attractions').where({
         _id: options.id
       }).get({
@@ -86,11 +90,14 @@ Page({
     app.addEventLog("detail share", page.data.cardId);
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
-    var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
+    var address = app.globalData.address;
+    //console.log("addr: ", page.data.addressShared, app.globalData.address, address);
+    var path = '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude + '&address=' + encodeURIComponent(address);
+    console.log("share path: ", path);
     return {
       title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
       desc: '各种类别都有哦～',
-      path: '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude + '&address=' + encodeURIComponent(address)
+      path: path
     }
   },
   getCardsRelated: function (loadHigh) {
@@ -151,7 +158,7 @@ Page({
     var url = '/pages/index/index';
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
-    var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
+    var address = app.globalData.address;
     url += "?latitude=" + latitude + "&longitude=" + longitude + '&address=' + encodeURIComponent(address);
     wx.redirectTo({
       url: url,

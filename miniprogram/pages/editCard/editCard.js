@@ -186,6 +186,9 @@ Page({
       success: res => {
         // output: res.result === 3
         console.log("audit succ");
+        wx.redirectTo({
+          url: '/pages/homepage/homepage',
+        })
       },
       fail: err => {
         // handle error
@@ -222,6 +225,9 @@ Page({
         // output: res.result === 3
         console.log(args);
         console.log("audit succ");
+        wx.redirectTo({
+          url: '/pages/homepage/homepage',
+        })
       },
       fail: err => {
         // handle error

@@ -465,7 +465,7 @@ border-bottom: 5rpx solid #1aae18;
   word-break: break-all;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  font-size: 30rpx;
+  font-size: 20rpx;
 }
 
 .textLimitwithoutImg {

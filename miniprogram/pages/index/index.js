@@ -332,6 +332,7 @@ Page({
       return
     }
 
+    console.log("onLoad options: ", options);
     //从分享详情传递到首页
     if (!app.globalData.latitude && !!options.latitude && !app.globalData.longitude && !!options.longitude) {
       console.log("options update app.globalData: ", app.globalData);
@@ -862,10 +863,11 @@ Page({
   onShareAppMessage: function () {
     var page = this;
     app.addEventLog("index share");
+    var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address);
     return {
       title: page.data.goods[0].content,
       desc: '各种类别都有哦～',
-      path: '/pages/index/index'
+      path: path
     }
   },
   onGetUserInfo: function(e) {
