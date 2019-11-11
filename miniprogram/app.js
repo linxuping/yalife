@@ -321,6 +321,10 @@ App({
         arg2: arg2,
         create_time: formatTime(new Date)
       },
+      fail: function (res) {
+        var errorCollect = require("utils/error")
+        errorCollect.add(res);
+      }
     })
   }
 })
