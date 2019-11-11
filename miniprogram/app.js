@@ -310,7 +310,7 @@ App({
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
-    if (page.isAdmin) {
+    if (page.isAdmin()) {
       return;
     }
     db.collection('user_log').add({
