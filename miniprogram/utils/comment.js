@@ -21,13 +21,15 @@ function formatDate(time) {
 
 class Comment {
   static add(cardId, content) {
+    var d = new Date().getTime();
     db.collection('comment').add({
       data: {
         card_id: cardId,
         content: content,
         status: 2,
         reason: "",
-        create_time: formatDate(new Date().getTime())
+        create_time: d,
+        create_time_str: formatDate(d)
       }
     }).then(res => {
       console.log(res)
@@ -62,33 +64,6 @@ class Comment {
         console.log(err);
       }
     })
-  };
-  
-  static audit(cardId, status, reason) {
-    db.collection('comment').doc(cardId).get({
-      success: res => {
-        console.log('comment get: ');
-        console.log(res.data);
-        if (res.data.length > 0) {
-          var card = res.data[0];
-          db.collection('comment').doc(cardId).update({
-            data: {
-              status: status,
-              reason: reason
-            },
-            success: function(res){
-              var message = "审核通过！";
-              if (status == 3) {
-                message = "审核不通过！";
-              }
-              app.sendMessage(card._openid, "评论审核结果", message, cardId); 
-            }
-          }) 
-        }
-      }
-    }) 
-    
-
   };
 }
 module.exports = Comment;
