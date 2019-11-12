@@ -36,8 +36,8 @@ class Comment {
     }).catch(console.error) 
   };
   
-  static remove(cardId) {
-    db.collection('comment').doc(cardId).update({
+  static remove(cmtId) {
+    db.collection('comment').doc(cmtId).update({
       data: {
         status: 0
       }
