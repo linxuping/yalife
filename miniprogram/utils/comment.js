@@ -47,7 +47,7 @@ class Comment {
   static fetch(cardId, cb) {
     db.collection('comment').orderBy('create_time', 'desc').where({
       card_id: cardId,
-      status: _.gte(0)
+      status: _.gt(0)
     }).get({
       success: res => {
         console.log("fetch comment result: ");
