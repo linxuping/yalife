@@ -495,6 +495,7 @@ Page({
             if (firstPage) {
               var ver = res.data[0]._id
               if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
+                console.log("hit tags: ", ver, app.globalData.tags);
                 page.setData({ tags: tags });
               } else {
                 app.globalData.newestVersion = ver;
