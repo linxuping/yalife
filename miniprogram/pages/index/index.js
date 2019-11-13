@@ -483,12 +483,26 @@ Page({
     var skip = 0;
     var limit = 10;
     var cards = [];
+    var firstPage = true;
     var loadTagPages = function(cb){
       db.collection('attractions').where(cond).orderBy("sort_time", "desc").skip(skip).limit(limit).get({
         success: res => {
           console.log("load_tags: " + skip);
           console.log(res.data);
           if (res.data.length > 0) {
+            
+            //看下是否为已拉取的最新版本
+            if (firstPage) {
+              var ver = res.data[0]._id
+              if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
+                page.setData({ tags: tags });
+              } else {
+                app.globalData.newestVersion = ver;
+                console.log("set newestVersion: ", ver);
+              }
+            }
+            firstPage = false;
+            
             cards = cards.concat(res.data);
             skip += limit; //继续翻页
             if (res.data.length == limit) {
@@ -536,6 +550,7 @@ Page({
         })
       }
       page.setData({ tags: tags }); 
+      app.globalData.tags = tags;
     });
     /*
     db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
