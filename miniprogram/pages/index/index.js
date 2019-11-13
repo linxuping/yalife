@@ -96,6 +96,44 @@ function goods_distinct(goods){
   return result;
 }
 
+function reRotateList2(lis) {
+  if (lis.length <= 4)
+    return lis;
+  var ids = [ lis[0]._id ];
+  var lis1 = [ lis[0] ];
+  var lis2 = [];
+  for (var i=1; i < lis.length; i++) {
+    if (ids.indexOf(lis[i]._id) == -1){
+      if (i % 2 == 0) {
+        lis2.push(lis[i]);
+      } else {
+        lis1.push(lis[i]);
+      }
+      ids.push(lis[i]._id);
+    }
+  }
+  return lis1.concat(lis2);
+}
+
+function reRotateList3(lis) {
+  if (lis.length <= 4)
+    return lis;
+  var ids = [];
+  var lis1 = [];
+  var lis2 = [];
+  for (var i=0; i < lis.length; i++) {
+    if (ids.indexOf(lis[i]._id) == -1){
+      if (i % 2 == 0) {
+        lis1.push(lis[i]);
+      } else {
+        lis2.push(lis[i]);
+      }
+      ids.push(lis[i]._id);
+    }
+  }
+  return lis1.concat(lis2);
+}
+
 function reRotateList(lis) {
   var len = lis.length;
   if (len <= 4) {
@@ -295,10 +333,16 @@ Page({
 
         //
         var len = res.data.length;
-        lis = lis.concat( reRotateList(res.data) );
+        lis = lis.concat( res.data );
         if (len < limit) {
           console.log("page loaded: ", lis.length);
-          page.setData({ goods:goods_distinct(lis) });
+          var goods = []
+          if (lis.length%2 > 0) {
+            goods = reRotateList2(lis)
+          } else {
+            goods = reRotateList3(lis)
+          }
+          page.setData({ goods:goods });
           wx.hideLoading();
         } else {
           console.log("page loading: ",offset+limit, limit);
