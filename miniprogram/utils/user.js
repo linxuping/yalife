@@ -33,6 +33,8 @@ class User {
         console.log("get user: ");
         console.log(res.data);
         if (res.data.length == 0) {
+          res.create_time = d;
+          res.create_time_str = formatDate(d);
           db.collection('user').add({
             data: res
           }).then(res => {
