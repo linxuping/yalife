@@ -123,13 +123,13 @@
     </picker>
     <view class="divLine"></view>
     
-    <picker bindchange="bindPickerChangeDays" value="{{indexDays}}" range="{{arrayDays}}" style="margin-top:16px">
+    <picker bindchange="bindPickerChangeDays" value="{{indexDays}}" range="{{arrayDays}}" style="margin-top:16px;display:none">
       <view style="bottom-margin:20px; margin-left:8px" bindtap="">
         <text>几天（内）：</text>
         <text class="modify" style="color: blue">{{arrayDays[indexDays]+"天"}}</text>
       </view>
     </picker>
-    <view class="divLine"></view>
+    <view class="divLine" style="display:none"></view>
     
     <view style="text-align:left;margin-left:8px" bindtap="choosePos">
       <text >我的位置：</text><text class="address addressAfter" style="color:blue">{{address}}</text>
