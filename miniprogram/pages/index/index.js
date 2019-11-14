@@ -202,6 +202,11 @@ Page({
     tags: [],
     index: 2, //15km
     array: ['3km', '8km', '15km'],
+    indexDays: 1, //15km
+    arrayDays: [1,3,7,15],
+    curTabDays: 1,
+    currentDays: 1,
+    filterDays: 3
   },
 
   selectTab(e) {
@@ -235,6 +240,20 @@ Page({
     app.addEventLog("choose distance", distance);
     page.getTags(true);
   },
+  bindPickerChangeDays: function (e) {
+    var page = this;
+    console.log('picker发送选择改变，携带值为', e.detail.value);//index为数组点击确定后选择的item索引
+    var index = e.detail.value;
+    var days = page.arrayDays[index];
+
+    page.setData({
+      indexDays: index,
+      filterDays: days
+    })
+    app.addEventLog("choose days", days);
+    page.getTags(true);
+  },
+
   onLoadCards: function (openid, latitude, longitude, dfrom, dto, limit, offset, firstPage, lis) {
     if (openid == "") {
       console.log("no openid");
@@ -515,6 +534,8 @@ Page({
       wx.showLoading({
         title: '分析最近信息...',
       })
+      //选项改编后强制拉取tags
+      app.globalData.newestVersion = "";
     }
 
     const _ = db.command
@@ -541,8 +562,10 @@ Page({
             if (firstPage) {
               var ver = res.data[0]._id
               if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
-                console.log("hit tags: ", ver, app.globalData.tags);
-                page.setData({ tags: tags });
+                console.log("hit tags and return: ", ver, app.globalData.tags);
+                page.setData({ tags: app.globalData.tags });
+                wx.hideLoading();
+                return
               } else {
                 app.globalData.newestVersion = ver;
                 console.log("set newestVersion: ", ver);
@@ -930,9 +953,9 @@ Page({
   },
   onShareAppMessage: function () {
     var page = this;
-    app.addEventLog("index share");
     var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address) + '&type=' + encodeURIComponent(page.data.type);
-    console.log(path);
+    app.addEventLog("index share", path, page.data.type);
+    console.log("share url: ", path);
     return {
       title: page.data.goods[0].content,
       desc: '各种类别都有哦～',

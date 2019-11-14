@@ -114,20 +114,29 @@
       <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
       <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
     </view>
-
+    
     <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" style="margin-top:16px">
       <view style="bottom-margin:20px; margin-left:8px" bindtap="">
         <text>选择距离范围（内）：</text>
         <text class="modify" style="color: blue">{{array[index]}}</text>
       </view>
     </picker>
-
     <view class="divLine"></view>
+    
+    <picker bindchange="bindPickerChangeDays" value="{{indexDays}}" range="{{arrayDays}}" style="margin-top:16px;display:none">
+      <view style="bottom-margin:20px; margin-left:8px" bindtap="">
+        <text>几天（内）：</text>
+        <text class="modify" style="color: blue">{{arrayDays[indexDays]+"天"}}</text>
+      </view>
+    </picker>
+    <view class="divLine" style="display:none"></view>
+    
     <view style="text-align:left;margin-left:8px" bindtap="choosePos">
       <text >我的位置：</text><text class="address addressAfter" style="color:blue">{{address}}</text>
       <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige; display:none" bindtap="choosePos">修正我的位置</button>
     </view>
     <view class="divLine"></view>
+    
     <text style="margin-left:8px">关键字搜索：</text>
     <view style="margin-top:10px">
       <view bindtap="typeSearch" data-type="{{item}}" style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center;margin-top:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">

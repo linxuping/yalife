@@ -87,12 +87,12 @@ Page({
   },
   onShareAppMessage: function () {
     var page = this;
-    app.addEventLog("detail share", page.data.cardId);
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
     var address = app.globalData.address;
     //console.log("addr: ", page.data.addressShared, app.globalData.address, address);
     var path = '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude + '&address=' + encodeURIComponent(address);
+    app.addEventLog("detail share", path, page.data.cardId);
     console.log("share path: ", path);
     return {
       title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),

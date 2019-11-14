@@ -1,0 +1,41 @@
+/* miniprogram/pages/genCard/genCard.wxss */
+page {
+    height: 100%;
+    background-color: #edf0f3;
+}
+.container {
+  background: #edf0f3;
+  height: 1000rpx;
+}
+
+.inviteCard {
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+  padding-top: 20rpx;
+  background: #edf0f3;
+}
+
+.share {
+  background: #edf0f3;
+  padding-bottom: 36rpx;
+}
+
+.share .buttonGroup {
+  display: flex;
+  flex-direction: column;
+  background: #edf0f3;
+  height: 100%;
+}
+
+.share .buttonGroup button {
+  width: 80vw;
+  margin: 10rpx auto;
+}
+
+.myCanvas {
+  z-index: -1000;
+  opacity: 0;
+  position: absolute;
+  top: -5000px;
+}

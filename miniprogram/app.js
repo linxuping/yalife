@@ -14,7 +14,8 @@ App({
     this.globalData = {
       distance: 15000, //default 15km
       newestVersion: "",
-      tags: []
+      tags: [],
+      days: this.daysAgo(15),
     }
     this.getOpenid()
   },//获取用户地理位置权限
@@ -328,7 +329,12 @@ App({
         errorCollect.add(res);
       }
     })
-  }
+  },
+  daysAgo: function (days) {
+    var d = new Date();
+    d.setDate(d.getDate() - days);
+    return d;
+  },
 })
 
 function formatTime(date) {

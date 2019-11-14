@@ -1,0 +1,17 @@
+<!--miniprogram/pages/genCard/genCard.wxml-->
+
+<view class='container' style='background:#EDF0F3;'>
+    <view style='background:#EDF0F3;'>
+        <canvas canvas-id="myCanvas" class='myCanvas' style="width: 750px; height: 2000px;" wx:if="{{showCanvas}}" />
+        <image mode="widthFix" wx:if="{{inviteCardUrl}}" src="{{inviteCardUrl}}" class="inviteCard" bindtap="previewImage" data-src="{{inviteCardUrl}}">
+        </image>
+    </view>
+
+    <view class='share' wx:if="{{inviteCardUrl}}">
+        <view class='buttonGroup' style='background:#EDF0F3;'>
+            <button type="primary" bindtap="save" style='flex:1'> 保存到相册 </button>
+            <button open-type="share" type="default" bindtap="onShareAppMessage" style='flex:1'> 邀请朋友来玩 </button>
+        </view>
+    </view>
+
+</view>
