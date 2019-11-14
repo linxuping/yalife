@@ -514,6 +514,8 @@ Page({
       wx.showLoading({
         title: '分析最近信息...',
       })
+      //选项改编后强制拉取tags
+      app.globalData.newestVersion = "";
     }
 
     var cond = {
