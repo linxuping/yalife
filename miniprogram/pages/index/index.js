@@ -540,7 +540,9 @@ Page({
               var ver = res.data[0]._id
               if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
                 console.log("hit tags: ", ver, app.globalData.tags);
-                page.setData({ tags: tags });
+                page.setData({ tags: app.globalData.tags });
+                cb();
+                return
               } else {
                 app.globalData.newestVersion = ver;
                 console.log("set newestVersion: ", ver);
