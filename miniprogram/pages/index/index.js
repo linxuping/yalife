@@ -929,8 +929,8 @@ Page({
   },
   onShareAppMessage: function () {
     var page = this;
-    app.addEventLog("index share");
     var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address) + '&type=' + encodeURIComponent(page.data.type);
+    app.addEventLog("index share", path, page.data.type);
     console.log("share url: ", path);
     return {
       title: page.data.goods[0].content,

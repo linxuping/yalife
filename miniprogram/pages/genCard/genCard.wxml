@@ -1,0 +1,61 @@
+<!--miniprogram/pages/genCard/genCard.wxml-->
+page {
+    height: 100%;
+    background-color: #edf0f3;
+}
+.container {
+  background: #edf0f3;
+  height: 1000rpx;
+}
+
+.inviteCard {
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+  padding-top: 20rpx;
+  background: #edf0f3;
+}
+
+.share {
+  background: #edf0f3;
+  padding-bottom: 36rpx;
+}
+
+.share .buttonGroup {
+  display: flex;
+  flex-direction: column;
+  background: #edf0f3;
+  height: 100%;
+}
+
+.share .buttonGroup button {
+  width: 80vw;
+  margin: 10rpx auto;
+}
+
+.myCanvas {
+  z-index: -1000;
+  opacity: 0;
+  position: absolute;
+  top: -5000px;
+}
+linxupingdeMacBook-Pro:card kavin$
+linxupingdeMacBook-Pro:card kavin$
+linxupingdeMacBook-Pro:card kavin$ cat love-res.wxml
+<!--pages/love-res/love-res.wxml-->
+
+<view class='container' style='background:#EDF0F3;'>
+    <view style='background:#EDF0F3;'>
+        <canvas canvas-id="myCanvas" class='myCanvas' style="width: 750px; height: 2000px;" wx:if="{{showCanvas}}" />
+        <image mode="widthFix" wx:if="{{inviteCardUrl}}" src="{{inviteCardUrl}}" class="inviteCard" bindtap="previewImage" data-src="{{inviteCardUrl}}">
+        </image>
+    </view>
+
+    <view class='share' wx:if="{{inviteCardUrl}}">
+        <view class='buttonGroup' style='background:#EDF0F3;'>
+            <button type="primary" bindtap="save" style='flex:1'> 保存到相册 </button>
+            <button open-type="share" type="default" bindtap="onShareAppMessage" style='flex:1'> 邀请朋友来玩 </button>
+        </view>
+    </view>
+
+</view>
