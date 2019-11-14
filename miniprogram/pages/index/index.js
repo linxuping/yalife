@@ -541,6 +541,7 @@ Page({
               if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
                 console.log("hit tags and return: ", ver, app.globalData.tags);
                 page.setData({ tags: app.globalData.tags });
+                wx.hideLoading();
                 return
               } else {
                 app.globalData.newestVersion = ver;
