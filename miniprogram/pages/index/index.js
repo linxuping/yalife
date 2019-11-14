@@ -245,6 +245,7 @@ Page({
     if (dto == 0) {
       dto = 100000000;
     }
+    const _ = db.command;
     var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
@@ -516,6 +517,7 @@ Page({
       })
     }
 
+    const _ = db.command
     var cond = {
       location: _.geoNear({
         geometry: db.Geo.Point(page.data.longitude, page.data.latitude),
@@ -930,6 +932,7 @@ Page({
     var page = this;
     app.addEventLog("index share");
     var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address) + '&type=' + encodeURIComponent(page.data.type);
+    console.log(path);
     return {
       title: page.data.goods[0].content,
       desc: '各种类别都有哦～',
