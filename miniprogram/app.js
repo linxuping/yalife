@@ -328,7 +328,12 @@ App({
         errorCollect.add(res);
       }
     })
-  }
+  },
+  daysAgo: function (days) {
+    var d = new Date();
+    d.setDate(d.getDate() - days);
+    return d;
+  },
 })
 
 function formatTime(date) {
