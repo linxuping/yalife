@@ -126,7 +126,7 @@
     <picker bindchange="bindPickerChangeDays" value="{{indexDays}}" range="{{arrayDays}}" style="margin-top:16px">
       <view style="bottom-margin:20px; margin-left:8px" bindtap="">
         <text>几天（内）：</text>
-        <text class="modify" style="color: blue">{{arrayDays[indexDays]}}</text>
+        <text class="modify" style="color: blue">{{arrayDays[indexDays]+"天"}}</text>
       </view>
     </picker>
     <view class="divLine"></view>
