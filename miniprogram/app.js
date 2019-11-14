@@ -15,7 +15,7 @@ App({
       distance: 15000, //default 15km
       newestVersion: "",
       tags: [],
-      days: this.daysAgo(30),
+      days: this.daysAgo(15),
     }
     this.getOpenid()
   },//获取用户地理位置权限
