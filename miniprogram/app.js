@@ -14,7 +14,8 @@ App({
     this.globalData = {
       distance: 15000, //default 15km
       newestVersion: "",
-      tags: []
+      tags: [],
+      days: this.daysAgo(30),
     }
     this.getOpenid()
   },//获取用户地理位置权限
