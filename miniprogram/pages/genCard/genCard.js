@@ -1,4 +1,4 @@
-// pages/love-res/love-res.js
+// pages/genCard/genCard.js
 
 // 预设一个default对象
 var defaultOptions = {
@@ -94,15 +94,15 @@ Page({
         console.log(math_ran);
         //男（1），女（2）
         if (that.data.gender == 1) {
-          // https://img.wekuo.com/temp/wx_act1/reason17.jpg
-          defaultOptions.bg_url = 'https://img.wekuo.com/temp/wx_act1/reason1' + math_ran + '.jpg';
+          // https://img.abc.com/temp/wx_act1/reason17.jpg
+          defaultOptions.bg_url = 'https://img.abc.com/temp/wx_act1/reason1' + math_ran + '.jpg';
           console.log(defaultOptions.bg_url);
         } else if (that.data.gender == 2) {
-          defaultOptions.bg_url = 'https://img.wekuo.com/temp/wx_act1/reason2' + math_ran + '.jpg';
+          defaultOptions.bg_url = 'https://img.abc.com/temp/wx_act1/reason2' + math_ran + '.jpg';
           console.log(defaultOptions.bg_url);
         } else {
           var twoRan = Math.floor(Math.random() * 2 + 1);
-          defaultOptions.bg_url = 'https://img.wekuo.com/temp/wx_act1/reason' + twoRan + math_ran + '.jpg';
+          defaultOptions.bg_url = 'https://img.abc.com/temp/wx_act1/reason' + twoRan + math_ran + '.jpg';
           console.log(defaultOptions.bg_url);
         }
 
