@@ -202,8 +202,20 @@ Page({
     tags: [],
     index: 2, //15km
     array: ['3km', '8km', '15km'],
+    indexDays: 1, //15km
+    arrayDays: [1,3,7,15],
+    curTabDays: 1,
+    currentDays: 1,
   },
 
+  selectTabDays(e) {
+    let index = e.target.dataset.index;
+    console.log("days index: ",index);
+    this.setData({
+      curTabDays: index,
+      currentDays: index
+    })
+  },
   selectTab(e) {
     let index = e.target.dataset.index;
     console.log(index);
