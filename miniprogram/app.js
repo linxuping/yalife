@@ -12,10 +12,14 @@ App({
     }
 
     this.globalData = {
+      type: "二手", 
+      index: 2, 
       distance: 15000, //default 15km
+      distanceDesc: "15km内", 
       newestVersion: "",
       tags: [],
       days: this.daysAgo(15),
+      indexDays: 1, 
     }
     this.getOpenid()
   },//获取用户地理位置权限

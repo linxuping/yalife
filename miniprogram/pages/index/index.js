@@ -7,7 +7,6 @@ var types = [];
 var pages = 0;
 var db = wx.cloud.database();
 const _ = db.command
-var startSize = 15000 //15KM
 
 function sort(arr){
   var d=new Date();
@@ -195,14 +194,14 @@ Page({
     types_class: [],
     address: "",
     distance: app.globalData.distance, //15000,
-    distanceDesc: "15km内",
+    distanceDesc: app.globalData.distanceDesc,
     typeImgHeight: 0,
     typeImgHeight2: 0,
-    type: "二手",
+    type: app.globalData.type,
     tags: [],
-    index: 2, //15km
+    index: app.globalData.index, //15km
     array: ['3km', '8km', '15km'],
-    indexDays: 1, //15km
+    indexDays: app.globalData.indexDays, 
     arrayDays: [1,3,7,15],
     curTabDays: 1,
     currentDays: 1,
@@ -237,6 +236,7 @@ Page({
       index: e.detail.value,
       distance: distance
     })
+    app.globalData.index = e.detail.value;
     app.addEventLog("choose distance", distance);
     page.getTags(true);
   },
@@ -250,6 +250,7 @@ Page({
       indexDays: index,
       filterDays: days
     })
+    app.globalData.indexDays = e.detail.value;
     app.addEventLog("choose days", days);
     page.getTags(true);
   },
@@ -412,8 +413,31 @@ Page({
       page.setData({
         type: decodeURIComponent(options.type)
       });
+      app.globalData.type = decodeURIComponent(options.address);      
+    } else {
+      page.setData({
+        type: app.globalData.type
+      });
+    }
+
+    if (!options.index) {
+      page.setData({
+        index: app.globalData.index
+      });
     }
     
+    if (!options.distanceDesc) {
+      page.setData({
+        distanceDesc: app.globalData.distanceDesc
+      });
+    }
+ 
+    if (!options.indexDays) {
+      page.setData({
+        indexDays: app.globalData.indexDays
+      });
+    }
+ 
     wx.getSystemInfo({
       success: function (res) {
         page.setData({
@@ -477,11 +501,11 @@ Page({
               //console.log(res);
               console.log('云函数获取到的openid: ', res.result.openid);
               app.globalData.openid = res.result.openid
-              page.onLoadCards(app.globalData.openid, latitude, longitude, 0, startSize, 20, 0, true, []);
+              page.onLoadCards(app.globalData.openid, latitude, longitude, 0, app.globalData.distance, 20, 0, true, []);
             }
           });
 
-          //page.onLoadCards(page.data.openid, latitude, longitude, 0, startSize)
+          //page.onLoadCards(page.data.openid, latitude, longitude, 0, app.globalData.distance)
 
           let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
           let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
@@ -689,6 +713,7 @@ Page({
   clickType: function (e) {
     var type = parseInt(event.currentTarget.dataset.type);
     this.setData({ type: type });
+    app.globalData.type = type;      
   },
   updateKeyword: function(e){
     var val = e.detail.value;
@@ -834,6 +859,8 @@ Page({
     }
     var page = this;
     page.setData({ showTypes: false, showGoods: true, typeClicked: true, goods: [], keyword: "", distanceDesc: distanceDesc, distance: distance,  type: type  });
+    app.globalData.distanceDesc = distanceDesc;
+    app.globalData.type = type;
     page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), 20, 0, true, []);
   },
   onReachBottom: function(){
