@@ -264,6 +264,7 @@ Page({
     if (dto == 0) {
       dto = 100000000;
     }
+    var db = wx.cloud.database();
     const _ = db.command;
     var cond = {
       location: _.geoNear({
@@ -362,8 +363,10 @@ Page({
           } else {
             goods = reRotateList3(lis)
           }
-          page.setData({ goods:goods });
-          wx.hideLoading();
+          page.setData({ goods:goods }, function(){
+            // this is setData callback
+            wx.hideLoading();
+          });
         } else {
           console.log("page loading: ",offset+limit, limit);
           page.onLoadCards(openid, latitude, longitude, dfrom, dto, limit, offset + limit, false, lis);
@@ -538,6 +541,7 @@ Page({
       app.globalData.newestVersion = "";
     }
 
+    var db = wx.cloud.database();
     const _ = db.command
     var cond = {
       location: _.geoNear({

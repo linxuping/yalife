@@ -52,7 +52,7 @@ Page({
    */
   onLoad: function (options) {
     setTimeout(function (e) {
-      defaultOptions.nickName = wx.getStorageSync('sendName');
+      defaultOptions.nickName = "abc";
       console.log(defaultOptions.nickName);
     }, 1);
     var that = this;
@@ -71,7 +71,7 @@ Page({
   },
   onShow: function (options) {
     setTimeout(function (e) {
-      defaultOptions.nickName = wx.getStorageSync('sendName');
+      defaultOptions.nickName = "abc";
       console.log();
     }, 1)
   },
@@ -90,26 +90,11 @@ Page({
         });
 
         // 改变背景图片
-        var math_ran = String(Math.floor(Math.random() * 7 + 1));
-        console.log(math_ran);
-        //男（1），女（2）
-        if (that.data.gender == 1) {
-          // https://img.abc.com/temp/wx_act1/reason17.jpg
-          defaultOptions.bg_url = 'https://img.abc.com/temp/wx_act1/reason1' + math_ran + '.jpg';
-          console.log(defaultOptions.bg_url);
-        } else if (that.data.gender == 2) {
-          defaultOptions.bg_url = 'https://img.abc.com/temp/wx_act1/reason2' + math_ran + '.jpg';
-          console.log(defaultOptions.bg_url);
-        } else {
-          var twoRan = Math.floor(Math.random() * 2 + 1);
-          defaultOptions.bg_url = 'https://img.abc.com/temp/wx_act1/reason' + twoRan + math_ran + '.jpg';
-          console.log(defaultOptions.bg_url);
-        }
-
+        defaultOptions.bg_url = 'https://6c78-lxp-oeb5n-1300557880.tcb.qcloud.la/1573791584.1.png';
 
         //把图片保存到本地
         wx.getImageInfo({
-          src: defaultOptions.bg_url.replace('http://', 'https://'),
+          src: defaultOptions.bg_url,
           success: function (res) {
             console.log(res);
             console.log(res.path);
