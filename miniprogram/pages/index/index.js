@@ -548,7 +548,7 @@ Page({
       status: 1
     };
     var skip = 0;
-    var limit = 10;
+    var limit = 20;
     var cards = [];
     var firstPage = true;
     var loadTagPages = function(cb){
