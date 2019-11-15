@@ -11,7 +11,7 @@ var defaultOptions = {
   code_pos: [405, 1021],
   code_width: 200,
   code_height: 200,
-  codePath: '/images/gao_qr_code_1.jpg',
+  codePath: '/images/genbg.jpg',
 
   bg_url: '',
   bg_width: 750,
