@@ -244,7 +244,7 @@ Page({
     var page = this;
     console.log('picker发送选择改变，携带值为', e.detail.value);//index为数组点击确定后选择的item索引
     var index = e.detail.value;
-    var days = page.arrayDays[index];
+    var days = page.data.arrayDays[index];
 
     page.setData({
       indexDays: index,
@@ -256,11 +256,12 @@ Page({
   },
 
   onLoadCards: function (openid, latitude, longitude, dfrom, dto, limit, offset, firstPage, lis) {
+    var page = this;
+    console.log("onLoadCards: ", openid, latitude, longitude, dfrom, dto, limit, offset, firstPage, lis.length, page.data);
     if (openid == "") {
       console.log("no openid");
       return
     }
-    var page = this;
     //console.log(page.data);
     if (dto == 0) {
       dto = 100000000;
@@ -272,7 +273,8 @@ Page({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: dfrom,
         maxDistance: dto,
-      })
+      }),
+      sort_time: _.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) )
     };
     if (page.data.type && page.data.type.length > 0) {
       cond.tags = page.data.type;
@@ -409,33 +411,48 @@ Page({
       app.globalData.address = decodeURIComponent(options.address);      
     }
 
-    if (!!options.type) {
-      page.setData({
-        type: decodeURIComponent(options.type)
-      });
-      app.globalData.type = decodeURIComponent(options.address);      
-    } else {
+    if (!options.type) {
       page.setData({
         type: app.globalData.type
       });
+    } else {
+      page.setData({
+        type: decodeURIComponent(options.type)
+      });
+      app.globalData.type = decodeURIComponent(options.type);      
     }
 
     if (!options.index) {
       page.setData({
         index: app.globalData.index
       });
+    } else {
+      page.setData({
+        index: parseInt(options.index)
+      });
+      app.globalData.index = parseInt(options.index);      
     }
     
     if (!options.distanceDesc) {
       page.setData({
         distanceDesc: app.globalData.distanceDesc
       });
+    } else {
+      page.setData({
+        distanceDesc: distanceDesc
+      });
+      app.globalData.distanceDesc = distanceDesc;      
     }
  
     if (!options.indexDays) {
       page.setData({
         indexDays: app.globalData.indexDays
       });
+    } else {
+      page.setData({
+        indexDays: parseInt(indexDays)
+      });
+      app.globalData.indexDays = parseInt(indexDays);      
     }
  
     wx.getSystemInfo({
@@ -573,6 +590,7 @@ Page({
         minDistance: 0,
         maxDistance: parseInt(page.data.distance),
       }),
+      sort_time: _.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) ),
       status: 1
     };
     var skip = 0;
@@ -984,8 +1002,8 @@ Page({
   },
   onShareAppMessage: function () {
     var page = this;
-    var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address) + '&type=' + encodeURIComponent(page.data.type);
-    app.addEventLog("index share", path, page.data.type);
+    var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address) + '&type=' + encodeURIComponent(page.data.type) + "&index" + app.globalData.index + "&indexDays" + app.globalData.indexDays + "&distanceDesc" + encodeURIComponent(page.data.distanceDesc);
+    app.addEventLog("index share", path, page.data.type, page.data.distanceDesc, page.data.address);
     console.log("share url: ", path);
     return {
       title: page.data.goods[0].content,

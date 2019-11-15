@@ -313,7 +313,7 @@ App({
       }
     });
   },
-  addEventLog: function (ev, arg1, arg2) {
+  addEventLog: function (ev, arg1, arg2, arg3, arg4) {
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
@@ -326,6 +326,8 @@ App({
         event: ev,
         arg1: arg1,
         arg2: arg2,
+        arg3: arg3,
+        arg4: arg4,
         create_time: formatTime(new Date)
       },
       fail: function (res) {
