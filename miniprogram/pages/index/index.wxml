@@ -20,7 +20,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{(type || '全部')+' '+distanceDesc+' '+arrayDays[indexDays]+'天内 '+address}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{(type || '全部')+'·'+distanceDesc+'·近'+arrayDays[indexDays]+'天·'+address}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
 
       </view>
     </view>
@@ -110,25 +110,27 @@
   <view wx:if="{{showTypes}}" style="text-align:left">
     <view style="display:none"> 
       <text style="display:block;margin-bottom:12px;margin-left:8px">请选择距离范围（内）：</text>
-      <button class="goodbutton" data-distance="3000" bindtap="typeSearch">3km</button>
-      <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km</button>
-      <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km</button>
+      <button class="goodbutton" data-distance="3000" bindtap="typeSearch">3km内</button>
+      <button class="goodbutton" data-distance="8000" bindtap="typeSearch">8km内</button>
+      <button class="goodbutton" data-distance="15000" bindtap="typeSearch">15km内</button>
     </view>
-    
-    <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" style="margin-top:16px">
-      <view style="bottom-margin:20px; margin-left:8px" bindtap="">
-        <text>选择距离范围（内）：</text>
-        <text class="modify" style="color: blue">{{array[index]}}</text>
-      </view>
-    </picker>
-    <view class="divLine"></view>
-    
-    <picker bindchange="bindPickerChangeDays" value="{{indexDays}}" range="{{arrayDays}}" style="margin-top:16px">
-      <view style="bottom-margin:20px; margin-left:8px" bindtap="">
-        <text>几天（内）：</text>
-        <text class="modify" style="color: blue">{{arrayDays[indexDays]+"天内"}}</text>
-      </view>
-    </picker>
+
+    <view style="width:45%;display:inline-block">
+      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" style="margin-top:16px">
+        <view style="bottom-margin:20px; margin-left:8px" bindtap="">
+          <text>范围：</text>
+          <text class="modify" style="color: blue">{{array[index]}}</text>
+        </view>
+      </picker>
+    </view>
+    <view style="width:45%;display:inline-block">
+      <picker bindchange="bindPickerChangeDays" value="{{indexDays}}" range="{{arrayDays}}" style="margin-top:16px">
+        <view style="bottom-margin:20px; margin-left:8px" bindtap="">
+          <text>时间：</text>
+          <text class="modify" style="color: blue">{{arrayDays[indexDays]+"天内"}}</text>
+        </view>
+      </picker>
+    </view>
     <view class="divLine"></view>
     
     <view style="text-align:left;margin-left:8px" bindtap="choosePos">

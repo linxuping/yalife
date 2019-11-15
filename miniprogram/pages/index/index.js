@@ -200,7 +200,7 @@ Page({
     type: app.globalData.type,
     tags: [],
     index: app.globalData.index, //15km
-    array: ['3km', '8km', '15km'],
+    array: ['3km内', '8km内', '15km内'],
     indexDays: app.globalData.indexDays, 
     arrayDays: [1,3,7,15],
     curTabDays: 1,
