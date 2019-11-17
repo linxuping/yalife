@@ -28,16 +28,19 @@ function save_err(openid, err) {
  
 exports.main = async (event, context) => {
   //try {
-    console.log("prepare: ", event.status, event.reason || '', event.tags, event.cardId);
+    console.log("prepare: ", event.status, event.reason || '', event.tags || [], event.cardId);
     const db = cloud.database()
     const _ = db.command;
-    db.collection('attractions').doc(event.cardId).update({
+    db.collection('attractions').where({
+      _id: event.cardId,
+      _openid: event.openid,
+    }).update({
       data: {
         status: parseInt( event.status ),
         reason: (event.reason || ""),
         tags: (event.tags || []),
       }}).then(res => {
-        console.log("已更新条目属性 ");
+        console.log("已更新条目属性 ", res);
         db.collection('user_formid').where(
           { _openid: event.openid }
         ).get().then(res => {
@@ -57,7 +60,7 @@ exports.main = async (event, context) => {
                 };
                 console.log("发送message：", args);
                 cloud.callFunction({
-                  name: 'message',
+                  name: 'unimessage',
                   data: args,
                   success: res => {
                     console.log(res);

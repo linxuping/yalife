@@ -14,11 +14,12 @@
         <!-- 右边内容 上下结构 -->
         <view style='width:100%'>
           <text class='item_title' style="display:block">{{item.content}}</text>
-          <text class="cardStatus" wx:if="{{item.status==2}}">审核中</text>
-          <text class="cardStatus" wx:if="{{item.status==1}}">在线</text>
-          <text class="cardStatus" wx:if="{{item.status>2}}">审核不通过</text>
+          <text class="cardStatus" wx:if="{{item.is_proxy==1}}">在线</text>
+          <text class="cardStatus" wx:elif="{{item.status==2}}">审核中</text>
+          <text class="cardStatus" wx:elif="{{item.status==1}}">在线</text>
+          <text class="cardStatus" wx:elif="{{item.status>2}}">审核不通过</text>
           <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
-          <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}</text>
+          <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}{{item.is_proxy==1?" 中介":""}}</text>
           <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
         </view>
       </view>

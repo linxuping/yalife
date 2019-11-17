@@ -20,8 +20,8 @@
     </picker>  
     <input placeholder="输入标签：a,b,c" style="border: solid 1px" bindinput="getInput" type="text" value="{{ card.tags }}"></input>
     <input placeholder="下线原因" style="border: solid 1px" bindinput="getReason" type="text"></input>
-    <button wx:if="{{card.status==1}}" bindtap="offline">点击下线</button>
-    <button wx:else bindtap="online">点击上线</button>
+    <button bindtap="auditFail">不通过</button>
+    <button bindtap="auditOk">通过</button>
   </view>
 
     <view style="bottom-margin:20px;margin-top:8px" bindtap="choosePos">

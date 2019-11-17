@@ -13,5 +13,7 @@
             <button open-type="share" type="default" bindtap="onShareAppMessage" style='flex:1'> 邀请朋友来玩 </button>
         </view>
     </view>
+    <button bindtap="authMsg">订阅消息</button>
+    <button bindtap="sendMsg">推送消息</button>
 
 </view>

@@ -167,9 +167,9 @@ Page({
       reason: e.detail.value
     });
   },
-  offline: function (e) {
+  auditFail: function (e) {
     var page = this;
-    this.data.card.status = 0;
+    this.data.card.status = 3;
     this.setData({
       card: this.data.card
     });
@@ -196,7 +196,7 @@ Page({
       }
     })
   },
-  online: function (e) {
+  auditOk: function (e) {
     var page = this;
     this.data.card.status = 1;
     this.setData({

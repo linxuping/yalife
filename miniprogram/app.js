@@ -188,14 +188,14 @@ App({
       name: 'login',
       success: res => {
         console.log("login success: ", res)
+        console.log('云函数获取到的openid: ', res.result.openid)
+        page.globalData['openid'] = res.result.openid;
       },
       fail: res => {
         console.log("login fail: ", res)
       },
       complete: res => {
         console.log("login complete: ", res)
-        console.log('云函数获取到的openid: ', res.result.openid)
-        page.globalData['openid'] = res.result.openid;
       }
     })
   },
@@ -317,7 +317,8 @@ App({
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
-    if (page.isAdmin()) {
+    var uids = ["of1Gv4u8HogWkBzuZWCsz-JI50Hk"];
+    if (page.isAdmin() || uids.indexOf(page.globalData.openid)>=0) {
       return;
     }
     db.collection('user_log').add({

@@ -51,11 +51,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("onload.");
     setTimeout(function (e) {
       defaultOptions.nickName = "abc";
       console.log(defaultOptions.nickName);
     }, 1);
     var that = this;
+
+    /*
     wx.getUserInfo({
       success: function (res) {
         var userInfo = res.userInfo;
@@ -65,19 +68,25 @@ Page({
           userInfo: userInfo,
           gender: gender
         })
+      },
+      fail: function(res){
+        console.log(res);
       }
-    })
+    })*/
 
   },
   onShow: function (options) {
+    console.log("onshow.");
     setTimeout(function (e) {
       defaultOptions.nickName = "abc";
       console.log();
     }, 1)
   },
   onReady: function (options) {
+    console.log("onready.");
     var that = this;
     //获得用户信息
+    /*
     wx.login({
       success: function () {
         wx.getUserInfo({
@@ -86,28 +95,35 @@ Page({
               showCanvas: true
             })
             that.loadPortraitPath(res.userInfo.avatarUrl)
+          },
+          fail: function(res) {
+            console.log(res);
           }
-        });
+        });*/
 
+        console.log("get image info.");
         // 改变背景图片
-        defaultOptions.bg_url = 'https://6c78-lxp-oeb5n-1300557880.tcb.qcloud.la/1573791584.1.png';
+        defaultOptions.bg_url = 'https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png';
 
         //把图片保存到本地
         wx.getImageInfo({
           src: defaultOptions.bg_url,
           success: function (res) {
-            console.log(res);
+            console.log("img: ", res);
             console.log(res.path);
             defaultOptions.bg_url = res.path;
             console.log(defaultOptions.bg_url);
             that.setData({
               bg: res.path
             })
+          },
+          fail: function(res) {
+            console.log(res);
           }
         })
 
-      }
-    });
+    /*  }
+    });*/
 
 
     //画出图片的方法
@@ -204,7 +220,7 @@ Page({
   //获得下载图片路径
   loadPortraitPath: function (imgUrl) {
     wx.getImageInfo({
-      src: imgUrl.replace('http://', 'https://'),
+      src: imgUrl,
       success: function (res) {
         defaultOptions.portraitPath = res.path;
       }
@@ -268,5 +284,38 @@ Page({
       current: current, // 当前显示图片的http链接
       urls: imgsurl // 需要预览的图片http链接列表
     })
+  },
+  authMsg: function(e) {
+    wx.requestSubscribeMessage({
+      tmplIds: ['4RZPg5LMYit7d7eC6Qti-SO3tPMFatfq1MB6bAsAMlg'],
+      success(res) {
+        console.log("requestSubscribeMessage: ", res);
+      },
+      fail(res) {
+        console.log("requestSubscribeMessage: ", res);
+      }
+    })
+  },
+  sendMsg: function (e) {
+    var args = {
+      openid: "of1Gv4kVHElVpbeBRNZzQ-VzFVMI",
+      title: "tt",
+      message: "mm",
+      cardid: "23db0a155dcb4a9f05edc89c0c89fff3"
+    };
+    console.log("发送message：", args);
+    wx.cloud.callFunction({
+      name: 'submessage',
+      data: args,
+      success: res => {
+        console.log(res);
+      },
+      fail: res => {
+        console.log(res);
+      },
+      complete: () => {
+        console.log("message:")
+      }
+    });
   }
 })

@@ -335,9 +335,9 @@ Page({
         if (res.data.length==0 && firstPage) {
           wx.hideLoading();
           wx.showModal({
-            title: '附近未有发布条目😊',
+            title: '附近该类别暂空 😊',
             content: '',
-            cancelText: '暂不谢谢',
+            cancelText: '继续逛逛',
             confirmText: '我来发布',
             success(res) {
               if (res.cancel) {
