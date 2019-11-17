@@ -101,6 +101,7 @@ Page({
           }
         });*/
 
+        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg   ");
         console.log("get image info.");
         // 改变背景图片
         defaultOptions.bg_url = 'https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png';
@@ -112,7 +113,6 @@ Page({
             console.log("img: ", res);
             console.log(res.path);
             defaultOptions.bg_url = res.path;
-            console.log(defaultOptions.bg_url);
             that.setData({
               bg: res.path
             })
@@ -137,6 +137,7 @@ Page({
 
         //画背景图
         ctx.drawImage(defaultOptions.bg_url, 1, 0, defaultOptions.bg_width, defaultOptions.bg_height)
+        console.log("bg_url: ", defaultOptions.bg_url);
 
         //画头像
         ctx.save(); // 保存当前ctx的状态
@@ -161,9 +162,10 @@ Page({
         ctx.setTextAlign('center')
         ctx.fillText(that.data.followText[0], defaultOptions.bg_width * 0.90, defaultOptions.bg_height * 0.94)
         ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.90, defaultOptions.bg_height * 0.94 + 40)
-
+        console.log("before draw...");
         //输出图片
         ctx.draw(false, function () {
+          console.log("before to temp...");
           wx.canvasToTempFilePath({
             x: 0,
             y: 0,
@@ -175,11 +177,15 @@ Page({
             success: function (res) {
               //console.log(res.tempFilePath);
               callback(res.tempFilePath)
+            },
+            fail: function(res) {
+              console.log("fail: ", res);
             }
           })
         });
-
+        console.log("after draw...");
       } catch (err) {
+        console.log(err);
         wx.hideLoading();
         wx.showModal({
           title: '提示',
@@ -191,6 +197,7 @@ Page({
 
     //检查是否已经下载了微信头像
     var _check = function () {
+      console.log("_check ... ");
       let localPath = defaultOptions.portraitPath;
       if (!!localPath) {
         makeImg(defaultOptions.portraitPath, function (path) {
