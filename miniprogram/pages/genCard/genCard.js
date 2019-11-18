@@ -105,7 +105,7 @@ Page({
             }
           }
         });
-        */wx.getUserInfo({
+        /*wx.getUserInfo({
           success: function (res) {
             that.setData({
               showCanvas: true
