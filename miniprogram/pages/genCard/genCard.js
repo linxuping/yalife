@@ -101,8 +101,12 @@ Page({
           }
         });*/
 
+        that.setData({
+          showCanvas: true
+        })
         that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg   ");
         console.log("get image info.");
+
         // 改变背景图片
         defaultOptions.bg_url = 'https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png';
 
