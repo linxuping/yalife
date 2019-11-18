@@ -86,10 +86,26 @@ Page({
     console.log("onready.");
     var that = this;
     //获得用户信息
-    /*
+    
     wx.login({
       success: function () {
-        wx.getUserInfo({
+        wx.getSetting({
+          success (res){
+            if (res.authSetting['scope.userInfo']) {
+              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+              wx.getUserInfo({
+                success: function(res) {
+                  console.log(res.userInfo);
+                  that.setData({
+                    showCanvas: true
+                  });
+                  that.loadPortraitPath(res.userInfo.avatarUrl);
+                }
+              })
+            }
+          }
+        });
+        */wx.getUserInfo({
           success: function (res) {
             that.setData({
               showCanvas: true
@@ -101,10 +117,10 @@ Page({
           }
         });*/
 
-        that.setData({
+        /*that.setData({
           showCanvas: true
         })
-        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg   ");
+        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg   ");*/
         console.log("get image info.");
 
         // 改变背景图片
@@ -126,8 +142,8 @@ Page({
           }
         })
 
-    /*  }
-    });*/
+      }
+    });
 
 
     //画出图片的方法
