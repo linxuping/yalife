@@ -95,7 +95,7 @@ Page({
     app.addEventLog("detail share", path, page.data.cardId);
     console.log("share path: ", path);
     return {
-      title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", ""),
+      title: page.data.card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", "").replace("石楼镇", ""),
       desc: '各种类别都有哦～',
       path: path
     }

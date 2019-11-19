@@ -173,7 +173,7 @@ Page({
     this.setData({
       card: this.data.card
     });
-    args = {
+    var args = {
       openid: page.data.card._openid, 
       title: page.data.card.content.substr(0, 66) || "[图片]",
       message: "审核不通过("+page.data.reason+")",  
@@ -264,17 +264,17 @@ Page({
                 var formid = formids[formids.length - 1]
                 console.log("formid: ", formid);
                 try {
-                  var args = {
+                  var args2 = {
                     openid: args.openid,
                     formid: formid,
                     title: args.title,
                     message: args.message,
                     cardid: args.cardId
                   };
-                  console.log("发送message：", args);
+                  console.log("发送message：", args2);
                   wx.cloud.callFunction({
                     name: 'unimessage',
-                    data: args,
+                    data: args2,
                     success: res => {
                       console.log("cloud.unimessage:", res);
 
@@ -311,7 +311,7 @@ Page({
                   });
                 } catch (e) {
                   console.error(e)
-                  app.save_err(event.openid, e);
+                  app.save_err(args.openid, e);
                 }
               }
             } else {
@@ -320,7 +320,7 @@ Page({
           })
           .catch(err => {
             console.error(err)
-            app.save_err(event.openid, err);
+            app.save_err(args.openid, err);
           });
       },
       fail: err => {

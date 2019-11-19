@@ -42,7 +42,6 @@ exports.main = async (event, context) => {
         console.log("update fail: ", res);
         save_err(event.openid, res);
       });
-    })
   } catch (e) {
     console.log("catch: ", e)
   }
