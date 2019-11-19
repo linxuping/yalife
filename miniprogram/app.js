@@ -342,6 +342,24 @@ App({
     d.setDate(d.getDate() - days);
     return d;
   },
+  save_err: function(openid, err) {
+     wx.cloud.callFunction({
+       name: 'log_collect',
+       data: {
+         openid: openid,
+         message: err
+       },
+       success: res => {
+         console.log(res);
+       },
+       fail: res => {
+         console.log(res);
+       },
+       complete: () => {
+         console.log("save_err ok")
+       }
+     });
+  }
 })
 
 function formatTime(date) {

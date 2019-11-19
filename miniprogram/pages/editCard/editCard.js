@@ -173,7 +173,16 @@ Page({
     this.setData({
       card: this.data.card
     });
-    wx.cloud.callFunction({
+    args = {
+      openid: page.data.card._openid, 
+      title: page.data.card.content.substr(0, 66) || "[图片]",
+      message: "审核不通过("+page.data.reason+")",  
+      cardId: page.data.card._id,
+      reason: page.data.reason,
+      status: 3
+    }
+    page.audit(args)
+    /*wx.cloud.callFunction({
       name: 'audit',
       data: {
         openid: page.data.card._openid, 
@@ -194,7 +203,7 @@ Page({
         // handle error
         console.log(err);
       }
-    })
+    })*/
   },
   auditOk: function (e) {
     var page = this;
@@ -218,7 +227,8 @@ Page({
       reason: "",
       status: 1
     };
-    wx.cloud.callFunction({
+    page.audit(args)
+    /*wx.cloud.callFunction({
       name: 'audit',
       data: args,
       success: res => {
@@ -232,6 +242,89 @@ Page({
       fail: err => {
         // handle error
         console.log(err);
+      }
+    })*/
+  },
+  audit: function (args) {
+    wx.cloud.callFunction({
+      name: 'audit_status',
+      data: args,
+      success: res => {
+        console.log("cloud.audit succ: ", args, res);
+
+        db.collection('user_formid').where(
+            { _openid: args.openid }
+          ).get().then(res => {
+
+            console.log('已获取fomid: ',args.openid,res.data);
+            if (res.data.length > 0) {
+              var formids = res.data[0].formids;
+              var popId = res.data[0]._id;
+              if (formids.length > 0) {
+                var formid = formids[formids.length - 1]
+                console.log("formid: ", formid);
+                try {
+                  var args = {
+                    openid: args.openid,
+                    formid: formid,
+                    title: args.title,
+                    message: args.message,
+                    cardid: args.cardId
+                  };
+                  console.log("发送message：", args);
+                  wx.cloud.callFunction({
+                    name: 'unimessage',
+                    data: args,
+                    success: res => {
+                      console.log("cloud.unimessage:", res);
+
+                      wx.cloud.callFunction({
+                        name: 'audit_pop_formid',
+                        data: {
+                          id: popId
+                        },
+                        success: res => {
+                          console.log("cloud.audit_pop_formid:", res);
+
+                          wx.redirectTo({
+                            url: '/pages/homepage/homepage',
+                          })
+
+                        },
+                        fail: res => {
+                          console.log("cloud.audit_pop_formid:", res);
+                          app.save_err(args.openid, res);
+                        },
+                        complete: () => {
+                          console.log("cloud.audit_pop_formid complete")
+                        }
+                      });
+
+                    },
+                    fail: res => {
+                      console.log("cloud.unimessage:", res);
+                      app.save_err(args.openid, res);
+                    },
+                    complete: () => {
+                      console.log("cloud.unimessage complete")
+                    }
+                  });
+                } catch (e) {
+                  console.error(e)
+                  app.save_err(event.openid, e);
+                }
+              }
+            } else {
+              console.log("formid为空");
+            }
+          })
+          .catch(err => {
+            console.error(err)
+            app.save_err(event.openid, err);
+          });
+      },
+      fail: err => {
+        console.log("cloud.audit: ", err);
       }
     })
   },

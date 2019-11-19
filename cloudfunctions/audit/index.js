@@ -31,10 +31,7 @@ exports.main = async (event, context) => {
     console.log("prepare: ", event.status, event.reason || '', event.tags || [], event.cardId);
     const db = cloud.database()
     const _ = db.command;
-    db.collection('attractions').where({
-      _id: event.cardId,
-      _openid: event.openid,
-    }).update({
+    return await  db.collection('attractions').doc(event.cardId).update({
       data: {
         status: parseInt( event.status ),
         reason: (event.reason || ""),
@@ -110,33 +107,4 @@ exports.main = async (event, context) => {
   console.log("end.");
 }
 
-//小程序模版消息推送
-function sendTemplateMessage(event) {
-  const {
-    OPENID
-  } = cloud.getWXContext()
-
-  // 接下来将新增模板、发送模板消息、然后删除模板
-  const templateId = 'pl9exbF9lRCnqDYTikZSqYat06rYmxll8BiUYq0ExQY'
-  var page = "pages/homepage/homepage";
-  if (event.cardid > 0) {
-    page = "pages/details/details?id=" + event.cardid
-  }
-
-  cloud.openapi.templateMessage.send({
-    touser: event.openid,
-    templateId,
-    formId: event.formid, //event.formId,
-    page: page,
-    data: {
-      keyword1: {
-        value: event.title,
-      },
-      keyword2: {
-        value: event.message,
-      },
-    }
-  })
-  console.log("cloud message.");
-}
 
