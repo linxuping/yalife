@@ -1009,8 +1009,12 @@ Page({
     var path = "/pages/index/index?latitude=" + app.globalData.latitude + "&longitude=" + app.globalData.longitude + '&address=' + encodeURIComponent(app.globalData.address) + '&type=' + encodeURIComponent(page.data.type) + "&index" + app.globalData.index + "&indexDays" + app.globalData.indexDays + "&distanceDesc" + encodeURIComponent(page.data.distanceDesc);
     app.addEventLog("index share", path, page.data.type, page.data.distanceDesc, page.data.address);
     console.log("share url: ", path);
+    var content = page.data.address;
+    if (len(page.data.goods) > 0) {
+      content = page.data.goods[0].content
+    }
     return {
-      title: page.data.goods[0].content,
+      title: content,
       desc: '各种类别都有哦～',
       path: path
     }

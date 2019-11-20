@@ -1,0 +1,9 @@
+{
+  "triggers": [
+    {
+      "name": "asyncmsg",
+      "type": "timer",
+      "config": "* */1 * * * * *"
+    }
+  ]
+}
