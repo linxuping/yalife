@@ -454,6 +454,10 @@ Page({
       });
       app.globalData.indexDays = parseInt(indexDays);      
     }
+    
+    if (!!options.source) {
+      app.globalData.source = options.source;
+    }
  
     wx.getSystemInfo({
       success: function (res) {
