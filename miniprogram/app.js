@@ -19,8 +19,8 @@ App({
       distanceDesc: "15km内", 
       newestVersion: "",
       tags: [],
-      days: this.daysAgo(15),
-      indexDays: 1, 
+      days: this.daysAgo(7),
+      indexDays: 2,  //[1,3,7,15]
     }
     this.getOpenid()
   },//获取用户地理位置权限
