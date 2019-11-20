@@ -43,6 +43,10 @@ Page({
         app.globalData.address = decodeURIComponent(options.address);
         console.log("app.globalData update: ", app.globalData);        
       }
+      
+      if (!!options.source) {
+        app.globalData.source = options.source;
+      }
 
       db.collection('attractions').where({
         _id: options.id
