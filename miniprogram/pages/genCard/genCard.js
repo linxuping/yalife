@@ -91,6 +91,9 @@ Page({
             }
           })
         }
+      },
+      fail (res) {
+        console.log(res);
       }
     });
 
@@ -123,6 +126,9 @@ Page({
                 }
               })
             }
+          },
+          fail(res) {
+            console.log(res);
           }
         });
         /*wx.getUserInfo({

@@ -343,22 +343,27 @@ App({
     return d;
   },
   save_err: function(openid, err) {
-     wx.cloud.callFunction({
-       name: 'log_collect',
-       data: {
-         openid: openid,
-         message: err
-       },
-       success: res => {
-         console.log(res);
-       },
-       fail: res => {
-         console.log(res);
-       },
-       complete: () => {
-         console.log("save_err ok")
-       }
-     });
+    var page = this;
+    var uids = ["of1Gv4u8HogWkBzuZWCsz-JI50Hk"];
+    if (page.isAdmin() || uids.indexOf(page.globalData.openid) >= 0) {
+      return;
+    }
+    wx.cloud.callFunction({
+      name: 'log_collect',
+      data: {
+        openid: openid,
+        message: err
+      },
+      success: res => {
+        console.log(res);
+      },
+      fail: res => {
+        console.log(res);
+      },
+      complete: () => {
+        console.log("save_err ok")
+      }
+    });
   }
 })
 
