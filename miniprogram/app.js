@@ -12,6 +12,7 @@ App({
     }
 
     this.globalData = {
+      source: "",
       type: "二手", 
       index: 2, 
       distance: 15000, //default 15km
@@ -329,6 +330,7 @@ App({
         arg2: arg2,
         arg3: arg3,
         arg4: arg4,
+        source: page.globalData.source,
         create_time: formatTime(new Date)
       },
       fail: function (res) {
