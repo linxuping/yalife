@@ -246,6 +246,7 @@ Page({
     })*/
   },
   audit: function (args) {
+    var page = this;
     wx.showLoading({
       title: '处理中...',
     })
@@ -276,7 +277,7 @@ Page({
                     title: args.title,
                     message: args.message,
                     cardid: args.cardId,
-                    path: '/pages/details/details?id=' + page.data.card._id + '&latitude=' + page.data.card.latitude + '&longitude=' + page.data.card.longitude + '&address=' + encodeURIComponent(page.data.card.address);
+                    path: '/pages/details/details?id=' + page.data.card._id + '&latitude=' + page.data.card.latitude + '&longitude=' + page.data.card.longitude + '&address=' + encodeURIComponent(page.data.card.address)
                   };
                   console.log("发送message：", args2);
                   wx.cloud.callFunction({
