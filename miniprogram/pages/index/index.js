@@ -408,7 +408,7 @@ Page({
       console.log("options update app.globalData: ", app.globalData);
       app.globalData.latitude = parseFloat( options.latitude );
       app.globalData.longitude = parseFloat( options.longitude );
-      app.globalData.address = decodeURIComponent(options.address);      
+      app.globalData.address = decodeURIComponent(options.address) || "附近";      
     }
 
     if (!options.type) {
@@ -538,7 +538,7 @@ Page({
           wechat.request(url, params).then(function (value) {
               //console.log(`fulfilled: ${value}`);
               console.log(value.data.result);
-              app.globalData.address = value.data.result.address_component.street_number;
+              app.globalData.address = value.data.result.address_component.street_number || "附近";
               page.setData({ address: app.globalData.address});
             })
             .catch(function (value) {
