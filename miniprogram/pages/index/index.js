@@ -267,14 +267,14 @@ Page({
       dto = 100000000;
     }
     var db = wx.cloud.database();
-    const _ = db.command;
+    const dc = db.command;
     var cond = {
-      location: _.geoNear({
+      location: dc.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: dfrom,
         maxDistance: dto,
       }),
-      sort_time: _.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) )
+      sort_time: dc.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) )
     };
     if (page.data.type && page.data.type.length > 0) {
       cond.tags = page.data.type;
@@ -587,14 +587,14 @@ Page({
     }
 
     var db = wx.cloud.database();
-    const _ = db.command
+    const dc = db.command
     var cond = {
-      location: _.geoNear({
+      location: dc.geoNear({
         geometry: db.Geo.Point(page.data.longitude, page.data.latitude),
         minDistance: 0,
         maxDistance: parseInt(page.data.distance),
       }),
-      sort_time: _.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) ),
+      sort_time: dc.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) ),
       status: 1
     };
     var skip = 0;
@@ -718,13 +718,13 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    this.getTags();
+    //this.getTags();
   },
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    this.getTags();
+    //this.getTags();
   },
   clickSearch: function (e) {
     wx.pageScrollTo({

@@ -275,7 +275,8 @@ Page({
                     formid: formid,
                     title: args.title,
                     message: args.message,
-                    cardid: args.cardId
+                    cardid: args.cardId,
+                    path: '/pages/details/details?id=' + page.data.card._id + '&latitude=' + page.data.card.latitude + '&longitude=' + page.data.card.longitude + '&address=' + encodeURIComponent(page.data.card.address);
                   };
                   console.log("发送message：", args2);
                   wx.cloud.callFunction({
@@ -588,7 +589,7 @@ Page({
 
     var cardData = {
       title: page.data.title,
-      address: page.data.address,
+      address: page.data.address || "附近",
       latitude: page.data.latitude,
       longitude: page.data.longitude,
       imgurl: page.data.imgurl,

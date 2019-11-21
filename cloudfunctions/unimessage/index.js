@@ -17,8 +17,11 @@ async function sendTemplateMessage(event) {
   const templateId = '5ItETFooNK2GRC4npi3dSqlTRfsx20dj7xFeeVmwPnI'
   //'pl9exbF9lRCnqDYTikZSqYat06rYmxll8BiUYq0ExQY'
   var page = "pages/homepage/homepage";
-  if (event.cardid.length > 0) {
-    page = "pages/details/details?id=" + event.cardid
+  if (!!event.path) {
+    page = event.path;
+  }
+  else if (event.cardid.length > 0) {
+    page = "pages/details/details?id=" + event.cardid;
   }
 
   const sendResult = await cloud.openapi.uniformMessage.send({
