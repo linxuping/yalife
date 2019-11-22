@@ -284,7 +284,7 @@ Page({
     var query = db.collection('attractions').where(cond).orderBy("sort_time", "desc");
     if (firstPage) {
       wx.showLoading({
-        title: '加载中...',
+        title: '分析中...',
       })
       query = query.limit(limit)
     } else {
@@ -367,6 +367,9 @@ Page({
           } else {
             goods = reRotateList3(lis)
           }
+          wx.showLoading({
+            title: '加载中...',
+          })
           page.setData({ goods:goods }, function(){
             // this is setData callback
             wx.hideLoading();
