@@ -205,7 +205,8 @@ Page({
     arrayDays: [1,3,7,15],
     curTabDays: 1,
     currentDays: 1,
-    filterDays: 3
+    filterDays: 3,
+    screenHeight: 0
   },
 
   selectTab(e) {
@@ -283,7 +284,7 @@ Page({
     var query = db.collection('attractions').where(cond).orderBy("sort_time", "desc");
     if (firstPage) {
       wx.showLoading({
-        title: '正在加载...',
+        title: '加载中...',
       })
       query = query.limit(limit)
     } else {
@@ -463,7 +464,8 @@ Page({
       success: function (res) {
         page.setData({
           typeImgHeight: res.windowWidth/6,
-          typeImgHeight2: res.windowWidth/2*3/4
+          typeImgHeight2: res.windowWidth/2*3/4,
+          screenHeight: res.windowHeight,
         }); 
       }
     });
@@ -614,7 +616,9 @@ Page({
               if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
                 console.log("hit tags and return: ", ver, app.globalData.tags);
                 page.setData({ tags: app.globalData.tags });
-                wx.hideLoading();
+                if (showLoading) {
+                  wx.hideLoading();
+                }
                 return
               } else {
                 app.globalData.newestVersion = ver;

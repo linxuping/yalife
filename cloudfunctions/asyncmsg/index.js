@@ -9,8 +9,8 @@ cloud.init()
 exports.main = (event, context) => {
   console.log("timing ... ");
   var args2 = {
-      openid: "of1Gv4kVHElVpbeBRNZzQ-VzFVMI",
-      formid: "09cda163369a4626b3bc0efb4c08ea8d",
+      openid: "of1Gv4u8HogWkBzuZWCsz-JI50Hk",
+      formid: "e4a8d0b2010447a3b850b498f19d91c8",
       title: "title",
       message: "message",
       cardid: "075734515d83783c00d1f3d8474986fc"
@@ -29,6 +29,7 @@ exports.main = (event, context) => {
       console.log("cloud.unimessage complete")
     }
   });
+  console.log("timing end ... ");
 
   return 0
 }
