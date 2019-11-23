@@ -169,81 +169,62 @@ Page({
   },
   auditFail: function (e) {
     var page = this;
-    this.data.card.status = 3;
-    this.setData({
-      card: this.data.card
-    });
-    var args = {
-      openid: page.data.card._openid, 
-      title: page.data.card.content.substr(0, 66) || "[图片]",
-      message: "审核不通过("+page.data.reason+")",  
-      cardId: page.data.card._id,
-      reason: page.data.reason,
-      status: 3
-    }
-    page.audit(args)
-    /*wx.cloud.callFunction({
-      name: 'audit',
-      data: {
-        openid: page.data.card._openid, 
-        title: page.data.card.content.substr(0, 66) || "[图片]",
-        message: "审核不通过("+page.data.reason+")",  
-        cardId: page.data.card._id,
-        reason: page.data.reason,
-        status: 3
-      },
-      success: res => {
-        // output: res.result === 3
-        console.log("audit succ");
-        wx.redirectTo({
-          url: '/pages/homepage/homepage',
-        })
-      },
-      fail: err => {
-        // handle error
-        console.log(err);
+    wx.showModal({
+      title: '提示',
+      content: '审核失败？',
+      success: function (sm) {
+        if (sm.confirm) {
+          page.data.card.status = 3;
+          page.setData({
+            card: page.data.card
+          });
+          var args = {
+            openid: page.data.card._openid,
+            title: page.data.card.content.substr(0, 66) || "[图片]",
+            message: "审核不通过(" + page.data.reason + ")",
+            cardId: page.data.card._id,
+            reason: page.data.reason,
+            status: 3
+          }
+          page.audit(args)
+        } else if (sm.cancel) {
+          console.log('用户点击取消')
+        }
       }
-    })*/
+    });
   },
   auditOk: function (e) {
     var page = this;
-    this.data.card.status = 1;
-    this.setData({
-      card: this.data.card
-    });
-    //app.sendMessage(this.data.card._openid, "title222", "msg222...");
-    console.log(page.data.card);
-    var len = page.data.card.content.length;
-    var title = page.data.card.content.substr(0, 50);
-    if (len > 50) {
-      title += " ...";
-    }
-    var args = {
-      openid: page.data.card._openid,
-      title: title || "[图片]",
-      message: "审核通过，请保持联系方式通畅哟～",
-      cardId: page.data.card._id,
-      tags: page.data.tags,
-      reason: "",
-      status: 1
-    };
-    page.audit(args)
-    /*wx.cloud.callFunction({
-      name: 'audit',
-      data: args,
-      success: res => {
-        // output: res.result === 3
-        console.log(args);
-        console.log("audit succ");
-        wx.redirectTo({
-          url: '/pages/homepage/homepage',
-        })
-      },
-      fail: err => {
-        // handle error
-        console.log(err);
+    wx.showModal({
+      title: '提示',
+      content: '审核通过？',
+      success: function (sm) {
+        if (sm.confirm) {
+          page.data.card.status = 1;
+          page.setData({
+            card: page.data.card
+          });
+          console.log(page.data.card);
+          var len = page.data.card.content.length;
+          var title = page.data.card.content.substr(0, 50);
+          if (len > 50) {
+            title += " ...";
+          }
+          var args = {
+            openid: page.data.card._openid,
+            title: title || "[图片]",
+            message: "审核通过，请保持联系方式通畅哟～",
+            cardId: page.data.card._id,
+            tags: page.data.tags,
+            reason: "",
+            status: 1
+          };
+          page.audit(args)
+        } else if (sm.cancel) {
+          console.log('用户点击取消')
+        }
       }
-    })*/
+    })
   },
   audit: function (args) {
     var page = this;
@@ -286,8 +267,10 @@ Page({
                     success: res => {
                       console.log("cloud.unimessage:", res);
                       wx.hideLoading()
-                      wx.showLoading({ title: 'cloud.unimessage ok' })
-
+                      wx.redirectTo({
+                        url: '/pages/homepage/homepage',
+                      })
+                      /*
                       wx.cloud.callFunction({
                         name: 'audit_pop_formid',
                         data: {
@@ -296,12 +279,9 @@ Page({
                         success: res => {
                           console.log("cloud.audit_pop_formid:", res);
                           wx.hideLoading()
-                          //wx.showLoading({ title: 'cloud.audit_pop_formid ok' })
-
                           wx.redirectTo({
                             url: '/pages/homepage/homepage',
                           })
-
                         },
                         fail: res => {
                           console.log("cloud.audit_pop_formid:", res);
@@ -310,15 +290,31 @@ Page({
                         complete: () => {
                           console.log("cloud.audit_pop_formid complete")
                         }
-                      });
-
+                      });*/
                     },
                     fail: res => {
+                      //formid无效时触发
                       console.log("cloud.unimessage:", res);
                       app.save_err(args.openid, res);
                     },
                     complete: () => {
                       console.log("cloud.unimessage complete")
+                      wx.cloud.callFunction({
+                        name: 'audit_lpop_formid',
+                        data: {
+                          id: popId
+                        },
+                        success: res => {
+                          console.log("cloud.audit_lpop_formid:", res);
+                        },
+                        fail: res => {
+                          console.log("cloud.audit_lpop_formid:", res);
+                          app.save_err(args.openid, res);
+                        },
+                        complete: () => {
+                          console.log("cloud.audit_lpop_formid complete")
+                        }
+                      });
                     }
                   });
                 } catch (e) {

@@ -18,6 +18,18 @@ Page({
     addressShared: "",
     defaultImg: "../../images/default.png",
     showHome: false,
+    inputBoxShow: false,
+    isScroll: true,
+    cmtContent: "",
+    comments: []
+  },
+  showInputBox: function () {
+    this.setData({ inputBoxShow: true });
+    this.setData({ isScroll: false });
+  },
+  invisible: function () {
+    this.setData({ inputBoxShow: false });
+    this.setData({ isScroll: true });
   },
 
   /**
@@ -84,7 +96,19 @@ Page({
           console.log(err);
           page.setData({ showHome: true })
         }
-      }) 
+      });
+      db.collection('comment').where({
+        card_id: options.id
+      }).get({
+        success: res => {
+          page.setData({
+            comments: res.data
+          });
+        },
+        fail: res=> {
+          console.log(res);
+        }
+      });
     } else {
       page.setData({ showHome: true })
     }
@@ -204,4 +228,33 @@ Page({
       }
     })
   },
+  onCmtChanged: function(e) {
+    this.setData({
+      cmtContent: e.detail.value
+    });
+  },
+  addComment: function(event) {
+    var page = this;
+    wx.showLoading({
+      title: '新增评论...',
+    })
+    app.saveFormid(event.detail.formId);
+    db.collection('comment').add({
+      // data 字段表示需新增的 JSON 数据
+      data: {
+        card_id: page.data.card._id,
+        content: page.data.cmtContent,
+        reply_id: "",
+      },
+      success: function (res) {
+        page.invisible();
+      },
+      fail: function(res) {
+        console.log(res);
+      },
+      complete: function(res) {
+        wx.hideLoading();
+      }
+    });
+  }
 })
