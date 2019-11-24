@@ -366,6 +366,18 @@ App({
         console.log("save_err ok")
       }
     });
+  },
+  sendMsg: function() {
+    //  formid = get(post/cmt)
+    //  if formid 空
+    //    log.error
+    //    return
+    //  elif formid 无效
+    //    pop(formid, post/cmt)
+    //    sendMsg
+    //  else 
+    //    do()
+    //    pop(formid, post/cmt)
   }
 })
 
