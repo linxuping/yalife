@@ -49,3 +49,11 @@
 .item_title {
   margin: 4px
 }
+.no-border-btn{
+  border: none;
+  background: none;
+  font-size: 11pt;
+}
+.no-border-btn:after{
+  border: none
+}

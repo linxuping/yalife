@@ -21,6 +21,11 @@
           <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
           <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}{{item.is_proxy==1?" 中介":""}}</text>
           <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
+          <view style="width:100%;text-align:right">
+            <form class="" bindsubmit="goCmt" report-submit="{{true}}">
+              <button formType="submit" style="padding:0px;color:red" class="no-border-btn">5条未处理评论</button>
+            </form>
+          </view>
         </view>
       </view>
     </view>
