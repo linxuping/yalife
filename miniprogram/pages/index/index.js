@@ -891,6 +891,7 @@ Page({
     app.globalData.distanceDesc = distanceDesc;
     app.globalData.type = type;
     page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), 20, 0, true, []);
+    app.saveFormid(event.detail.formId);
   },
   onReachBottom: function(){
     return;

@@ -24,19 +24,32 @@
     <button bindtap="auditOk">通过</button>
   </view>
 
-    <view style="bottom-margin:20px;margin-top:8px" bindtap="choosePos">
+    <view style="bottom-margin:20px;margin-top:8px">
       <text>选择位置：</text>
-      <text class="address modify" style="color:blue;font-size:30rpx">{{address}}</text>
+      <form class="address modify" bindsubmit="choosePos" report-submit="{{true}}">
+        <button formType="submit" style="display:inline;color:blue;font-size:30rpx;padding:0px" class="no-border-btn">{{address}}</button>
+      </form>
     </view>
 
+    <form bindsubmit="chooseImage" data-type="{{item}}" report-submit="{{true}}" class="keyword">
+      <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 
+      <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" wx:else>{{loading?'正在上传图片... ...':'更换图片'}}</button> 
+    </form>
+
+    <!-->
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:else>{{loading?'正在上传图片... ...':'更换图片'}}</button> 
+    -->
     <view>
     <image src="{{imgurl}}" wx:if="{{imgurl!=''}}" mode="aspectFit" style="display:none"></image>
     <image src="{{item}}" wx:if="{{!!item}}" style="width:100%" mode="aspectFit" wx:for="{{imgurls}}"></image>
     </view>     
 
-    <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;display:none" bindtap="choosePos">修正位置,方便附近人找我</button>
+    <!--<button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige;display:none" bindtap="choosePos">修正位置,方便附近人找我</button>-->
+    <form bindsubmit="choosePos" data-type="{{item}}" report-submit="{{true}}">
+      <button formType="submit" class="keyword" style="margin:30rpx;border-radius: 30px;background-color: beige;display:none">修正位置,方便附近人找我</button>
+    </form>
+
     <text style="text-decoration:underline" wx:if="{{!!cardId}}" bindtap="onDeleteCard">删除此次发布</text>
   </view>
   <form bindsubmit="updateCard" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">

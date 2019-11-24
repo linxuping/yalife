@@ -94,3 +94,11 @@
   top: 0;
   bottom: 0;
 }
+
+.button-cmt{
+  border: none;
+  background: none;
+}
+.button-cmt:after{
+  border: none
+}

@@ -474,7 +474,7 @@ Page({
 
   },
 
-  chooseImage: function () {
+  chooseImage: function (event) {
     var page = this;
     wx.chooseImage({
       count: 9, // 默认9 
@@ -521,10 +521,11 @@ Page({
           })
         }
       }
-    })
+    });
+    app.saveFormid(event.detail.formId);
   },
 
-  choosePos: function () {
+  choosePos: function (event) {
     console.log("choose pos");
     var page = this;
     wx.chooseLocation({
@@ -540,7 +541,8 @@ Page({
           title: '修改成功！',
         })
       },
-    })
+    });
+    app.saveFormid(event.detail.formId);
   },
 
   updateCard: function (event) {
