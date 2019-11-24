@@ -95,10 +95,10 @@
   bottom: 0;
 }
 
-.button-cmt{
+.no-border-btn{
   border: none;
   background: none;
 }
-.button-cmt:after{
+.no-border-btn:after{
   border: none
 }

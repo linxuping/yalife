@@ -184,7 +184,8 @@ Page({
             message: "审核不通过(" + page.data.reason + ")",
             cardId: page.data.card._id,
             reason: page.data.reason,
-            status: 3
+            status: 3,
+            path: '/pages/homepage/homepage'
           }
           page.audit(args)
         } else if (sm.cancel) {
@@ -217,7 +218,8 @@ Page({
             cardId: page.data.card._id,
             tags: page.data.tags,
             reason: "",
-            status: 1
+            status: 1,
+            path: '/pages/details/details?id=' + page.data.card._id + '&latitude=' + page.data.card.latitude + '&longitude=' + page.data.card.longitude + '&address=' + encodeURIComponent(page.data.card.address)
           };
           page.audit(args)
         } else if (sm.cancel) {
@@ -235,9 +237,17 @@ Page({
       name: 'audit_status',
       data: args,
       success: res => {
-        console.log("cloud.audit succ: ", args, res);
+        app.push("audit", args, function (res) {
+          wx.hideLoading()
+          wx.redirectTo({
+            url: '/pages/homepage/homepage',
+          })
+        });
+        /*console.log("cloud.audit succ: ", args, res);
         wx.hideLoading()
         wx.showLoading({ title: 'cloud.audit succ'  })
+
+        args.path = '/pages/details/details?id=' + page.data.card._id + '&latitude=' + page.data.card.latitude + '&longitude=' + page.data.card.longitude + '&address=' + encodeURIComponent(page.data.card.address);
 
         db.collection('user_formid').where(
             { _openid: args.openid }
@@ -270,27 +280,6 @@ Page({
                       wx.redirectTo({
                         url: '/pages/homepage/homepage',
                       })
-                      /*
-                      wx.cloud.callFunction({
-                        name: 'audit_pop_formid',
-                        data: {
-                          id: popId
-                        },
-                        success: res => {
-                          console.log("cloud.audit_pop_formid:", res);
-                          wx.hideLoading()
-                          wx.redirectTo({
-                            url: '/pages/homepage/homepage',
-                          })
-                        },
-                        fail: res => {
-                          console.log("cloud.audit_pop_formid:", res);
-                          app.save_err(args.openid, res);
-                        },
-                        complete: () => {
-                          console.log("cloud.audit_pop_formid complete")
-                        }
-                      });*/
                     },
                     fail: res => {
                       //formid无效时触发
@@ -331,6 +320,7 @@ Page({
             console.error(err)
             app.save_err(args.openid, err);
           });
+          */
       },
       fail: err => {
         console.log("cloud.audit: ", err);
@@ -522,7 +512,7 @@ Page({
         }
       }
     });
-    app.saveFormid(event.detail.formId);
+    app.saveFormid(event.detail.formId, "cmt");
   },
 
   choosePos: function (event) {
@@ -542,7 +532,7 @@ Page({
         })
       },
     });
-    app.saveFormid(event.detail.formId);
+    app.saveFormid(event.detail.formId, "cmt");
   },
 
   updateCard: function (event) {

@@ -32,11 +32,20 @@ exports.main = async (event, context) => {
     const db = cloud.database()
     const _ = db.command;
 
+    var data = {};
+    if (event.type == "audit") {
+      data = { formids: _.shift() };
+    } else if (event.type=="ask" || event.type=="reply") {
+      data = { formids_cmt: _.shift() }
+    } else {
+      console.log("error type: ", event.type, event);
+      return
+    }
+
     //删除数组尾部元素
     return await db.collection('user_formid').doc(event.id).update({
-      data: {
-        formids: _.shift()
-      }}).then(res => {
+        data: data
+      }).then(res => {
         console.log("已移除formid：");
       }).catch(res => {
         console.log('pop: ');

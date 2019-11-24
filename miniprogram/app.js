@@ -206,7 +206,7 @@ App({
     var lis = ["oV5MQ5YBim_nRH66WxfWLGVcW7yc", "of1Gv4kVHElVpbeBRNZzQ-VzFVMI","of1Gv4iy9Gh2wQnpp9o3vq45SVWk"];
     return lis.indexOf(this.globalData.openid)>=0;
   },
-  saveFormid: function(formid) {
+  saveFormid: function(formid, type) {
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
@@ -217,11 +217,17 @@ App({
         console.log('user_formid addf');
         console.log(res.data);
         if (res.data.length == 0) {
+          var data = {
+            formids: [formid]
+          };
+          if (type == "cmt") {
+            data = {
+              formids_cmt: [formid]
+            };
+          }
           db.collection('user_formid').add({
             // data 字段表示需新增的 JSON 数据
-            data: {
-              formids: [formid]
-            },
+            data: data,
             success: function (res) {
             },
             fail: function (res) {
@@ -231,10 +237,16 @@ App({
         } else {
           console.log('user_formid update');
           var _id = res.data[0]._id;
+          var data = {
+            formids: _.push([formid])
+          }
+          if (type == "cmt") {
+            data = {
+              formids_cmt: _.push([formid])
+            }
+          }
           db.collection('user_formid').doc(_id).update({
-            data: {
-              formids: _.push([formid])
-            },
+            data: data,
             success: console.log,
             fail: console.error
           })
@@ -367,7 +379,7 @@ App({
       }
     });
   },
-  sendMsg: function() {
+  push: function(type, args, cb, _t) {
     //  formid = get(post/cmt)
     //  if formid 空
     //    log.error
@@ -378,6 +390,97 @@ App({
     //  else 
     //    do()
     //    pop(formid, post/cmt)
+    var page = this;
+    if (!_t) {
+      _t = 0;
+    }
+
+    var popFormid = function(popId, type, cb){
+      wx.cloud.callFunction({
+        name: 'audit_lpop_formid',
+        data: { id: popId, type: type },
+        success: res => { 
+          console.log("cloud.audit_lpop_formid:", res); 
+          if (!!cb) {
+            cb();
+          }
+        },
+        fail: res => {
+          console.log("cloud.audit_lpop_formid:", res);
+          page.save_err(args.openid, res);
+        },
+        complete: () => { console.log("cloud.audit_lpop_formid complete") }
+      });
+    }
+
+    console.log("push: ", type, args, cb, _t);
+    var db = wx.cloud.database();
+    db.collection('user_formid').where(
+      { _openid: args.openid }
+    ).get().then(res => {
+      console.log('已获取fomid: ', args.openid, res.data);
+      if (res.data.length > 0) {
+        var formids = res.data[0].formids;
+        if (type=="ask" || type=="reply") {
+          formids = res.data[0].formids_cmt;
+        }
+        var popId = res.data[0]._id;
+        wx.showLoading({ title: 'formid len:' + formids.length })
+        if (formids.length > 0) {
+          var formid = formids[0]
+          console.log("formid: ", formid);
+          try {
+            if (type == "audit") {
+              var args2 = {
+                openid: args.openid,
+                formid: formid,
+                title: args.title,
+                message: args.message,
+                cardid: args.cardId,
+                path: args.path
+              };
+              console.log("发送审核消息：", args2);
+              wx.cloud.callFunction({
+                name: 'unimessage',
+                data: args2,
+                success: res => {
+                  console.log("cloud.unimessage:", res);
+                  popFormid(popId, type);
+                  cb();
+                },
+                fail: res => {
+                  if (res.errMsg.indexOf("invalid form id") == -1) {
+                    console.log("cloud.unimessage:", res);
+                    page.save_err(args.openid, res);
+                  } else {
+                    console.log("cloud.unimessage: invalid formid hint, ignore.");
+                  }
+                  popFormid(popId, type, function(){
+                    page.push(type, args, cb, _t+1);
+                  });
+                },
+                complete: () => {
+                  console.log("cloud.unimessage complete")
+                }
+              });
+            } else if (type == "ask") {
+              console.log("发送留言信息")
+            } else if (type == "reply") {
+              console.log("发送回复信息")
+            }
+          } catch (e) {
+            console.error(e)
+            app.save_err(args.openid, e);
+          }
+        }
+      } else {
+        console.log("formid为空");
+        wx.showLoading({ title: 'formid为空' })
+      }
+    }).catch(err => {
+      console.error(err)
+      app.save_err(args.openid, err);
+    });
   }
 })
 

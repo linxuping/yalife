@@ -4,6 +4,18 @@ var recommend = require("../../utils/recommend")
 const app = getApp()
 const _ = db.command
 
+function formatTime(date) {
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+  var second = date.getSeconds()
+
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+}
+
 Page({
 
   /**
@@ -21,7 +33,9 @@ Page({
     inputBoxShow: false,
     isScroll: true,
     cmtContent: "",
-    comments: []
+    comments: [],
+    isAdmin: false,
+    openid: ""
   },
   showInputBox: function () {
     this.setData({ inputBoxShow: true });
@@ -37,6 +51,10 @@ Page({
    */
   onLoad: function (options) {
     var page = this;
+    page.setData({
+      isAdmin: app.isAdmin(),
+      openid: app.globalData.openid,
+    });
     wx.setNavigationBarTitle({
       title: "邻里小事"
     })
@@ -97,18 +115,7 @@ Page({
           page.setData({ showHome: true })
         }
       });
-      db.collection('comment').where({
-        card_id: options.id
-      }).get({
-        success: res => {
-          page.setData({
-            comments: res.data
-          });
-        },
-        fail: res=> {
-          console.log(res);
-        }
-      });
+      page.loadComment();
     } else {
       page.setData({ showHome: true })
     }
@@ -233,20 +240,42 @@ Page({
       cmtContent: e.detail.value
     });
   },
+  loadComment: function(event) {
+    var page = this;
+    const _ = db.command
+    db.collection('comment').orderBy("create_time", "asc").where({
+      card_id: page.data.cardId,
+      status: _.gt(0)
+    }).get({
+      success: res => {
+        console.log("load comments: ", res.data);
+        page.setData({
+          comments: res.data
+        });
+      },
+      fail: res => {
+        console.log(res);
+      }
+    });
+  },
   addComment: function(event) {
     var page = this;
     wx.showLoading({
-      title: '新增评论...',
+      title: '正在新增...',
     })
-    app.saveFormid(event.detail.formId);
+    app.saveFormid(event.detail.formId, "cmt");
     db.collection('comment').add({
       // data 字段表示需新增的 JSON 数据
       data: {
         card_id: page.data.card._id,
         content: page.data.cmtContent,
         reply_id: "",
+        create_time_str: formatTime(new Date), //formatTime(new Date)
+        create_time: new Date,
+        status: 2
       },
       success: function (res) {
+        page.loadComment();
         page.invisible();
       },
       fail: function(res) {
@@ -254,6 +283,56 @@ Page({
       },
       complete: function(res) {
         wx.hideLoading();
+      }
+    });
+  },
+  delComment: function(event) {
+    var page = this;
+    wx.showModal({
+      title: '提示',
+      content: '确认删除该评论？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.showLoading({
+            title: '正在删除...',
+          })
+          app.saveFormid(event.detail.formId, "cmt");
+          var cmtId = event.currentTarget.dataset.cid;
+          console.log("del comment: ", cmtId);
+          db.collection('comment').doc(cmtId).remove({
+            success: function (res) {
+              page.loadComment();
+            },
+            fail: function (res) {
+              console.log(res);
+            },
+            complete: function (res) {
+              wx.hideLoading();
+            }
+          });           
+        }
+
+      },
+      fail: function(res) {
+        console.log(res);
+      }
+    });
+  },
+  auditOk: function(event) {
+    var page = this;
+    wx.showModal({
+      title: '提示',
+      content: '审核通过？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.showLoading({
+            title: '审核开始...',
+          })
+          // 静默 审核上线，并给 发帖作者发 留言通知          
+        }
+      },
+      fail: function (res) {
+        console.log(res);
       }
     });
   }

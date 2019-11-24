@@ -5,23 +5,25 @@
   <open-data type="userNickName" lang="zh_CN"></open-data>
   <image style="width:30px;height:30px;position:absolute;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
   <block class="" wx:for="{{cardList}}" wx:key="id" wx:if="{{item.status>0}}">
-    <view bindlongpress="onDeleteCard" bindtap="jumpEdit" data-cardId="{{item._id}}" style="width:95%;background-color:#FEFEFE">
+    <view bindlongpress="onDeleteCard" style="width:95%;background-color:#FEFEFE">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
-        <view style='width:128rpx; height:128rpx; margin:20rpx;'>
+        <view style='width:128rpx; height:128rpx; margin:20rpx;' bindtap="jumpEdit" data-cardId="{{item._id}}">
           <image class='index-logo' style='width:128rpx; height:128rpx; border-radius:8px' src="{{item.imgurl || ((!!item.imgurls && item.imgurls.length>0)?item.imgurls[0]:defaultImg)}}"></image>
         </view>
         <!-- 右边内容 上下结构 -->
         <view style='width:100%'>
-          <text class='item_title' style="display:block">{{item.content}}</text>
-          <text class="cardStatus" wx:if="{{item.is_proxy==1}}">在线</text>
-          <text class="cardStatus" wx:elif="{{item.status==2}}">审核中</text>
-          <text class="cardStatus" wx:elif="{{item.status==1}}">在线</text>
-          <text class="cardStatus" wx:elif="{{item.status>2}}">审核不通过</text>
-          <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
-          <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}{{item.is_proxy==1?" 中介":""}}</text>
-          <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
-          <view style="width:100%;text-align:right">
+          <view style='width:100%' bindtap="jumpEdit" data-cardId="{{item._id}}">
+            <text class='item_title' style="display:block">{{item.content}}</text>
+            <text class="cardStatus" wx:if="{{item.is_proxy==1}}">在线</text>
+            <text class="cardStatus" wx:elif="{{item.status==2}}">审核中</text>
+            <text class="cardStatus" wx:elif="{{item.status==1}}">在线</text>
+            <text class="cardStatus" wx:elif="{{item.status>2}}">审核不通过</text>
+            <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
+            <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}{{item.is_proxy==1?" 中介":""}}</text>
+            <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
+          </view>
+          <view style="width:100%;text-align:right" bindtap="jumpDetail" data-cardId="{{item._id}}">
             <form class="" bindsubmit="goCmt" report-submit="{{true}}">
               <button formType="submit" style="padding:0px;color:red" class="no-border-btn">5条未处理评论</button>
             </form>
