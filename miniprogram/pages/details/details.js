@@ -31,6 +31,7 @@ Page({
     defaultImg: "../../images/default.png",
     showHome: false,
     inputBoxShow: false,
+    replyId: "",
     isScroll: true,
     cmtContent: "",
     comments: [],
@@ -40,6 +41,7 @@ Page({
   showInputBox: function () {
     this.setData({ inputBoxShow: true });
     this.setData({ isScroll: false });
+    this.setData({ replyId: "" });
   },
   invisible: function () {
     this.setData({ inputBoxShow: false });
@@ -115,7 +117,7 @@ Page({
           page.setData({ showHome: true })
         }
       });
-      page.loadComment();
+      page.loadComments();
     } else {
       page.setData({ showHome: true })
     }
@@ -244,7 +246,7 @@ Page({
       cmtContent: e.detail.value
     });
   },
-  loadComment: function(event) {
+  loadComments: function(event) {
     var page = this;
     const _ = db.command
     db.collection('comment').orderBy("create_time", "asc").where({
@@ -252,9 +254,33 @@ Page({
       status: _.gt(0)
     }).get({
       success: res => {
-        console.log("load comments: ", res.data);
+        console.log("load comments before: ", res.data);
+        var cmts = res.data;
+        //分离 ask/reply
+        var replies = {};
+        var asks = [];
+        for (var i=0; i<cmts.length; i++) {
+          if (!!cmts[i].reply_id) {
+            replies[ cmts[i].reply_id ] = cmts[i];
+          }
+        }
+        console.log("replies: ",replies);
+        for (var i=0; i<cmts.length; i++) {
+          if (!!cmts[i].reply_id) {
+            //有reply, ignore
+          }
+          else {
+            //没有reply说明是ask
+            if ( !!replies[ cmts[i]._id ] ) {
+              //匹配reply
+              cmts[i].reply = replies[ cmts[i]._id ];
+            }
+            asks.push( cmts[i] );
+          }
+        }
+        console.log("load comments after: ",asks);
         page.setData({
-          comments: res.data
+          comments: asks
         });
       },
       fail: res => {
@@ -273,13 +299,13 @@ Page({
       data: {
         card_id: page.data.card._id,
         content: page.data.cmtContent,
-        reply_id: "",
+        reply_id: page.data.replyId,
         create_time_str: formatTime(new Date), //formatTime(new Date)
         create_time: new Date,
         status: 2
       },
       success: function (res) {
-        page.loadComment();
+        page.loadComments();
         page.invisible();
       },
       fail: function(res) {
@@ -305,7 +331,7 @@ Page({
           console.log("del comment: ", cmtId);
           db.collection('comment').doc(cmtId).remove({
             success: function (res) {
-              page.loadComment();
+              page.loadComments();
             },
             fail: function (res) {
               console.log(res);
@@ -335,7 +361,7 @@ Page({
             title: '审核开始...',
           })
           if (nopush == 1) {
-            page.loadComment();
+            page.loadComments();
             wx.hideLoading()
             return
           }
@@ -354,7 +380,7 @@ Page({
             success: res => {
               console.log("cloud.audit_status_cmt:", res);
               app.push("ask", args, function (res) {
-                page.loadComment();
+                page.loadComments();
                 wx.hideLoading()
               });
             },
@@ -394,7 +420,7 @@ Page({
             name: 'audit_status_cmt',
             data: args,
             success: res => {
-              page.loadComment();
+              page.loadComments();
               wx.hideLoading();
               console.log("cloud.audit_status_cmt:", res);
             },
@@ -412,5 +438,10 @@ Page({
         console.log(res);
       }
     });
-  }
+  },
+  openReply: function(event) {
+    this.showInputBox();
+    var replyId = event.currentTarget.dataset.replyid;
+    this.setData({ replyId: replyId });
+  } 
 })

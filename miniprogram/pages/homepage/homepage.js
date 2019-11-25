@@ -14,7 +14,8 @@ Page({
     defaultImg: "../../images/default.png",
 
     isAdmin: false,
-    openid: ''
+    openid: '',
+    auditComments: [],
   },
 
   /**
@@ -40,6 +41,9 @@ Page({
       isAdmin: app.isAdmin(),
       openid: app.globalData.openid
     });
+    if (app.isAdmin()) {
+      page.loadAuditComments();
+    }
 
     app.addEventLog("into homepage");
 
@@ -219,7 +223,23 @@ Page({
       url: '/pages/index/index'
     })
   },
-
+  loadAuditComments: function(event) {
+    var page = this;
+    const _ = db.command
+    db.collection('comment').orderBy("create_time", "desc").where({
+      status: 2
+    }).get({
+      success: res => {
+        console.log("load comments: ", res.data);
+        page.setData({
+          auditComments: res.data
+        });
+      },
+      fail: res => {
+        console.log(res);
+      }
+    });
+  },
   goAddPage: function () {
     app.addEventLog("into homepage.add");
     var url = '/pages/editCard/editCard';

@@ -24,17 +24,27 @@
       <form bindsubmit="delComment" data-cid="{{item._id}}" report-submit="{{true}}" wx:if="{{item._openid==openid}}">
         <button formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray">删除</button>
       </form>
+      <form bindsubmit="openReply" data-cid="{{item._id}}" data-replyid="{{item._id}}" report-submit="{{true}}" wx:if="{{card._openid==openid}}">
+        <button formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray">回复</button>
+      </form>
+
       <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.status==2}}" bindtap="auditOk">审ok</button>
       <button class="no-border-btn" data-cid="{{item._id}}" data-nopush="1" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.status==2}}" bindtap="auditOk">审okn</button>
       <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.status==2}}" bindtap="auditFail">审fail</button>
-      <view style="margin-left:20px">
+
+      <view style="margin-left:20px" wx:if="{{!!item.reply}}">
         <view>
           <text style="color:gray">| 作者</text>
         </view>
-        <text>1125</text>
-        <form bindsubmit="delComment" data-cid="{{item._id2}}" report-submit="{{true}}">
-          <button formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{item._openid==openid}}">删除</button>
+        <text>{{item.reply.content}}</text>
+        <form bindsubmit="delComment" data-isreply="1" data-cid="{{item.reply._id}}" report-submit="{{true}}">
+          <button bindsubmit="delComment" data-cid="{{item.reply._id}}" formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{item.reply._openid==openid}}">删除</button>
         </form>
+
+        <button class="no-border-btn" data-cid="{{item.reply._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.reply.status==2}}" bindtap="auditOk">审ok</button>
+        <button class="no-border-btn" data-cid="{{item.reply._id}}" data-nopush="1" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.reply.status==2}}" bindtap="auditOk">审okn</button>
+        <button class="no-border-btn" data-cid="{{item.reply._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.reply.status==2}}" bindtap="auditFail">审fail</button>
+
       </view>
     </view>
   </view>
