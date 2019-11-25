@@ -325,6 +325,7 @@ Page({
   auditOk: function(event) {
     var page = this;
     var cmtId = event.currentTarget.dataset.cid;
+    var nopush = event.currentTarget.dataset.nopush;
     wx.showModal({
       title: '提示',
       content: '审核通过？',
@@ -333,6 +334,11 @@ Page({
           wx.showLoading({
             title: '审核开始...',
           })
+          if (nopush == 1) {
+            page.loadComment();
+            wx.hideLoading()
+            return
+          }
           // 静默 status=1，并给 发帖作者发 留言通知          
     	  var path = page.getSharePath();
           var args = {
@@ -348,10 +354,8 @@ Page({
             success: res => {
               console.log("cloud.audit_status_cmt:", res);
               app.push("ask", args, function (res) {
+                page.loadComment();
                 wx.hideLoading()
-                wx.redirectTo({
-                  url: '/pages/homepage/homepage',
-                })
               });
             },
             fail: res => {
@@ -390,6 +394,8 @@ Page({
             name: 'audit_status_cmt',
             data: args,
             success: res => {
+              page.loadComment();
+              wx.hideLoading();
               console.log("cloud.audit_status_cmt:", res);
             },
             fail: res => {

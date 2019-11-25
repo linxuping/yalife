@@ -25,6 +25,7 @@
         <button formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray">删除</button>
       </form>
       <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.status==2}}" bindtap="auditOk">审ok</button>
+      <button class="no-border-btn" data-cid="{{item._id}}" data-nopush="1" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.status==2}}" bindtap="auditOk">审okn</button>
       <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{isAdmin && item.status==2}}" bindtap="auditFail">审fail</button>
       <view style="margin-left:20px">
         <view>
