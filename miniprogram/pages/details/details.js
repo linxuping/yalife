@@ -120,13 +120,17 @@ Page({
       page.setData({ showHome: true })
     }
   },
-  onShareAppMessage: function () {
+  getSharePath: function() {
     var page = this;
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
     var address = app.globalData.address;
     //console.log("addr: ", page.data.addressShared, app.globalData.address, address);
-    var path = '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude + '&address=' + encodeURIComponent(address);
+    return '/pages/details/details?id=' + page.data.cardId + '&latitude=' + latitude + '&longitude=' + longitude + '&address=' + encodeURIComponent(address);
+  },
+  onShareAppMessage: function () {
+    var page = this;
+    var path = page.getSharePath();
     app.addEventLog("detail share", path, page.data.cardId);
     console.log("share path: ", path);
     return {
@@ -320,6 +324,7 @@ Page({
   },
   auditOk: function(event) {
     var page = this;
+    var cmtId = event.currentTarget.dataset.cid;
     wx.showModal({
       title: '提示',
       content: '审核通过？',
@@ -329,6 +334,34 @@ Page({
             title: '审核开始...',
           })
           // 静默 status=1，并给 发帖作者发 留言通知          
+    	  var path = page.getSharePath();
+          var args = {
+            openid: app.globalData.openid,
+            cmtid: cmtId,
+            status: 1,
+            path: path,
+            content: page.data.cmtContent
+          }
+          wx.cloud.callFunction({
+            name: 'audit_status_cmt',
+            data: args,
+            success: res => {
+              console.log("cloud.audit_status_cmt:", res);
+              app.push("ask", args, function (res) {
+                wx.hideLoading()
+                wx.redirectTo({
+                  url: '/pages/homepage/homepage',
+                })
+              });
+            },
+            fail: res => {
+              console.log("cloud.audit_status_cmt:", res);
+              app.save_err(args.openid, res);
+            },
+            complete: () => {
+              console.log("cloud.unimessage complete")
+            }
+          });
         }
       },
       fail: function (res) {
@@ -338,6 +371,7 @@ Page({
   },
   auditFail: function(event) {
     var page = this;
+    var cmtId = event.currentTarget.dataset.cid;
     wx.showModal({
       title: '提示',
       content: '审核失败？',
@@ -347,6 +381,25 @@ Page({
             title: '审核开始...',
           })
           // 静默 status=3        
+          var args = {
+            openid: app.globalData.openid,
+            cmtid: cmtId,
+            status: 3 
+          }
+          wx.cloud.callFunction({
+            name: 'audit_status_cmt',
+            data: args,
+            success: res => {
+              console.log("cloud.audit_status_cmt:", res);
+            },
+            fail: res => {
+              console.log("cloud.audit_status_cmt:", res);
+              app.save_err(args.openid, res);
+            },
+            complete: () => {
+              console.log("cloud.unimessage complete")
+            }
+          });
         }
       },
       fail: function (res) {

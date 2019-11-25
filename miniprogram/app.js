@@ -430,7 +430,11 @@ App({
           var formid = formids[0]
           console.log("formid: ", formid);
           try {
+            args.formid = formid
+            funcname = "unimessage"
             if (type == "audit") {
+              funcname = "unimessage"
+              /*
               var args2 = {
                 openid: args.openid,
                 formid: formid,
@@ -462,12 +466,41 @@ App({
                 complete: () => {
                   console.log("cloud.unimessage complete")
                 }
-              });
+              });*/
             } else if (type == "ask") {
-              console.log("发送留言信息")
+              console.log("发送留言信息：");
+              funcname = "askmessage"
             } else if (type == "reply") {
               console.log("发送回复信息")
+              funcname = "replymessage"
             }
+            console.log("cloud.callFunction: ",funcname,args);
+            wx.cloud.callFunction({
+              name: funcname,
+              data: args,
+              success: res => {
+                console.log("cloud.call:", funcname, res);
+		wx.showToast({
+		  title: '发送成功！',
+		})
+                popFormid(popId, type);
+                cb();
+              },
+              fail: res => {
+                if (res.errMsg.indexOf("invalid form id") == -1) {
+                  console.log("cloud.call:", funcname, res);
+                  page.save_err(args.openid, res);
+                } else {
+                  console.log("cloud.call: invalid formid hint, ignore.", funcname);
+                }
+                popFormid(popId, type, function(){
+                  page.push(type, args, cb, _t+1);
+                });
+              },
+              complete: () => {
+                console.log("cloud.call complete", funcname)
+              }
+            });
           } catch (e) {
             console.error(e)
             app.save_err(args.openid, e);

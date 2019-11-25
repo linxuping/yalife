@@ -182,7 +182,7 @@ Page({
             openid: page.data.card._openid,
             title: page.data.card.content.substr(0, 66) || "[图片]",
             message: "审核不通过(" + page.data.reason + ")",
-            cardId: page.data.card._id,
+            cardid: page.data.card._id,
             reason: page.data.reason,
             status: 3,
             path: '/pages/homepage/homepage'
@@ -215,7 +215,7 @@ Page({
             openid: page.data.card._openid,
             title: title || "[图片]",
             message: "审核通过，请保持联系方式通畅哟～",
-            cardId: page.data.card._id,
+            cardid: page.data.card._id,
             tags: page.data.tags,
             reason: "",
             status: 1,

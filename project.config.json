@@ -5,8 +5,10 @@
 		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
-		"minified": true,
+		"minified": false,
 		"newFeature": true,
+		"nodeModules": true,
+		"autoAudits": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -14,12 +16,11 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		},
-		"nodeModules": true
+		}
 	},
 	"appid": "wx658ecc427ea40939",
 	"projectname": "yalife",
-	"libVersion": "2.8.3",
+	"libVersion": "2.9.3",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
