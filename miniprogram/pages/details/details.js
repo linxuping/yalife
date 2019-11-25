@@ -242,6 +242,7 @@ Page({
     })
   },
   onCmtChanged: function(e) {
+    console.log("onCmtChanged:", e.detail.value);
     this.setData({
       cmtContent: e.detail.value
     });
@@ -352,21 +353,25 @@ Page({
     var page = this;
     var cmtId = event.currentTarget.dataset.cid;
     var nopush = event.currentTarget.dataset.nopush;
+    var isreply = event.currentTarget.dataset.isreply;
+    var hint = "审核通过？";
+    if (nopush == 1) {
+      hint = "审核通过？(nopush)";
+    }
+    var type = "ask";
+    if (isreply == 1) {
+      type = "reply";
+    }
     wx.showModal({
       title: '提示',
-      content: '审核通过？',
+      content: hint,
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({
             title: '审核开始...',
           })
-          if (nopush == 1) {
-            page.loadComments();
-            wx.hideLoading()
-            return
-          }
           // 静默 status=1，并给 发帖作者发 留言通知          
-    	  var path = page.getSharePath();
+    	    var path = page.getSharePath();
           var args = {
             openid: app.globalData.openid,
             cmtid: cmtId,
@@ -379,10 +384,16 @@ Page({
             data: args,
             success: res => {
               console.log("cloud.audit_status_cmt:", res);
-              app.push("ask", args, function (res) {
+              if (nopush == 1) {
                 page.loadComments();
                 wx.hideLoading()
-              });
+                return
+              } else {
+                app.push(type, args, function (res) {
+                  page.loadComments();
+                  wx.hideLoading()
+                });                
+              }
             },
             fail: res => {
               console.log("cloud.audit_status_cmt:", res);

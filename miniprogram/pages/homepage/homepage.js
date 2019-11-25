@@ -160,6 +160,7 @@ Page({
   jumpEdit: function (event) {
     var page = this;
     console.log(event);
+    app.saveFormid(event.detail.formId, "cmt");
     var cardId = event.currentTarget.dataset.cardid;
     var url = '/pages/editCard/editCard?id=' + cardId;
     wx.navigateTo({
