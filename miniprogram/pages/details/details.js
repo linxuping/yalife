@@ -328,7 +328,25 @@ Page({
           wx.showLoading({
             title: '审核开始...',
           })
-          // 静默 审核上线，并给 发帖作者发 留言通知          
+          // 静默 status=1，并给 发帖作者发 留言通知          
+        }
+      },
+      fail: function (res) {
+        console.log(res);
+      }
+    });
+  },
+  auditFail: function(event) {
+    var page = this;
+    wx.showModal({
+      title: '提示',
+      content: '审核失败？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.showLoading({
+            title: '审核开始...',
+          })
+          // 静默 status=3        
         }
       },
       fail: function (res) {
