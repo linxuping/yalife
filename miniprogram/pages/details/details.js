@@ -69,7 +69,7 @@ Page({
         addressShared: decodeURIComponent(options.address)
       });
 
-      if (!!options.latitude && !!options.longitude) {
+      if (!!options.latitude && !!options.longitude && !!options.address) {
         app.globalData.latitude = parseFloat( options.latitude );
         app.globalData.longitude = parseFloat( options.longitude );
         app.globalData.address = decodeURIComponent(options.address);

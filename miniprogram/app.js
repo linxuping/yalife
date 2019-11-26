@@ -21,6 +21,7 @@ App({
       tags: [],
       days: this.daysAgo(7),
       indexDays: 2,  //[1,3,7,15]
+      address: "",
     }
     this.getOpenid()
   },//获取用户地理位置权限

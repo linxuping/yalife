@@ -408,7 +408,7 @@ Page({
 
     console.log("onLoad options: ", options);
     //从分享详情传递到首页
-    if (!app.globalData.latitude && !!options.latitude && !app.globalData.longitude && !!options.longitude) {
+    if (!app.globalData.latitude && !!options.latitude && !app.globalData.longitude && !!options.longitude && !!options.address) {
       console.log("options update app.globalData: ", app.globalData);
       app.globalData.latitude = parseFloat( options.latitude );
       app.globalData.longitude = parseFloat( options.longitude );
