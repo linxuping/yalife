@@ -262,6 +262,10 @@ Page({
     var cardId = event.currentTarget.dataset.cardid;
     wx.cloud.callFunction({
       name: 'msg_unread_reset',
+      data: {
+        openid: app.globalData.openid,
+        cardid: cardId,
+      },
       complete: res => {
         console.log("msg_unread_reset:", res)
         var url = "/pages/details/details?id=" + cardId;
