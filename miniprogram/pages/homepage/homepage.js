@@ -107,9 +107,9 @@ Page({
         })
         if (res.data.length == limit) {
           console.log("getCardsRecursively: "+offset+" "+limit);
-          //if (!app.isAdmin()) { //admin卡片太多了，拉取一页最新的
-          page.getCardsRecursively(cond, offset + limit, limit);
-          //}
+          if (!app.isAdmin() || offset<100) { //admin卡片太多了，拉取一页最新的
+            page.getCardsRecursively(cond, offset + limit, limit);
+          }
         }
         setTimeout(function () {
           page.setData({

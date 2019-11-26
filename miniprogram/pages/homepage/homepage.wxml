@@ -5,13 +5,13 @@
   <open-data type="userNickName" lang="zh_CN"></open-data>
   <image style="width:30px;height:30px;position:absolute;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
 
-  <block class="" wx:for="{{auditComments}}" wx:key="id" wx:if="{{isAdmin}}">
-    <navigator url="/pages/details/details?id={{item.card_id}}" open-type="navigate">
+  <view style="width:95%;text-align:left" wx:if="{{isAdmin}}">
+    <navigator url="/pages/details/details?id={{item.card_id}}" open-type="navigate" wx:for="{{auditComments}}" wx:key="id" style="margin:4px;border:solid 1px">
       <text style="margin-right:4px">{{item.content}}</text>
-      <text style="margin-right:4px">{{item.card_id}}</text>
-      <text>{{item.create_time_str}}</text>
+      <text style="font-size:10px">{{item.create_time_str}}</text>
+      <text style="margin-right:4px;display:block;font-size:10px">{{item.card_id}}</text>
     </navigator>
-  </block>
+  </view>
 
   <block class="" wx:for="{{cardList}}" wx:key="id" wx:if="{{item.status>0}}">
     <view bindlongpress="onDeleteCard" data-cardid="{{item._id}}" style="width:95%;background-color:#FEFEFE">
@@ -43,14 +43,6 @@
         </view>
       </view>
     </view>
-  </block>
-
-  <block class="" wx:for="{{auditComments}}" wx:key="id" wx:if="{{isAdmin}}">
-    <navigator url="/pages/details/details?id={{item.card_id}}" open-type="navigate">
-      <text style="margin-right:4px">{{item.content}}</text>
-      <text style="margin-right:4px">{{item.card_id}}</text>
-      <text>{{item.create_time_str}}</text>
-    </navigator>
   </block>
 
   <view style="height:200px;width:100%;align:left" wx:if="{{loaded}}">

@@ -21,7 +21,7 @@
     <view wx:for="{{comments}}" style="margin-left:12px" wx:if="{{item.status==1 || item._openid==openid || isAdmin}}">
       <image mode="aspectFit" style="width:20px;height:20px;margin-right:4px;font-size:8px" src="/images/head_default.png"></image>
       <text>{{item.content}}</text>
-      <text>{{isAdmin?"."+item.status:""}}</text>
+      <text style="{{item.status==2?'color:red':''}}">{{isAdmin?"."+item.status:""}}</text>
       <form bindsubmit="delComment" data-cid="{{item._id}}" report-submit="{{true}}" wx:if="{{item._openid==openid}}">
         <button formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray">删除</button>
       </form>
