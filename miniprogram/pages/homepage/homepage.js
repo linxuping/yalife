@@ -98,7 +98,7 @@ Page({
   },
   getCardsRecursively: function(cond, offset,limit){
     var page = this;
-    db.collection('attractions').orderBy('sort_time', 'desc').where(cond).skip(offset).limit(limit).get({
+    db.collection('attractions').orderBy('unread_count', 'desc').orderBy('sort_time', 'desc').where(cond).skip(offset).limit(limit).get({
       success: res => {
         console.log("cards: ");
         console.log(res.data);
