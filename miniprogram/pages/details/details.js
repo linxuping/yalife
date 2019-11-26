@@ -354,6 +354,7 @@ Page({
     var cmtId = event.currentTarget.dataset.cid;
     var nopush = event.currentTarget.dataset.nopush;
     var isreply = event.currentTarget.dataset.isreply;
+    var recvopenid = event.currentTarget.dataset.recvopenid;
     var hint = "审核通过？";
     if (nopush == 1) {
       hint = "审核通过？(nopush)";
@@ -373,7 +374,7 @@ Page({
           // 静默 status=1，并给 发帖作者发 留言通知          
     	    var path = page.getSharePath();
           var args = {
-            openid: app.globalData.openid,
+            openid: recvopenid,
             cmtid: cmtId,
             status: 1,
             path: path,

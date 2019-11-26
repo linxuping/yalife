@@ -29,7 +29,7 @@
         <button formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray">回复</button>
       </form>
 
-      <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" bindtap="auditOk">审ok</button>
+      <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" data-recvopenid="{{openid}}" bindtap="auditOk">审ok</button>
       <button class="no-border-btn" data-cid="{{item._id}}" data-nopush="1" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" bindtap="auditOk">审okn</button>
       <button class="no-border-btn" data-cid="{{item._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" bindtap="auditFail">审fail</button>
 
@@ -39,11 +39,11 @@
         </view>
         <text>{{item.reply.content}}</text>
         <text>{{isAdmin?"."+item.reply.status:""}}</text>
-        <form bindsubmit="delComment" data-isreply="1" data-cid="{{item.reply._id}}" report-submit="{{true}}">
+        <form bindsubmit="delComment" data-isreply="{{1}}" data-cid="{{item.reply._id}}" report-submit="{{true}}">
           <button bindsubmit="delComment" data-cid="{{item.reply._id}}" formType="submit" class="no-border-btn" style="display:inline;font-size:10pt;text-decoration:underline;color:gray" wx:if="{{item.reply._openid==openid}}">删除</button>
         </form>
 
-        <button class="no-border-btn" data-cid="{{item.reply._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" data-isreply="{{1}}" bindtap="auditOk">审ok</button>
+        <button class="no-border-btn" data-cid="{{item.reply._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" data-recvopenid="{{item.reply._openid}}" data-isreply="{{1}}" bindtap="auditOk">审ok</button>
         <button class="no-border-btn" data-cid="{{item.reply._id}}" data-nopush="1" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" bindtap="auditOk">审okn</button>
         <button class="no-border-btn" data-cid="{{item.reply._id}}" style="display:inline;font-size:10pt;text-decoration:underline;color:gray;padding:0px;padding-left:6px;padding-right:6px" wx:if="{{isAdmin}}" bindtap="auditFail">审fail</button>
 

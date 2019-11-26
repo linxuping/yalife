@@ -361,7 +361,7 @@ App({
     var uids = ["of1Gv4u8HogWkBzuZWCsz-JI50Hk"];
     if (!forced) {
       if (page.isAdmin() || uids.indexOf(page.globalData.openid) >= 0) {
-        console.log("isAdmin and ignore: ",err)
+        //console.log("isAdmin and ignore: ",err)
         return;
       }      
     }
@@ -490,10 +490,11 @@ App({
                 cb();
               },
               fail: res => {
-                if (res.errMsg.indexOf("invalid form id") == -1 && formid.indexOf("the formId is a mock one") == -1) {
+                /*if (res.errMsg.indexOf("invalid form id") == -1 && formid.indexOf("the formId is a mock one") == -1) {
                   console.log("cloud.call:", funcname, res);
                   page.save_err(args.openid, res);
-                } else if (res.errMsg.indexOf("cloud function service error")>=0 && res.errMsg.indexOf("form id")==-1) {
+                } else */
+                if (res.errMsg.indexOf("cloud function service error") >= 0 && (res.errMsg.toLowerCase().indexOf("form id") == -1 && res.errMsg.toLowerCase().indexOf("formid") == -1) ) {
                   console.log("cloud.call exit:", funcname, res);
                   page.save_err(args.openid, res, true);
                   wx.hideLoading();
