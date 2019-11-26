@@ -585,7 +585,8 @@ Page({
       imgurls: page.data.imgurls,
       content: page.data.content,
       update_time: formatTime(new Date), //formatTime(new Date)
-      sort_time:   new Date
+      sort_time:   new Date,
+      unread_count:  0   //消息未读数
     };
     if (page.data.latitude && page.data.longitude) {
       cardData["location"] = db.Geo.Point(page.data.longitude, page.data.latitude)

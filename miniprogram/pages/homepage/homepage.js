@@ -254,5 +254,27 @@ Page({
         });
       }
     })
+  },
+  goDetail: function (event) {
+    var page = this;
+    console.log(event);
+    app.saveFormid(event.detail.formId, "cmt");
+    var cardId = event.currentTarget.dataset.cardid;
+    wx.cloud.callFunction({
+      name: 'msg_unread_reset',
+      complete: res => {
+        console.log("msg_unread_reset:", res)
+        var url = "/pages/details/details?id=" + cardId;
+        wx.navigateTo({
+          url: url,
+          success: function (res) {
+            console.log("goDetails success: ");
+          },
+          fail: function (res) {
+            console.log("goDetails fail: ", res);
+          }
+        })
+      }
+    });
   }
 })

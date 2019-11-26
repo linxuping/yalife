@@ -36,8 +36,8 @@
             <form class="display:inline;margin-right:4px;display:none" bindsubmit="jumpEdit" report-submit="{{true}}" data-cardId="{{item._id}}">
               <button formType="submit" style="padding:0px;display:inline;margin-left:6px;margin-right:6px;display:none" class="no-border-btn">编辑</button>
             </form>
-            <form class="" bindsubmit="goCmt" report-submit="{{true}}">
-              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px" class="no-border-btn">5条未处理评论</button>
+            <form class="" bindsubmit="goDetail" data-cardid="{{item.card_id}}" report-submit="{{true}}" wx:if="{{item.unread_count>0}}">
+              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px" class="no-border-btn">您有待处理留言</button>
             </form>
           </view>
         </view>
