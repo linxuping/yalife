@@ -9,6 +9,8 @@ exports.main = async (event, context) => {
 
 function getDayStr() {
   var d=new Date();
+  // 当前时间 = 包含时差的当前时间 + 时差时间，getTimezoneOffset() 获取时差（以分钟为单位），转为小时需要除以 60
+  d.setHours(d.getHours() + 8)
   var year=d.getFullYear();
   var month=change(d.getMonth()+1);
   var day=change(d.getDate());

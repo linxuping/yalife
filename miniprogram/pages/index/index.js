@@ -726,12 +726,14 @@ Page({
    */
   onHide: function () {
     //this.getTags();
+    wx.hideLoading();
   },
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
     //this.getTags();
+    wx.hideLoading();
   },
   clickSearch: function (e) {
     wx.pageScrollTo({

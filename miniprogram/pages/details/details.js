@@ -355,6 +355,7 @@ Page({
     var nopush = event.currentTarget.dataset.nopush;
     var isreply = event.currentTarget.dataset.isreply;
     var recvopenid = event.currentTarget.dataset.recvopenid;
+    var content = event.currentTarget.dataset.content;
     var hint = "审核通过？";
     if (nopush == 1) {
       hint = "审核通过？(nopush)";
@@ -378,7 +379,7 @@ Page({
             cmtid: cmtId,
             status: 1,
             path: path,
-            content: page.data.cmtContent
+            content: content
           }
           wx.cloud.callFunction({
             name: 'audit_status_cmt',

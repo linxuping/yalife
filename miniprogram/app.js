@@ -520,6 +520,14 @@ App({
             app.save_err(args.openid, e);
           }
         }
+        else{
+          wx.hideLoading()
+          wx.showToast({
+            title: 'formid为空！',
+            icon: 'fail',
+            duration: 2000
+          })
+        }
       } else {
         console.log("formid为空");
         wx.showLoading({ title: 'formid为空' })

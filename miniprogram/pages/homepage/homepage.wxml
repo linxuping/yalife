@@ -4,6 +4,15 @@
   <open-data type="userAvatarUrl" class="testAvatar"></open-data>
   <open-data type="userNickName" lang="zh_CN"></open-data>
   <image style="width:30px;height:30px;position:absolute;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
+
+  <block class="" wx:for="{{auditComments}}" wx:key="id" wx:if="{{isAdmin}}">
+    <navigator url="/pages/details/details?id={{item.card_id}}" open-type="navigate">
+      <text style="margin-right:4px">{{item.content}}</text>
+      <text style="margin-right:4px">{{item.card_id}}</text>
+      <text>{{item.create_time_str}}</text>
+    </navigator>
+  </block>
+
   <block class="" wx:for="{{cardList}}" wx:key="id" wx:if="{{item.status>0}}">
     <view bindlongpress="onDeleteCard" data-cardid="{{item._id}}" style="width:95%;background-color:#FEFEFE">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
@@ -35,6 +44,15 @@
       </view>
     </view>
   </block>
+
+  <block class="" wx:for="{{auditComments}}" wx:key="id" wx:if="{{isAdmin}}">
+    <navigator url="/pages/details/details?id={{item.card_id}}" open-type="navigate">
+      <text style="margin-right:4px">{{item.content}}</text>
+      <text style="margin-right:4px">{{item.card_id}}</text>
+      <text>{{item.create_time_str}}</text>
+    </navigator>
+  </block>
+
   <view style="height:200px;width:100%;align:left" wx:if="{{loaded}}">
     <text style="margin-left:8px">联系管理员(审核、瞎聊等)</text>
     <contact-button style="color:green;margin-top:30px;z-index:1011"></contact-button>
