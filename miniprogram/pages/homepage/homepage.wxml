@@ -37,7 +37,7 @@
               <button formType="submit" style="padding:0px;display:inline;margin-left:6px;margin-right:6px;display:none" class="no-border-btn">编辑</button>
             </form>
             <form class="" bindsubmit="goDetail" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.unread_count>0}}">
-              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px" class="no-border-btn">您有待处理留言</button>
+              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px" class="no-border-btn">🐶点击处理新留言</button>
             </form>
           </view>
         </view>
