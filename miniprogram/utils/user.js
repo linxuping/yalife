@@ -20,26 +20,36 @@ function formatDate(time) {
 
 
 class User {
-  static add(openid, res) {
-    if (!res || !res.userInfo) {
-      console.log("add user. invalid res", openid, res);
-      return
-    }
+  static update() {
     var d = new Date().getTime();
     db.collection('user').where({
-      _openid: openid
+      _openid: app.globalData.openid
     }).get({
       success: res => {
-        console.log("get user: ");
-        console.log(res.data);
         if (res.data.length == 0) {
-          res.create_time = d;
-          res.create_time_str = formatDate(d);
+          app.globalData.create_time = d;
+          app.globalData.create_time_str = formatDate(d);
+          console.log("add user: ", app.globalData);
           db.collection('user').add({
-            data: res
+            data: app.globalData
           }).then(res => {
             console.log(res)
           }).catch(console.error)         
+        } else {
+          app.globalData.update_time = formatDate(d);
+          app.globalData.update_time_str = formatDate(d);
+          console.log("update user: ", app.globalData);
+          delete app.globalData._id
+          delete app.globalData._openid
+          db.collection('user').doc(res.data[0]._id).update({
+            data: app.globalData,
+            success: function(res) {
+              console.log("user update ok:", res)
+            },
+            fail: function(res) {
+              console.log("user update fail:", res)
+            },
+          });   
         }
       },
       fail: err => {
@@ -48,21 +58,22 @@ class User {
     })
   };
 
-  static get(openid, cb) {
+  static get(openid, cb, err_cb) {
     db.collection('user').where({
       _openid: openid
     }).get({
       success: res => {
-        console.log("get user: ");
-        console.log(res.data);
+        console.log("get user: ", res.data);
         if (res.data.length > 0) {
           cb(res.data[0]);
         } else {
           console.log("get user. invalid res", openid, res);
+          err_cb();
         }
       },
       fail: err => {
         console.log(err);
+        err_cb();
       }
     })
   };

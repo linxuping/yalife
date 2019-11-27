@@ -20,7 +20,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{(type || '全部')+'·'+distanceDesc+'·近'+arrayDays[indexDays]+'天·'+address}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{(type || '全部')+'·'+distanceDesc+'·近'+arrayDays[indexDays]+'天·'+(address || '')}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
 
       </view>
     </view>

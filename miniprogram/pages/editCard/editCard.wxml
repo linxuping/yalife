@@ -27,7 +27,7 @@
     <view style="bottom-margin:20px;margin-top:8px">
       <text>选择位置：</text>
       <form class="address modify" bindsubmit="choosePos" report-submit="{{true}}">
-        <button formType="submit" style="display:inline;color:blue;font-size:30rpx;padding:0px" class="no-border-btn">{{address}}</button>
+        <button formType="submit" style="display:inline;color:blue;font-size:30rpx;padding:0px" class="no-border-btn">{{address || '(请点击选择)'}}</button>
       </form>
     </view>
 

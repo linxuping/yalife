@@ -11,10 +11,10 @@
     </view>
   </view>
 
-  <view style="margin-top:36px" wx:if="{{comments.length==0}}">
+  <view style="margin-top:36px" wx:if="{{showHome && comments.length==0}}">
     <text style="color:blue;letter-spacing:2px" bindtap="showInputBox">写留言</text>
   </view>
-  <view style="margin-top:36px;width:100%;text-align:right;margin-right:12px" wx:else>
+  <view style="margin-top:36px;width:100%;text-align:right;margin-right:12px" wx:if="{{showHome && comments.length>0}}">
     <text style="color:blue;letter-spacing:2px" bindtap="showInputBox">写留言</text>
   </view>
   <view style="width:100%;text-align:left">
@@ -35,7 +35,8 @@
 
       <view style="margin-left:20px" wx:if="{{!!item.reply}}">
         <view>
-          <text style="color:gray">| 作者回复</text>
+          <text style="color:blue">| </text>
+          <text style="color:gray">作者回复</text>
         </view>
         <text>{{item.reply.content}}</text>
         <text style="{{item.reply.status==2?'color:red':''}}">{{isAdmin?" "+item.reply.status:""}}</text>

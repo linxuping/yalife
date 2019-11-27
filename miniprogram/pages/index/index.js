@@ -2,6 +2,7 @@
 const app = getApp()
 let wechat = require("../../utils/wechat");
 var common = require("../../utils/common.js")
+var user = require("../../utils/user.js")
 var types = [];
 //var types_titles = {};
 var pages = 0;
@@ -497,7 +498,7 @@ Page({
     console.log(app.globalData.latitude);
     console.log(app.globalData.longitude);
     console.log(app.globalData.address);
-    if (!!app.globalData.latitude && !!app.globalData.longitude && !!app.globalData.address){
+    var loadCards = function() {
       page.setData({
         latitude: app.globalData.latitude,
         longitude: app.globalData.longitude,
@@ -505,53 +506,63 @@ Page({
         distance: app.globalData.distance
       });
       page.onLoadCards(app.globalData.openid, app.globalData.latitude, app.globalData.longitude, 0, app.globalData.distance, 20, 0, true, []);
+    }
+    if (!!app.globalData.latitude && !!app.globalData.longitude && !!app.globalData.address){
+      loadCards();
     } else {
       console.log("app.getLocation start.");
-      app.getLocation(
-        function(res) {
-          const latitude = res.latitude
-          const longitude = res.longitude
-          const speed = res.speed
-          const accuracy = res.accuracy
-          page.setData({
-            latitude: res.latitude,
-            longitude: res.longitude      
-          });
-
-          app.globalData.latitude = latitude;
-          app.globalData.longitude = longitude;
-
-          wx.cloud.callFunction({
-            name: 'login',
-            complete: res => {
-              //console.log(res);
-              console.log('云函数获取到的openid: ', res.result.openid);
-              app.globalData.openid = res.result.openid
-              page.onLoadCards(app.globalData.openid, latitude, longitude, 0, app.globalData.distance, 20, 0, true, []);
-            }
-          });
-
-          //page.onLoadCards(page.data.openid, latitude, longitude, 0, app.globalData.distance)
-
-          let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
-          let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
-          let params = {
-            location: latitude + "," + longitude,
-            key
-          }
-
-          wechat.request(url, params).then(function (value) {
-              //console.log(`fulfilled: ${value}`);
-              console.log(value.data.result);
-              app.globalData.address = value.data.result.address_component.street_number || "附近";
-              page.setData({ address: app.globalData.address});
-            })
-            .catch(function (value) {
-              console.log(`rejected: ${value}`); // 'rejected: Hello World'
-              console.log(data)
+      user.get(app.globalData.openid, function(data){
+        wx.showToast({title: '加载覆盖...'});
+        app.globalData = data;
+        loadCards();
+      }, function(){
+        wx.showToast({title: '初始化本地...'});
+        app.getLocation(
+          function(res) {
+            const latitude = res.latitude
+            const longitude = res.longitude
+            const speed = res.speed
+            const accuracy = res.accuracy
+            page.setData({
+              latitude: res.latitude,
+              longitude: res.longitude      
             });
-        }
-      );
+
+            app.globalData.latitude = latitude;
+            app.globalData.longitude = longitude;
+
+            wx.cloud.callFunction({
+              name: 'login',
+              complete: res => {
+                //console.log(res);
+                console.log('云函数获取到的openid: ', res.result.openid);
+                app.globalData.openid = res.result.openid
+                page.onLoadCards(app.globalData.openid, latitude, longitude, 0, app.globalData.distance, 20, 0, true, []);
+              }
+            });
+
+            //page.onLoadCards(page.data.openid, latitude, longitude, 0, app.globalData.distance)
+
+            let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
+            let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
+            let params = {
+              location: latitude + "," + longitude,
+              key
+            }
+
+            wechat.request(url, params).then(function (value) {
+                //console.log(`fulfilled: ${value}`);
+                console.log(value.data.result);
+                app.globalData.address = value.data.result.address_component.street_number || "附近";
+                page.setData({ address: app.globalData.address});
+              })
+              .catch(function (value) {
+                console.log(`rejected: ${value}`); // 'rejected: Hello World'
+                console.log(data)
+              });
+          }
+        );
+      })
     }
   },
   choosePos: function () {
@@ -894,6 +905,7 @@ Page({
     app.globalData.type = type;
     page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), 20, 0, true, []);
     app.saveFormid(event.detail.formId);
+    user.update();
   },
   onReachBottom: function(){
     return;

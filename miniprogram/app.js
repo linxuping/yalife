@@ -38,6 +38,8 @@ App({
           addr: res.address      //调用成功直接设置地址
         })*/
         cb(res);
+        var user = require("utils/user");
+        user.update();
       },
       fail: function () {
         wx.getSetting({
@@ -62,6 +64,8 @@ App({
                           wx.chooseLocation({
                             success: function (res) {
                               cb(res);
+                              var user = require("utils/user");
+                              user.update();
                             },
                           })
                         } else {
@@ -117,6 +121,8 @@ App({
                           wx.getLocation({
                             success: function (res) {
                               cb(res);
+                              var user = require("utils/user");
+                              user.update();
                             },
                           })
                         } else {
