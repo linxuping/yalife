@@ -1032,7 +1032,7 @@ Page({
     app.addEventLog("index share", path, page.data.type, page.data.distanceDesc, page.data.address);
     console.log("share url: ", path);
     var content = page.data.address;
-    if (len(page.data.goods) > 0) {
+    if (page.data.goods.length > 0) {
       content = page.data.goods[0].content
     }
     return {
