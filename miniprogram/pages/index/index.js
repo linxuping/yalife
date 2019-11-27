@@ -511,58 +511,60 @@ Page({
       loadCards();
     } else {
       console.log("app.getLocation start.");
-      user.get(app.globalData.openid, function(data){
-        wx.showToast({title: '加载覆盖...'});
-        app.globalData = data;
-        loadCards();
-      }, function(){
-        wx.showToast({title: '初始化本地...'});
-        app.getLocation(
-          function(res) {
-            const latitude = res.latitude
-            const longitude = res.longitude
-            const speed = res.speed
-            const accuracy = res.accuracy
-            page.setData({
-              latitude: res.latitude,
-              longitude: res.longitude      
-            });
-
-            app.globalData.latitude = latitude;
-            app.globalData.longitude = longitude;
-
-            wx.cloud.callFunction({
-              name: 'login',
-              complete: res => {
-                //console.log(res);
-                console.log('云函数获取到的openid: ', res.result.openid);
-                app.globalData.openid = res.result.openid
-                page.onLoadCards(app.globalData.openid, latitude, longitude, 0, app.globalData.distance, 20, 0, true, []);
-              }
-            });
-
-            //page.onLoadCards(page.data.openid, latitude, longitude, 0, app.globalData.distance)
-
-            let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
-            let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
-            let params = {
-              location: latitude + "," + longitude,
-              key
-            }
-
-            wechat.request(url, params).then(function (value) {
-                //console.log(`fulfilled: ${value}`);
-                console.log(value.data.result);
-                app.globalData.address = value.data.result.address_component.street_number || "附近";
-                page.setData({ address: app.globalData.address});
-              })
-              .catch(function (value) {
-                console.log(`rejected: ${value}`); // 'rejected: Hello World'
-                console.log(data)
+      app.getOpenid(function(){
+        user.get(app.globalData.openid, function(data){
+          wx.showToast({title: '加载覆盖...'});
+          app.globalData = data;
+          loadCards();
+        }, function(){
+          wx.showToast({title: '初始化本地...'});
+          app.getLocation(
+            function(res) {
+              const latitude = res.latitude
+              const longitude = res.longitude
+              const speed = res.speed
+              const accuracy = res.accuracy
+              page.setData({
+                latitude: res.latitude,
+                longitude: res.longitude      
               });
-          }
-        );
-      })
+
+              app.globalData.latitude = latitude;
+              app.globalData.longitude = longitude;
+
+              wx.cloud.callFunction({
+                name: 'login',
+                complete: res => {
+                  //console.log(res);
+                  console.log('云函数获取到的openid: ', res.result.openid);
+                  app.globalData.openid = res.result.openid
+                  page.onLoadCards(app.globalData.openid, latitude, longitude, 0, app.globalData.distance, 20, 0, true, []);
+                }
+              });
+
+              //page.onLoadCards(page.data.openid, latitude, longitude, 0, app.globalData.distance)
+
+              let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
+              let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
+              let params = {
+                location: latitude + "," + longitude,
+                key
+              }
+
+              wechat.request(url, params).then(function (value) {
+                  //console.log(`fulfilled: ${value}`);
+                  console.log(value.data.result);
+                  app.globalData.address = value.data.result.address_component.street_number || "附近";
+                  page.setData({ address: app.globalData.address});
+                })
+                .catch(function (value) {
+                  console.log(`rejected: ${value}`); // 'rejected: Hello World'
+                  console.log(data)
+                });
+            }
+          );
+        });
+      });
     }
   },
   choosePos: function () {

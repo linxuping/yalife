@@ -59,11 +59,16 @@ class User {
   };
 
   static get(openid, cb, err_cb) {
+    if (!openid) {
+      console.log("invalid openid: ", openid);
+      err_cb();
+      return;
+    }
     db.collection('user').where({
       _openid: openid
     }).get({
       success: res => {
-        console.log("get user: ", res.data);
+        console.log("get user: ", openid, res.data);
         if (res.data.length > 0) {
           cb(res.data[0]);
         } else {

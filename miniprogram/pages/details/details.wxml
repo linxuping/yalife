@@ -3,7 +3,7 @@
   <view class="container" style="width:100%;margin-left:8px;margin-right:8px;margin-top:8px">
     <text class="text-firstline" selectable="true">{{card.content}}</text>
     <view style="width:95%">
-      <image src="{{item}}" wx:if="{{!!item}}" wx:for="{{card.imgurls}}" style="margin:2px;width:100%;border-radius:4px" mode="widthFix" data-src="{{item}}" bindtap="previewImage"></image>
+      <image src="{{item}}" wx:if="{{!!item}}" wx:for="{{card.imgurls}}" style="margin-top:2px;margin-bottom:2px;width:100%;border-radius:4px" mode="widthFix" data-src="{{item}}" bindtap="previewImage"></image>
     </view>
     <text class="address" style="margin-top:16px;color:#0000A0" wx:if="{{card}}">{{card.address}}</text>  
     <view style="width:95%;text-align:right;font-size:30rpx;margin-top:8px">
@@ -19,7 +19,7 @@
   </view>
   <view style="width:100%;text-align:left">
     <view wx:for="{{comments}}" style="margin-left:12px" wx:if="{{item.status==1 || item._openid==openid || isAdmin}}">
-      <image mode="aspectFit" style="width:20px;height:20px;margin-right:4px;font-size:8px" src="/images/head_default.png"></image>
+      <image mode="aspectFit" style="width:15px;height:15px;margin-right:4px;font-size:8px" src="/images/head_default.png"></image>
       <text>{{item.content}}</text>
       <text style="{{item.status==2?'color:red':''}}">{{isAdmin?" "+item.status:""}}</text>
       <form bindsubmit="delComment" data-cid="{{item._id}}" report-submit="{{true}}" wx:if="{{item._openid==openid}}">
