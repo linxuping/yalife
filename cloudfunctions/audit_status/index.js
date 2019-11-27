@@ -28,10 +28,10 @@ function save_err(openid, err) {
  
 exports.main = async (event, context) => {
   try {
-    console.log("prepare: ", event.status, event.reason || '', event.tags || [], event.cardId);
+    console.log("prepare: ", event.status, event.reason || '', event.tags || [], event.cardid);
     const db = cloud.database()
     const _ = db.command;
-    return await  db.collection('attractions').doc(event.cardId).update({
+    return await  db.collection('attractions').doc(event.cardid).update({
       data: {
         status: parseInt( event.status ),
         reason: (event.reason || ""),
