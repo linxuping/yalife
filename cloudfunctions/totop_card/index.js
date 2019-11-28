@@ -43,10 +43,11 @@ exports.main = async (event, context) => {
     console.log("prepare: ", event);
     const db = cloud.database()
     const _ = db.command;
+    var d = new Date(Date.now()+8*3600000);
     return await  db.collection('attractions').doc(event.cardid).update({
       data: {
-        update_time: formatTime(new Date),
-        sort_time:   new Date,
+        update_time: formatTime(d),
+        sort_time:   d,
       }}).then(res => {
         console.log("已更新条目属性 ", res);
       }).catch(res => {
