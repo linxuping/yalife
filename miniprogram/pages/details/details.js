@@ -352,12 +352,12 @@ Page({
   },
   updateUnread: function() {
     var page = this;
-    var cardId = page.card._id;
+    var cardId = page.data.card._id;
     db.collection('comment').where({
       card_id: cardId,
       status:  1,
       reply_id:  "",
-    }).then((res) => {
+    }).get({success: function (res) {
       console.log(res);
       if (res.data.length == 0) {
         console.log("msg_unread_reset: 0");
@@ -388,16 +388,19 @@ Page({
       //else //减掉已回复的
       const _ = db.command
       var _ids = [];
+      console.log("comment 1 level len:", res.data.length);
       for (var i=0; i<res.data.length; i++) {
         _ids.push( res.data[i]._id )
       }
-      db.collection('comment').count({
+      db.collection('comment').where({
         card_id: cardId,
         status:  _.gt(0), //非删除都算
         reply_id:  _.in(_ids),
-      }).then((res) => {
-        var left = _ids.length - res.total;
-        console.log("msg_unread_reset left: ", _ids.length, res.total, left);
+      }).get({success: function(res){
+        var total = res.data.length;
+        console.log("comment 2 level len:", total);
+        var left = _ids.length - total;
+        console.log("msg_unread_reset left: ", _ids.length, total, left);
         wx.cloud.callFunction({
           name: 'msg_unread_reset',
           data: {
@@ -419,8 +422,12 @@ Page({
             })
           }
         });
-      }).catch(console.error);
-    }).catch(console.error);
+      },fail: function(res){
+        console.log("get comment fail: ", res);
+      }});
+    },fail: function (res){
+      console.log("get comments: ", res);
+    }});
   },
   auditOk: function(event) {
     var page = this;
@@ -458,6 +465,7 @@ Page({
             name: 'audit_status_cmt',
             data: args,
             success: res => {
+              page.updateUnread();
               console.log("cloud.audit_status_cmt:", res);
               if (nopush == 1) {
                 page.loadComments();
@@ -468,7 +476,7 @@ Page({
                   page.loadComments();
                   wx.hideLoading()
                 });                
-              }
+              };
             },
             fail: res => {
               console.log("cloud.audit_status_cmt:", res);
@@ -507,6 +515,7 @@ Page({
             data: args,
             success: res => {
               page.loadComments();
+              page.updateUnread();
               wx.hideLoading();
               console.log("cloud.audit_status_cmt:", res);
             },
