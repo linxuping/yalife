@@ -368,18 +368,8 @@ Page({
             cardid: cardId,
             count: left,
           },
-          complete: res => {
+          fail: res => {
             console.log("msg_unread_reset:", res)
-            var url = "/pages/details/details?id=" + cardId;
-            wx.navigateTo({
-              url: url,
-              success: function (res) {
-                console.log("goDetails success: ");
-              },
-              fail: function (res) {
-                console.log("goDetails fail: ", res);
-              }
-            })
           }
         });
         return
@@ -408,18 +398,8 @@ Page({
             cardid: cardId,
             count: left,
           },
-          complete: res => {
+          fail: res => {
             console.log("msg_unread_reset:", res)
-            var url = "/pages/details/details?id=" + cardId;
-            wx.navigateTo({
-              url: url,
-              success: function (res) {
-                console.log("goDetails success: ");
-              },
-              fail: function (res) {
-                console.log("goDetails fail: ", res);
-              }
-            })
           }
         });
       },fail: function(res){

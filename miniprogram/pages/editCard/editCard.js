@@ -83,6 +83,7 @@ Page({
               imgurl: card.imgurl,
               imgurls: card.imgurls || [card.imgurl],
               content: card.content,
+              tags:    card.tags,
               isAdmin: app.isAdmin(),
             })
 
@@ -591,6 +592,9 @@ Page({
     if (page.data.latitude && page.data.longitude) {
       cardData["location"] = db.Geo.Point(page.data.longitude, page.data.latitude)
     }
+    if (!page.data.unread_count) {
+      cardData["unread_count"] = 0
+    }
     console.log("update card." + page.data.cardId);
 
     if (opType == "add" && page.data.cardId == 0) {
@@ -648,7 +652,7 @@ Page({
       cardData.status = 2; //page.data.card.status;
       cardData.tags = page.data.tags;
       if (app.isAdmin()) { //admin直接添加上线
-        cardData["status"] = 1
+        cardData["status"] = page.data.status
         cardData["tags"] = page.data.tags
       }
       //update
