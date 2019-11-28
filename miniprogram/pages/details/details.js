@@ -308,6 +308,7 @@ Page({
       success: function (res) {
         page.loadComments();
         page.invisible();
+        page.updateUnread();
       },
       fail: function(res) {
         console.log(res);
@@ -333,6 +334,7 @@ Page({
           db.collection('comment').doc(cmtId).remove({
             success: function (res) {
               page.loadComments();
+              page.updateUnread();
             },
             fail: function (res) {
               console.log(res);
@@ -342,12 +344,83 @@ Page({
             }
           });           
         }
-
       },
       fail: function(res) {
         console.log(res);
       }
     });
+  },
+  updateUnread: function() {
+    var page = this;
+    var cardId = page.card._id;
+    db.collection('comment').where({
+      card_id: cardId,
+      status:  1,
+      reply_id:  "",
+    }).then((res) => {
+      console.log(res);
+      if (res.data.length == 0) {
+        console.log("msg_unread_reset: 0");
+        wx.cloud.callFunction({
+          name: 'msg_unread_reset',
+          data: {
+            openid: app.globalData.openid,
+            cardid: cardId,
+            count: left,
+          },
+          complete: res => {
+            console.log("msg_unread_reset:", res)
+            var url = "/pages/details/details?id=" + cardId;
+            wx.navigateTo({
+              url: url,
+              success: function (res) {
+                console.log("goDetails success: ");
+              },
+              fail: function (res) {
+                console.log("goDetails fail: ", res);
+              }
+            })
+          }
+        });
+        return
+      }
+
+      //else //减掉已回复的
+      const _ = db.command
+      var _ids = [];
+      for (var i=0; i<res.data.length; i++) {
+        _ids.push( res.data[i]._id )
+      }
+      db.collection('comment').count({
+        card_id: cardId,
+        status:  _.gt(0), //非删除都算
+        reply_id:  _.in(_ids),
+      }).then((res) => {
+        var left = _ids.length - res.total;
+        console.log("msg_unread_reset left: ", _ids.length, res.total, left);
+        wx.cloud.callFunction({
+          name: 'msg_unread_reset',
+          data: {
+            openid: app.globalData.openid,
+            cardid: cardId,
+            count: left,
+          },
+          complete: res => {
+            console.log("msg_unread_reset:", res)
+            var url = "/pages/details/details?id=" + cardId;
+            wx.navigateTo({
+              url: url,
+              success: function (res) {
+                console.log("goDetails success: ");
+              },
+              fail: function (res) {
+                console.log("goDetails fail: ", res);
+              }
+            })
+          }
+        });
+      }).catch(console.error);
+    }).catch(console.error);
   },
   auditOk: function(event) {
     var page = this;

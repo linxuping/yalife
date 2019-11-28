@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
     const _ = db.command;
     return await  db.collection('attractions').doc(event.cardid).update({
       data: {
-        unread_count: 0
+        unread_count: event.count
       }}).then(res => {
         console.log("已更新条目属性 ", res);
       }).catch(res => {

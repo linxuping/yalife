@@ -265,6 +265,7 @@ Page({
       data: {
         openid: app.globalData.openid,
         cardid: cardId,
+        count: 0,
       },
       complete: res => {
         console.log("msg_unread_reset:", res)
