@@ -28,14 +28,11 @@ function save_err(openid, err) {
  
 exports.main = async (event, context) => {
   try {
-    console.log("prepare: ", event.status, event.reason || '', event.tags || [], event.cardid);
     const db = cloud.database()
     const _ = db.command;
     return await  db.collection('attractions').doc(event.cardid).update({
       data: {
-        status: parseInt( event.status ),
-        reason: (event.reason || ""),
-        tags: (event.tags || []),
+        unread_count: event.count
       }}).then(res => {
         console.log("已更新条目属性 ", res);
       }).catch(res => {

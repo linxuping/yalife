@@ -13,7 +13,7 @@ App({
 
     this.globalData = {
       source: "",
-      type: "二手", 
+      type: "家具", //"二手", 
       index: 2, 
       distance: 15000, //default 15km
       distanceDesc: "15km内", 
@@ -21,6 +21,7 @@ App({
       tags: [],
       days: this.daysAgo(7),
       indexDays: 2,  //[1,3,7,15]
+      address: "",
     }
     this.getOpenid()
   },//获取用户地理位置权限
@@ -37,6 +38,8 @@ App({
           addr: res.address      //调用成功直接设置地址
         })*/
         cb(res);
+        var user = require("utils/user");
+        user.update();
       },
       fail: function () {
         wx.getSetting({
@@ -61,6 +64,8 @@ App({
                           wx.chooseLocation({
                             success: function (res) {
                               cb(res);
+                              var user = require("utils/user");
+                              user.update();
                             },
                           })
                         } else {
@@ -116,6 +121,8 @@ App({
                           wx.getLocation({
                             success: function (res) {
                               cb(res);
+                              var user = require("utils/user");
+                              user.update();
                             },
                           })
                         } else {
@@ -183,14 +190,17 @@ App({
         }
       });
   },
-  getOpenid() {
-    let page = this;
+  getOpenid(cb) {
+    var page = this;
     wx.cloud.callFunction({
       name: 'login',
       success: res => {
         console.log("login success: ", res)
         console.log('云函数获取到的openid: ', res.result.openid)
-        page.globalData['openid'] = res.result.openid;
+        page.globalData.openid = res.result.openid;
+        if (!!cb) {
+          cb();
+        }
       },
       fail: res => {
         console.log("login fail: ", res)
@@ -206,7 +216,7 @@ App({
     var lis = ["oV5MQ5YBim_nRH66WxfWLGVcW7yc", "of1Gv4kVHElVpbeBRNZzQ-VzFVMI","of1Gv4iy9Gh2wQnpp9o3vq45SVWk"];
     return lis.indexOf(this.globalData.openid)>=0;
   },
-  saveFormid: function(formid) {
+  saveFormid: function(formid, type) {
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command
@@ -217,11 +227,17 @@ App({
         console.log('user_formid addf');
         console.log(res.data);
         if (res.data.length == 0) {
+          var data = {
+            formids: [formid]
+          };
+          if (type == "cmt") {
+            data = {
+              formids_cmt: [formid]
+            };
+          }
           db.collection('user_formid').add({
             // data 字段表示需新增的 JSON 数据
-            data: {
-              formids: [formid]
-            },
+            data: data,
             success: function (res) {
             },
             fail: function (res) {
@@ -231,10 +247,16 @@ App({
         } else {
           console.log('user_formid update');
           var _id = res.data[0]._id;
+          var data = {
+            formids: _.push([formid])
+          }
+          if (type == "cmt") {
+            data = {
+              formids_cmt: _.push([formid])
+            }
+          }
           db.collection('user_formid').doc(_id).update({
-            data: {
-              formids: _.push([formid])
-            },
+            data: data,
             success: console.log,
             fail: console.error
           })
@@ -344,11 +366,14 @@ App({
     d.setDate(d.getDate() - days);
     return d;
   },
-  save_err: function(openid, err) {
+  save_err: function(openid, err, forced) {
     var page = this;
     var uids = ["of1Gv4u8HogWkBzuZWCsz-JI50Hk"];
-    if (page.isAdmin() || uids.indexOf(page.globalData.openid) >= 0) {
-      return;
+    if (!forced) {
+      if (page.isAdmin() || uids.indexOf(page.globalData.openid) >= 0) {
+        //console.log("isAdmin and ignore: ",err)
+        return;
+      }      
     }
     wx.cloud.callFunction({
       name: 'log_collect',
@@ -365,6 +390,161 @@ App({
       complete: () => {
         console.log("save_err ok")
       }
+    });
+  },
+  push: function(type, args, cb, _t) {
+    //  formid = get(post/cmt)
+    //  if formid 空
+    //    log.error
+    //    return
+    //  elif formid 无效
+    //    pop(formid, post/cmt)
+    //    sendMsg
+    //  else 
+    //    do()
+    //    pop(formid, post/cmt)
+    var page = this;
+    if (!_t) {
+      _t = 0;
+    }
+
+    var popFormid = function(popId, type, cb){
+      wx.cloud.callFunction({
+        name: 'audit_lpop_formid',
+        data: { id: popId, type: type },
+        success: res => { 
+          console.log("cloud.audit_lpop_formid:", res); 
+          if (!!cb) {
+            cb();
+          }
+        },
+        fail: res => {
+          console.log("cloud.audit_lpop_formid:", res);
+          page.save_err(args.openid, res);
+        },
+        complete: () => { console.log("cloud.audit_lpop_formid complete") }
+      });
+    }
+
+    console.log("push: ", type, args, cb, _t);
+    var db = wx.cloud.database();
+    db.collection('user_formid').where(
+      { _openid: args.openid }
+    ).get().then(res => {
+      console.log('已获取fomid: ', args.openid, res.data);
+      if (res.data.length > 0) {
+        var formids = res.data[0].formids;
+        if (type=="ask" || type=="reply") {
+          formids = res.data[0].formids_cmt;
+        }
+        var popId = res.data[0]._id;
+        wx.showLoading({ title: 'formid len:' + formids.length })
+        if (formids.length > 0) {
+          var formid = formids[0]
+          console.log("formid: ", formid);
+          try {
+            args.formid = formid
+            var funcname = "unimessage"
+            if (type == "audit") {
+              funcname = "unimessage"
+              /*
+              var args2 = {
+                openid: args.openid,
+                formid: formid,
+                title: args.title,
+                message: args.message,
+                cardid: args.cardId,
+                path: args.path
+              };
+              console.log("发送审核消息：", args2);
+              wx.cloud.callFunction({
+                name: 'unimessage',
+                data: args2,
+                success: res => {
+                  console.log("cloud.unimessage:", res);
+                  popFormid(popId, type);
+                  cb();
+                },
+                fail: res => {
+                  if (res.errMsg.indexOf("invalid form id") == -1) {
+                    console.log("cloud.unimessage:", res);
+                    page.save_err(args.openid, res);
+                  } else {
+                    console.log("cloud.unimessage: invalid formid hint, ignore.");
+                  }
+                  popFormid(popId, type, function(){
+                    page.push(type, args, cb, _t+1);
+                  });
+                },
+                complete: () => {
+                  console.log("cloud.unimessage complete")
+                }
+              });*/
+            } else if (type == "ask") {
+              console.log("发送留言信息：");
+              funcname = "askmessage"
+            } else if (type == "reply") {
+              console.log("发送回复信息")
+              funcname = "replymessage"
+            }
+            console.log("cloud.callFunction: ",funcname,args);
+            wx.cloud.callFunction({
+              name: funcname,
+              data: args,
+              success: res => {
+                console.log("cloud.call:", funcname, res);
+                wx.showToast({
+                  title: '发送成功！',
+                })
+                popFormid(popId, type);
+                cb();
+              },
+              fail: res => {
+                /*if (res.errMsg.indexOf("invalid form id") == -1 && formid.indexOf("the formId is a mock one") == -1) {
+                  console.log("cloud.call:", funcname, res);
+                  page.save_err(args.openid, res);
+                } else */
+                if (res.errMsg.indexOf("cloud function service error") >= 0 && (res.errMsg.toLowerCase().indexOf("form id") == -1 && res.errMsg.toLowerCase().indexOf("formid") == -1) ) {
+                  console.log("cloud.call exit:", funcname, res);
+                  page.save_err(args.openid, res, true);
+                  wx.hideLoading();
+                  wx.showToast({
+                    title: '推送网络错误',
+                  })
+                  return
+                } else {
+                  console.log("cloud.call: invalid formid hint, ignore.", funcname, formid);
+                }
+                console.log("catch: ",res.errMsg);
+                popFormid(popId, type, function(){
+                  console.log("try page.push... ...");
+                  page.push(type, args, cb, _t+1);
+                });
+              },
+              complete: () => {
+                console.log("cloud.call complete", funcname)
+              }
+            });
+          } catch (e) {
+            console.error(e)
+            app.save_err(args.openid, e);
+          }
+        }
+        else{
+          wx.hideLoading()
+          wx.showToast({
+            title: 'formid为空！',
+            icon: 'fail',
+            duration: 2000
+          })
+        }
+      } else {
+        console.log("formid为空");
+        wx.showLoading({ title: 'formid为空' })
+      }
+    }).catch(err => {
+      console.error(err)
+      app.save_err(args.openid, err);
     });
   }
 })

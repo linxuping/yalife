@@ -4,27 +4,47 @@
   <open-data type="userAvatarUrl" class="testAvatar"></open-data>
   <open-data type="userNickName" lang="zh_CN"></open-data>
   <image style="width:30px;height:30px;position:absolute;top:4px;right:4px" src="../../images/home.png" mode="aspectFit" bindtap="goMainPage"></image>
+
+  <view style="width:95%;text-align:left" wx:if="{{isAdmin}}">
+    <navigator url="/pages/details/details?id={{item.card_id}}" open-type="navigate" wx:for="{{auditComments}}" wx:key="id" style="margin:4px;border:solid 1px">
+      <text style="margin-right:4px">{{item.content}}</text>
+      <text style="font-size:10px">{{item.create_time_str}}</text>
+      <text style="margin-right:4px;display:block;font-size:10px">{{item.card_id}}</text>
+    </navigator>
+  </view>
+
   <block class="" wx:for="{{cardList}}" wx:key="id" wx:if="{{item.status>0}}">
-    <view bindlongpress="onDeleteCard" bindtap="jumpEdit" data-cardId="{{item._id}}" style="width:95%;background-color:#FEFEFE">
+    <view bindlongpress="onDeleteCard" data-cardid="{{item._id}}" style="width:95%;background-color:#FEFEFE">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
-        <view style='width:128rpx; height:128rpx; margin:20rpx;'>
+        <view style='width:128rpx; height:128rpx; margin:20rpx;' bindtap="jumpEdit" data-cardid="{{item._id}}">
           <image class='index-logo' style='width:128rpx; height:128rpx; border-radius:8px' src="{{item.imgurl || ((!!item.imgurls && item.imgurls.length>0)?item.imgurls[0]:defaultImg)}}"></image>
         </view>
         <!-- 右边内容 上下结构 -->
         <view style='width:100%'>
-          <text class='item_title' style="display:block">{{item.content}}</text>
-          <text class="cardStatus" wx:if="{{item.is_proxy==1}}">在线</text>
-          <text class="cardStatus" wx:elif="{{item.status==2}}">审核中</text>
-          <text class="cardStatus" wx:elif="{{item.status==1}}">在线</text>
-          <text class="cardStatus" wx:elif="{{item.status>2}}">审核不通过</text>
-          <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
-          <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}{{item.is_proxy==1?" 中介":""}}</text>
-          <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
+          <view style='width:100%' bindtap="jumpEdit" data-cardid="{{item._id}}">
+            <text class='item_title' style="display:block">{{item.content}}</text>
+            <text class="cardStatus" wx:if="{{item.is_proxy==1}}">在线</text>
+            <text class="cardStatus" wx:elif="{{item.status==2}}">审核中</text>
+            <text class="cardStatus" wx:elif="{{item.status==1}}">在线</text>
+            <text class="cardStatus" wx:elif="{{item.status>2}}">审核不通过</text>
+            <text class='item_title' style="display:block;text-align:right">{{item.update_time}}{{(isAdmin && openid==item._openid)?' 我':''}}</text>
+            <text class='item_title' style="font-size:25rpx" wx:if="{{isAdmin}}">{{item._id}}{{item.is_proxy==1?" 中介":""}}</text>
+            <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
+          </view>
+          <view style="width:100%;text-align:right" bindtap="jumpDetail" data-cardId="{{item._id}}">
+            <form class="display:inline;margin-right:4px;display:none" bindsubmit="jumpEdit" report-submit="{{true}}" data-cardId="{{item._id}}">
+              <button formType="submit" style="padding:0px;display:inline;margin-left:6px;margin-right:6px;display:none" class="no-border-btn">编辑</button>
+            </form>
+            <form class="" bindsubmit="goDetail" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.unread_count>0}}">
+              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px" class="no-border-btn">🐶点击处理新留言</button>
+            </form>
+          </view>
         </view>
       </view>
     </view>
   </block>
+
   <view style="height:200px;width:100%;align:left" wx:if="{{loaded}}">
     <text style="margin-left:8px">联系管理员(审核、瞎聊等)</text>
     <contact-button style="color:green;margin-top:30px;z-index:1011"></contact-button>

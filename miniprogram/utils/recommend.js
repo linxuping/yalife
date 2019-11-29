@@ -136,14 +136,12 @@ class Recommend {
               cardids: cardIds //待优化性能
             }
           });          
-          
         }
       },
       fail: err => {
         console.log(err);
       }
     })
-    
   };
 }
 module.exports = Recommend;

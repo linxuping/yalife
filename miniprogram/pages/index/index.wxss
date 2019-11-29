@@ -477,3 +477,11 @@ border-bottom: 5rpx solid #1aae18;
   -webkit-box-orient: vertical;
   font-size: 30rpx;
 }
+.keyword{
+  border: none;
+  background: none;
+  font-size: 11pt;
+}
+.keyword:after{
+  border: none
+}

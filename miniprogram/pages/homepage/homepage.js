@@ -14,7 +14,8 @@ Page({
     defaultImg: "../../images/default.png",
 
     isAdmin: false,
-    openid: ''
+    openid: '',
+    auditComments: [],
   },
 
   /**
@@ -40,6 +41,9 @@ Page({
       isAdmin: app.isAdmin(),
       openid: app.globalData.openid
     });
+    if (app.isAdmin()) {
+      page.loadAuditComments();
+    }
 
     app.addEventLog("into homepage");
 
@@ -94,7 +98,7 @@ Page({
   },
   getCardsRecursively: function(cond, offset,limit){
     var page = this;
-    db.collection('attractions').orderBy('sort_time', 'desc').where(cond).skip(offset).limit(limit).get({
+    db.collection('attractions').orderBy('unread_count', 'desc').orderBy('sort_time', 'desc').where(cond).skip(offset).limit(limit).get({
       success: res => {
         console.log("cards: ");
         console.log(res.data);
@@ -103,7 +107,9 @@ Page({
         })
         if (res.data.length == limit) {
           console.log("getCardsRecursively: "+offset+" "+limit);
-          page.getCardsRecursively(cond, offset+limit, limit);
+          if (!app.isAdmin() || offset<50) { //admin卡片太多了，拉取一页最新的
+            page.getCardsRecursively(cond, offset + limit, limit);
+          }
         }
         setTimeout(function () {
           page.setData({
@@ -154,6 +160,7 @@ Page({
   jumpEdit: function (event) {
     var page = this;
     console.log(event);
+    app.saveFormid(event.detail.formId, "cmt");
     var cardId = event.currentTarget.dataset.cardid;
     var url = '/pages/editCard/editCard?id=' + cardId;
     wx.navigateTo({
@@ -217,7 +224,23 @@ Page({
       url: '/pages/index/index'
     })
   },
-
+  loadAuditComments: function(event) {
+    var page = this;
+    const _ = db.command
+    db.collection('comment').orderBy("create_time", "desc").where({
+      status: 2
+    }).get({
+      success: res => {
+        console.log("load comments: ", res.data);
+        page.setData({
+          auditComments: res.data
+        });
+      },
+      fail: res => {
+        console.log(res);
+      }
+    });
+  },
   goAddPage: function () {
     app.addEventLog("into homepage.add");
     var url = '/pages/editCard/editCard';
@@ -231,5 +254,32 @@ Page({
         });
       }
     })
+  },
+  goDetail: function (event) {
+    var page = this;
+    console.log(event);
+    app.saveFormid(event.detail.formId, "cmt");
+    var cardId = event.currentTarget.dataset.cardid;
+    wx.cloud.callFunction({
+      name: 'msg_unread_reset',
+      data: {
+        openid: app.globalData.openid,
+        cardid: cardId,
+        count: 0,
+      },
+      complete: res => {
+        console.log("msg_unread_reset:", res)
+        var url = "/pages/details/details?id=" + cardId;
+        wx.navigateTo({
+          url: url,
+          success: function (res) {
+            console.log("goDetails success: ");
+          },
+          fail: function (res) {
+            console.log("goDetails fail: ", res);
+          }
+        })
+      }
+    });
   }
 })

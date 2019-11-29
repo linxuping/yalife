@@ -20,7 +20,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{(type || '全部')+'·'+distanceDesc+'·近'+arrayDays[indexDays]+'天·'+address}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
+        <input type="text" value="{{keyword}}" class="weui-search-bar__input" placeholder="{{(type || '全部')+'·'+distanceDesc+'·近'+arrayDays[indexDays]+'天·'+(address || '')}}" bindinput="updateKeyword" bindtap="clickSearch" bindconfirm="tbSearch" autocomplete="on" disabled="true"/>
 
       </view>
     </view>
@@ -142,9 +142,14 @@
     
     <text style="margin-left:8px">关键字搜索：</text>
     <view style="margin-top:10px">
-      <view bindtap="typeSearch" data-type="{{item}}" style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center;margin-top:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
+      <!--<view bindtap="typeSearch" data-type="{{item}}" style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center;margin-top:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
         <text style="margin:10px">{{item}}</text>
-      </view>    
+      </view>-->
+      <view style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center" wx:for="{{tags}}" wx:if="{{item!='高'}}">
+        <form bindsubmit="typeSearch" data-type="{{item}}" report-submit="{{true}}" class="add-btn">
+          <button formType="submit" class="keyword">{{item}}</button>
+        </form>
+      </view>   
     </view>
     <view style="display:none">
       <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
