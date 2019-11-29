@@ -676,12 +676,26 @@ Page({
         }
       }
 
-      var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
+      var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a] });
       var tags = [];
+      var tags2 = [];
       for(var key in res2){
-        tags.push(res2[key])
+        var tag = res2[key];
+        if (dic[tag] > 1)
+          tags.push(tag)
+        else
+          tags2.push(tag)
       }
-      wx.hideLoading();
+      if (tags.length > 4) {
+        var tags_1 = tags.slice(0,4);
+        var tags_2 = tags.slice(4);
+        //tags_1.push("");
+        tags_2.sort(function(a,b){ return a.length-b.length }); 
+        tags = tags_1.concat(tags_2);
+      }
+      //tags.push("");
+      tags2.sort(function(a,b){ return a.length-b.length }); 
+      tags = tags.concat(tags2); 
       tags.push("全部"); 
       if (tags.length == 0) {
         wx.showToast({
@@ -691,6 +705,7 @@ Page({
       }
       page.setData({ tags: tags }); 
       app.globalData.tags = tags;
+      wx.hideLoading();
     });
     /*
     db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
