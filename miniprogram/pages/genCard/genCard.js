@@ -1,6 +1,8 @@
 // pages/genCard/genCard.js
 const app = getApp()
 
+const bgUrl = "https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
+
 // 预设一个default对象
 var defaultOptions = {
   nickName: '',
@@ -14,7 +16,7 @@ var defaultOptions = {
   code_height: 200,
   codePath: '/images/genbg.jpg',
 
-  bg_url: 'https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png',
+  bg_url: bgUrl,
   bg_width: 750,
   bg_height: 1334,
 
@@ -154,7 +156,7 @@ Page({
 
         //把图片保存到本地
         wx.getImageInfo({
-          src: "https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png", //defaultOptions.bg_url,
+          src: bgUrl, //defaultOptions.bg_url,
           success: function (res) {
             console.log("getImageInfo: ", res);
             defaultOptions.bg_url = res.path;
@@ -223,11 +225,25 @@ Page({
         //画背景图
         ctx.drawImage(defaultOptions.bg_url, 0, 0, defaultOptions.bg_width, defaultOptions.bg_height)
         ctx.save(); 
-        ctx.drawImage(defaultOptions.qrcode, 0, 100, 200, 200)
+
+        /*var x = defaultOptions.bg_width - 260;
+        var y = defaultOptions.bg_height - 125; 
+        var d = 120;
+        var r = 60;
+
+        var cx = x + r;
+        var cy = y + r;
+        ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+        ctx.clip();
+        ctx.drawImage(defaultOptions.qrcode, x, y, d, d);
+        ctx.restore();*/
+
+        ctx.drawImage(defaultOptions.qrcode, defaultOptions.bg_width - 585, defaultOptions.bg_height-138, 135, 135)
         
         //画头像
         ctx.save(); // 保存当前ctx的状态
         
+        /*
         //设置圆半径
         let radius = 60;
         ctx.arc(375, 170, radius, 0, 2 * Math.PI);
@@ -241,12 +257,12 @@ Page({
         ctx.setTextAlign('center')
         ctx.setTextBaseline('middle');
         ctx.fillText(defaultOptions.nickName, defaultOptions.nickname_pos[0], defaultOptions.nickname_pos[1]);
-
+*/
         ctx.setFontSize(24)
         ctx.setFillStyle('#969595')
         ctx.setTextAlign('center')
-        ctx.fillText(that.data.followText[0], defaultOptions.bg_width * 0.90, defaultOptions.bg_height * 0.94)
-        ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.90, defaultOptions.bg_height * 0.94 + 40)
+        ctx.fillText(that.data.followText[0], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094)
+        ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094 + 40)
         
         console.log("before draw...", defaultOptions);
         //输出图片

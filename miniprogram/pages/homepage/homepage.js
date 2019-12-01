@@ -16,6 +16,7 @@ Page({
     isAdmin: false,
     openid: '',
     auditComments: [],
+    userLogs: [],
   },
 
   /**
@@ -43,6 +44,7 @@ Page({
     });
     if (app.isAdmin()) {
       page.loadAuditComments();
+      setTimeout(page.loadUserLogs, 1000);
     }
 
     app.addEventLog("into homepage");
@@ -238,6 +240,21 @@ Page({
       },
       fail: res => {
         console.log(res);
+      }
+    });
+  },
+  loadUserLogs: function (event) {
+    var page = this;
+    const _ = db.command
+    db.collection('user_log').orderBy("sort_time", "desc").get({
+      success: res => {
+        console.log("load user logs: ", res.data);
+        page.setData({
+          userLogs: res.data
+        });
+      },
+      fail: res => {
+        console.log("load user logs: ", res);
       }
     });
   },

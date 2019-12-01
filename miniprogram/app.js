@@ -353,7 +353,8 @@ App({
         arg3: arg3,
         arg4: arg4,
         source: page.globalData.source,
-        create_time: formatTime(new Date)
+        create_time: formatTime(new Date),
+        sort_time: new Date,
       },
       fail: function (res) {
         var errorCollect = require("utils/error")

@@ -45,6 +45,14 @@
     </view>
   </block>
 
+  <view style="width:95%;text-align:left" wx:if="{{isAdmin}}">
+    <view wx:for="{{userLogs}}" wx:key="id">
+      <text style="margin-right:4px">{{item.event}}</text>
+      <text style="font-size:10px">{{item.create_time}}</text>
+      <text style="margin-right:4px;display:block;font-size:10px">{{item._openid}}</text>
+    </view>
+  </view>
+
   <view style="height:200px;width:100%;align:left" wx:if="{{loaded}}">
     <text style="margin-left:8px">联系管理员(审核、瞎聊等)</text>
     <contact-button style="color:green;margin-top:30px;z-index:1011"></contact-button>

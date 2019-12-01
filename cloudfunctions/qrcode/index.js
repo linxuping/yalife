@@ -37,12 +37,14 @@ exports.main = async (event, context) => {
   }
 }
 */
+
 const cloud = require('wx-server-sdk')
 cloud.init()
 exports.main = async (event, context) => {
   try {
     const result = await cloud.openapi.wxacode.getUnlimited({
-      scene: 'a=1'
+      scene: 'abc=123',
+      path: 'pages/index/index'
     })
     console.log(result)
     return result
@@ -52,3 +54,19 @@ exports.main = async (event, context) => {
   }
 }
 
+/*
+const cloud = require('wx-server-sdk')
+cloud.init()
+exports.main = async (event, context) => {
+  try {
+    const result = await cloud.openapi.wxacode.createQRCode({
+      path: 'pages/index/index?latitude=22.947357&longitude=113.486712&address=%E4%BA%9A%E8%BF%90%E5%A4%A7%E9%81%93%E4%B8%8E%E5%85%B4%E4%BA%9A%E5%A4%A7%E9%81%93%E4%BA%A4%E5%8F%89%E5%8F%A3&type=%E6%8B%9B%E8%81%98'
+    })
+    console.log(result)
+    return result
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
+*/

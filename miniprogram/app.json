@@ -1,7 +1,7 @@
 {
   "cloud": true,
   "pages": [
-    "pages/genCard/genCard",
+    "pages/index/index",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",
@@ -12,7 +12,7 @@
     "pages/homepage/homepage",
     "pages/cards/cards",
     "pages/details/details",
-    "pages/index/index"
+    "pages/genCard/genCard"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

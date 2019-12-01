@@ -394,6 +394,8 @@ Page({
   onLoad: function (options) {
     var page = this;
     //app.getPermission(page);
+    var obj = wx.getLaunchOptionsSync();
+    console.log("scan args: ",obj);
 
     this.setData({
       types_class: types_class
