@@ -210,6 +210,34 @@ Page({
       }
     });
 
+    /*
+      canvas文字换行
+      str:要绘制的字符串
+      ctx:canvas对象
+      initX:绘制字符串起始x坐标
+      initY:绘制字符串起始y坐标
+      lineHeight:字行高，自己定义个值即可
+      canvasWidth:画布的宽度
+    */
+    var canvasTextAutoLine = function (str, ctx, initX, initY, lineHeight, canvasWidth) {
+      const arrText = str.split('')//字符串分割为数组
+      let currentText = ''// 当前字符串及宽度
+      let currentWidth
+      for (let letter of arrText) {
+        currentText += letter
+        currentWidth = ctx.measureText(currentText).width
+        if (currentWidth > canvasWidth) {
+          console.log("debug: ", currentText, currentWidth, canvasWidth);
+          ctx.fillText(currentText, initX, initY)
+          currentText = ''
+          initY += lineHeight
+        }
+      }
+      if (currentText) {
+        ctx.fillText(currentText, initX, initY)
+      }
+    };
+
 
     //画出图片的方法
     var makeImg = function (imgUrl, callback) {
@@ -263,6 +291,7 @@ Page({
         ctx.setTextAlign('center')
         ctx.fillText(that.data.followText[0], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094)
         ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094 + 40)
+        canvasTextAutoLine("如果网络图片地址是异步请求过来的数据，需要先使用wx.downloadFile()的方式，把图片下载到本地，再把临时的本地路径使用drawImage()绘制", ctx, defaultOptions.bg_width * 1/2, defaultOptions.bg_height * 0.094 + 120, 40, that.data.x);
         
         console.log("before draw...", defaultOptions);
         //输出图片

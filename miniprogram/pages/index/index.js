@@ -683,6 +683,8 @@ Page({
       var tags2 = [];
       for(var key in res2){
         var tag = res2[key];
+        if (tag == "二手")
+          continue
         if (dic[tag] > 1)
           tags.push(tag)
         else

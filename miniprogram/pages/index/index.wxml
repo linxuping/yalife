@@ -88,14 +88,14 @@
 <view class="search-types"  style="align:center">
   <view wx:if="{{showTypes}}" style="height:100px;display:none">
     <scroll-view class="tab-list" scroll-x scroll-with-animation>
-      <view wx:for="{{tabList}}" class="tab-item {{curTab===index ? 'selected-tab':''}}" data-index="{{index}}" bindtap="selectTab">{{item.name}}</view>
+      <view wx:for="{{tabList}}" class="tab-item {{curTab===index ? 'selected-tab':''}}" data-index="{{index}}" wx:key="id" bindtap="selectTab">{{item.name}}</view>
     </scroll-view>
     <swiper current="{{current}}" bindchange="swiperChange" style="height:500px">
-      <block wx:for="{{tabList}}">
+      <block wx:for="{{tabList}}" wx:key="id">
       <swiper-item>
       
       <view style="margin-top:15px;height:auto">
-        <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{types_class[index]}}" wx:if="{{item != '预留1'}}">
+        <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{types_class[index]}}" wx:key="id" wx:if="{{item != '预留1'}}">
           <text style="margin:10px">{{item}}</text>
         </view>
         <view bindtap="typeSearch" data-type="全部" wx:if="{{index==6}}" style="margin:10px;display:inline-block">
@@ -145,14 +145,14 @@
       <!--<view bindtap="typeSearch" data-type="{{item}}" style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center;margin-top:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
         <text style="margin:10px">{{item}}</text>
       </view>-->
-      <view style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center" wx:for="{{tags}}" wx:if="{{item!='高'}}">
+      <view style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center" wx:for="{{tags}}" wx:key="id" wx:if="{{item!='高'}}">
         <form bindsubmit="typeSearch" data-type="{{item}}" report-submit="{{true}}" class="add-btn">
           <button formType="submit" class="keyword">{{item}}</button>
         </form>
       </view>   
     </view>
     <view style="display:none">
-      <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
+      <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}" wx:key="id" wx:if="{{item!='高'}}">
         <text style="margin:10px">{{item}}</text>
       </view>    
     </view>
