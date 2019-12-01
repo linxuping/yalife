@@ -522,21 +522,29 @@ Page({
   toTopCard: function() {
     var page = this;
     if (app.isAdmin()) {
-      var data = {
-        cardid: page.data.card._id,
-        openid: page.data.card._openid,
-      }
-      wx.cloud.callFunction({
-        name: 'totop_card',
-        data: data,
-        success: res => {
-          console.log('[云函数] [totop_card]: ', data)
-          wx.showToast({title: 'totop OK.'});
-        },
-        fail: err => {
-          console.error('[云函数] [totop_card] 调用失败', err)
+      wx.showModal({
+        title: '提示',
+        content: '置顶？',
+        success: function (res) {
+          if (res.confirm) {
+            var data = {
+              cardid: page.data.card._id,
+              openid: page.data.card._openid,
+            }
+            wx.cloud.callFunction({
+              name: 'totop_card',
+              data: data,
+              success: res => {
+                console.log('[云函数] [totop_card]: ', data)
+                wx.showToast({title: 'totop OK.'});
+              },
+              fail: err => {
+                console.error('[云函数] [totop_card] 调用失败', err)
+              }
+            })            
+          }
         }
-      })
+      });
     } else {
       console.log("it's not admin, can not totop.", data);
     }

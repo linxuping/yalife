@@ -2,9 +2,10 @@
 
 <view class='container' style='background:#EDF0F3;'>
     <view style='background:#EDF0F3;'>
-        <canvas canvas-id="myCanvas" class='myCanvas' style="width: 750px; height: 2000px;" wx:if="{{showCanvas}}" />
-        <image mode="widthFix" wx:if="{{inviteCardUrl}}" src="{{inviteCardUrl}}" class="inviteCard" bindtap="previewImage" data-src="{{inviteCardUrl}}">
+        <canvas canvas-id="myCanvas" class='myCanvas' style="width: 750px; height: 2000px;" />
+        <image mode="widthFix" wx:if="{{inviteCardUrl}}" src="{{inviteCardUrl}}" class="" bindtap="previewImage" data-src="{{inviteCardUrl}}">
         </image>
+        <image src="{{testurl}}" style="display:none"></image>
     </view>
 
     <view class='share' wx:if="{{inviteCardUrl}}">

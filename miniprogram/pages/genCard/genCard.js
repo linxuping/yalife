@@ -1,4 +1,5 @@
 // pages/genCard/genCard.js
+const app = getApp()
 
 // 预设一个default对象
 var defaultOptions = {
@@ -13,7 +14,7 @@ var defaultOptions = {
   code_height: 200,
   codePath: '/images/genbg.jpg',
 
-  bg_url: '',
+  bg_url: 'https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png',
   bg_width: 750,
   bg_height: 1334,
 
@@ -44,8 +45,8 @@ Page({
     followText: [
       "我也要玩",
       "搜索“搞嘢吧”"
-    ]
-
+    ],
+    testurl: "",
   },
   /**
    * 生命周期函数--监听页面加载
@@ -96,7 +97,6 @@ Page({
         console.log(res);
       }
     });
-
   },
   onShow: function (options) {
     console.log("onshow.");
@@ -143,31 +143,68 @@ Page({
           }
         });*/
 
-        /*that.setData({
+        that.setData({
           showCanvas: true
         })
-        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg   ");*/
+        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg");
         console.log("get image info.");
 
         // 改变背景图片
-        defaultOptions.bg_url = 'https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png';
+        defaultOptions.bg_url = '';
 
         //把图片保存到本地
         wx.getImageInfo({
-          src: defaultOptions.bg_url,
+          src: "https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png", //defaultOptions.bg_url,
           success: function (res) {
-            console.log("img: ", res);
-            console.log(res.path);
+            console.log("getImageInfo: ", res);
             defaultOptions.bg_url = res.path;
             that.setData({
-              bg: res.path
-            })
+              bg: res.path,
+              bg_width: res.width,
+              bg_height: res.height,
+            });
+
+            wx.cloud.callFunction({
+              name: 'qrcode',
+              data: {
+              },
+              success: res => {
+                console.log("qrcode: ", res);
+                var base64Url = 'data:' + res.result.contentType + ';base64,' + wx.arrayBufferToBase64(res.result.buffer);
+                /*that.setData({
+                  testurl: 'data:' + res.result.contentType + ';base64,' + wx.arrayBufferToBase64(res.result.buffer)
+                });*/
+
+
+                console.log("get qrcode url: ", res);
+
+                let fsm = wx.getFileSystemManager();
+                var tmpPath = wx.env.USER_DATA_PATH + '/qrcode_share.png'
+                fsm.writeFile({
+                  filePath: tmpPath,
+                  data: res.result.buffer,
+                  encoding: 'utf8',
+                  success: res => {
+                    console.info("write file: ", res)
+                    defaultOptions.qrcode = tmpPath;
+                    _check();
+                  },
+                  fail: res => {
+                    console.info(res)
+                  }
+                });
+
+              },
+              fail: res => {
+                console.log("msg_unread_reset:", res)
+              }
+            });
+
           },
           fail: function(res) {
             console.log(res);
           }
         })
-
       }
     });
 
@@ -181,21 +218,23 @@ Page({
         var canvasX = that.data.x;
         var canvasY = that.data.y;
 
+        console.log("before drawImage: ", defaultOptions);
+        
         //画背景图
-        ctx.drawImage(defaultOptions.bg_url, 1, 0, defaultOptions.bg_width, defaultOptions.bg_height)
-        console.log("bg_url: ", defaultOptions.bg_url);
-
+        ctx.drawImage(defaultOptions.bg_url, 0, 0, defaultOptions.bg_width, defaultOptions.bg_height)
+        ctx.save(); 
+        ctx.drawImage(defaultOptions.qrcode, 0, 100, 200, 200)
+        
         //画头像
         ctx.save(); // 保存当前ctx的状态
+        
         //设置圆半径
-
         let radius = 60;
         ctx.arc(375, 170, radius, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.clip();
         ctx.drawImage(defaultOptions.portraitPath, defaultOptions.wx_icon_pos[0], defaultOptions.wx_icon_pos[1], defaultOptions.wx_icon_width * 1.3, defaultOptions.wx_icon_height * 1.3);
         ctx.restore();
-
 
         ctx.setFillStyle('#000000');
         ctx.setFontSize(40);
@@ -208,10 +247,11 @@ Page({
         ctx.setTextAlign('center')
         ctx.fillText(that.data.followText[0], defaultOptions.bg_width * 0.90, defaultOptions.bg_height * 0.94)
         ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.90, defaultOptions.bg_height * 0.94 + 40)
-        console.log("before draw...");
+        
+        console.log("before draw...", defaultOptions);
         //输出图片
         ctx.draw(false, function () {
-          console.log("before to temp...");
+          console.log("before to temp...", defaultOptions);
           wx.canvasToTempFilePath({
             x: 0,
             y: 0,
@@ -223,6 +263,7 @@ Page({
             success: function (res) {
               //console.log(res.tempFilePath);
               callback(res.tempFilePath)
+              console.log("canvasToTempFilePath: ", res);
             },
             fail: function(res) {
               console.log("fail: ", res);
@@ -243,14 +284,15 @@ Page({
 
     //检查是否已经下载了微信头像
     var _check = function () {
-      console.log("_check ... ");
-      let localPath = defaultOptions.portraitPath;
+      //defaultOptions.portraitPath = "https://alcdn.yojiang.cn/upload/circle/22107/circle/327679/20191117/1438.png";
+      let localPath = defaultOptions.portraitPath; //defaultOptions.portraitPath;
+      console.log("_check ... ", localPath);
       if (!!localPath) {
         makeImg(defaultOptions.portraitPath, function (path) {
-
           //设置canvas生成的图片地址
           defaultOptions.saveImgPath = path;
           //console.log(defaultOptions.saveImgPath)
+          console.log("make img ... ", path);
 
           if (path) {
             that.showLoading()
@@ -264,11 +306,11 @@ Page({
 
         })
       } else {
-        setTimeout(_check, 100);
+        setTimeout(_check, 1000);
       }
     }
 
-    _check()
+    //_check()
   },
   //获得下载图片路径
   loadPortraitPath: function (imgUrl) {
@@ -278,6 +320,7 @@ Page({
         defaultOptions.portraitPath = res.path;
       }
     })
+    defaultOptions.portraitPath = imgUrl;
   },
   //保存图片
   save: function () {
