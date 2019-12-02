@@ -46,7 +46,7 @@
   </block>
 
   <view style="width:95%;text-align:left" wx:if="{{isAdmin}}">
-    <view wx:for="{{userLogs}}" wx:key="id">
+    <view wx:for="{{userLogs}}" wx:key="id" data-cardid="{{item.card_id}}" bindtap="goDetail">
       <text style="margin-right:4px">{{item.event}}</text>
       <text style="font-size:10px">{{item.create_time}}</text>
       <text style="margin-right:4px;display:block;font-size:10px">{{item._openid}}</text>

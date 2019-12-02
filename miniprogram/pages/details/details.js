@@ -548,5 +548,36 @@ Page({
     } else {
       console.log("it's not admin, can not totop.", data);
     }
-  } 
+  }, 
+  setSeek: function() {
+    var page = this;
+    if (app.isAdmin()) {
+      wx.showModal({
+        title: '提示',
+        content: '设置寻找？',
+        success: function (res) {
+          if (res.confirm) {
+            var data = {
+              cardid: page.data.card._id,
+              openid: page.data.card._openid,
+              is_seek: 1,
+            }
+            wx.cloud.callFunction({
+              name: 'set_seek',
+              data: data,
+              success: res => {
+                console.log('[云函数] [set_seek]: ', data)
+                wx.showToast({title: 'totop OK.'});
+              },
+              fail: err => {
+                console.error('[云函数] [set_seek] 调用失败', err)
+              }
+            })            
+          }
+        }
+      });
+    } else {
+      console.log("it's not admin, can not seek.", data);
+    }
+  }
 })

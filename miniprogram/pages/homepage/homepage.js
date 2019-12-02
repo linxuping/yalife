@@ -249,6 +249,11 @@ Page({
     db.collection('user_log').orderBy("sort_time", "desc").get({
       success: res => {
         console.log("load user logs: ", res.data);
+        for (var i=0; i<res.data.length; i++) {
+          if (res.data[i].event == "into detail"){
+            res.data[i].card_id = res.data[i].arg1._id;
+          }
+        }
         page.setData({
           userLogs: res.data
         });
