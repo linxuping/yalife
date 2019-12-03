@@ -36,8 +36,8 @@
             <form class="display:inline;margin-right:4px;display:none" bindsubmit="jumpEdit" report-submit="{{true}}" data-cardId="{{item._id}}">
               <button formType="submit" style="padding:0px;display:inline;margin-left:6px;margin-right:6px;display:none" class="no-border-btn">编辑</button>
             </form>
-            <form class="" bindsubmit="goDetail" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.unread_count>0}}">
-              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px" class="no-border-btn">🐶点击处理新留言</button>
+            <form class="" bindsubmit="goDetail" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.unread_count>0 && item._openid==openid}}">
+              <button formType="submit" style="padding:0px;color:red;display:inline;margin-right:6px;background-color:#DEDEDE" class="no-border-btn">🐶点击处理新留言</button>
             </form>
           </view>
         </view>
