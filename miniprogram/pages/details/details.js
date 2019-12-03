@@ -36,12 +36,14 @@ Page({
     cmtContent: "",
     comments: [],
     isAdmin: false,
-    openid: ""
+    openid: "",
+    openSwitch: false,
   },
   showInputBox: function () {
     this.setData({ inputBoxShow: true });
     this.setData({ isScroll: false });
     this.setData({ replyId: "" });
+    this.setData({ openSwitch: false });
   },
   invisible: function () {
     this.setData({ inputBoxShow: false });
@@ -303,7 +305,8 @@ Page({
         reply_id: page.data.replyId,
         create_time_str: formatTime(new Date), //formatTime(new Date)
         create_time: new Date,
-        status: 2
+        status: 2,
+        anonymous: page.data.openSwitch?1:0,
       },
       success: function (res) {
         page.loadComments();
@@ -579,5 +582,25 @@ Page({
     } else {
       console.log("it's not admin, can not seek.", data);
     }
+  },
+  switchChange: function(e) {
+    console.log("switchChange: ", e.detail.value);
+    this.data.openSwitch = e.detail.value;
+  },
+  goDetails: function (event){
+    var url = "/pages/editCard/editCard?id=" + this.data.card._id;
+    wx.navigateTo({
+      url: url,
+      success: function (res) {
+        console.log("goDetails success: ");
+      },
+      fail: function (res) {
+        console.log("goDetails fail: ");
+        console.log(res);
+        wx.redirectTo({
+          url: url,
+        });
+      }
+    })    
   }
 })
