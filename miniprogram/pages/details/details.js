@@ -587,7 +587,7 @@ Page({
     console.log("switchChange: ", e.detail.value);
     this.data.openSwitch = e.detail.value;
   },
-  goDetails: function (event){
+  goEdit: function (event){
     var url = "/pages/editCard/editCard?id=" + this.data.card._id;
     wx.navigateTo({
       url: url,

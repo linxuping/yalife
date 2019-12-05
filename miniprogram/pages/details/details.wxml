@@ -87,7 +87,7 @@
 
   <button style="margin-top:50px" wx:if="{{isAdmin}}" bindtap="toTopCard">置顶</button>
   <button style="margin-top:50px" wx:if="{{isAdmin}}" bindtap="setSeek">设置寻找</button>
-  <button style="margin-top:50px" wx:if="{{isAdmin && openid==card._openid}}" bindtap="goDetails">编辑</button>
+  <button style="margin-top:50px" wx:if="{{isAdmin && openid==card._openid}}" bindtap="goEdit">编辑</button>
 
   <view style="height:100px"></view>
   <view style="width:100%;text-align:left">

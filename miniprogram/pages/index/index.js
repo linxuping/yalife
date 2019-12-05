@@ -203,7 +203,7 @@ Page({
     index: app.globalData.index, //15km
     array: ['3km内', '8km内', '15km内'],
     indexDays: app.globalData.indexDays, 
-    arrayDays: [1,3,7,15],
+    arrayDays: [1,3,7,15,30,60],
     curTabDays: 1,
     currentDays: 1,
     filterDays: 3,

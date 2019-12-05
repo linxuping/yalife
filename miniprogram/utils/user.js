@@ -70,6 +70,9 @@ class User {
       success: res => {
         console.log("get user: ", openid, res.data);
         if (res.data.length > 0) {
+          if (res.data[0].address == "undefined") {
+            res.data[0].address = "附近";
+          }
           cb(res.data[0]);
         } else {
           console.log("get user. invalid res", openid, res);
