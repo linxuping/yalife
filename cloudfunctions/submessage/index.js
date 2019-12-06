@@ -15,16 +15,11 @@ async function sendTemplateMessage(event) {
 
   // 接下来将新增模板、发送模板消息、然后删除模板
   const templateId = '4RZPg5LMYit7d7eC6Qti-SO3tPMFatfq1MB6bAsAMlg'
-  //'pl9exbF9lRCnqDYTikZSqYat06rYmxll8BiUYq0ExQY'
-  var page = "pages/homepage/homepage";
-  if (event.cardid.length > 0) {
-    page = "pages/details/details?id=" + event.cardid
-  }
 
   const sendResult = await cloud.openapi.subscribeMessage.send({
     touser: event.openid,
     templateId: templateId,
-    page: page,
+    page: event.path,
     data: {
       thing1: {
         value: event.title,

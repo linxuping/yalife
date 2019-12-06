@@ -709,6 +709,65 @@ Page({
     this.setData({
       auto_height: true
     })
+  },
+  notifyAll: function (path, openids) {
+    var len = openids.length;
+    var count = 0;
+    for (var i=0; i<len; i++) {
+      var openid = openids[i];
+      wx.cloud.callFunction({
+        name: 'submessage',
+        data: {
+          path: path,
+          title: title,
+          openid: openid,
+          message: message
+        },
+        success: res => {
+          console.log("cloud.unimessage:", res);
+          wx.showLoading({
+            title: openid,
+          })
+          count += 1;
+        },
+        fail: res => {
+          count += 1;
+          console.log("cloud.unimessage:", res);
+          app.save_err(args.openid, res);
+        },
+        complete: () => {
+          console.log("cloud.unimessage complete")
+          if (count >= len) {
+            wx.showToast({
+              title: count
+            })
+
+            wx.showLoading({
+              title: "submessage_reset...",
+            })
+            wx.cloud.callFunction({
+              name: 'submessage_reset',
+              data: {
+                cardid: cardid,
+                openids: openids
+              },
+              success: res => {
+                console.log("cloud.submessage_reset:", res);
+              },
+              fail: res => {
+                console.log("cloud.submessage_reset:", res);
+                app.save_err(cardid, res);
+              },
+              complete: () => {
+                console.log("cloud.submessage_reset complete")
+                wx.hideLoading();
+              }
+            });
+
+          }
+        }
+      });
+    }
   }
 })
 
