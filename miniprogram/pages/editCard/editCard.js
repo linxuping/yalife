@@ -1,5 +1,6 @@
 // miniprogram/pages/editCard/editCard.js
 let wechat = require("../../utils/wechat");
+let submessage = require("../../utils/submessage");
 var db = wx.cloud.database();
 const app = getApp()
 
@@ -40,7 +41,19 @@ Page({
     tags: [],
     loading: false,
     reason: "",
-    auto_height: true
+    auto_height: true,
+    items: [
+      { name: 'USA', value: '美国' },
+      { name: 'CHN', value: '中国', checked: 'true' },
+      { name: 'BRA', value: '巴西' },
+      { name: 'JPN', value: '日本' },
+      { name: 'ENG', value: '英国' },
+      { name: 'TUR', value: '法国' },
+    ],
+    seletedStr: "",
+    selectedOpenids: "",
+    showNotify: false,
+    notifyCards: []
   },
 
   /**
@@ -443,28 +456,6 @@ Page({
   onUnload: function () {
 
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
   chooseImage: function (event) {
     var page = this;
     wx.chooseImage({
@@ -587,6 +578,7 @@ Page({
       content: page.data.content,
       update_time: formatTime(new Date), //formatTime(new Date)
       sort_time:   new Date,
+      notify_tag: page.data.card.notifyTag || "",
       unread_count:  0   //消息未读数
     };
     if (page.data.latitude && page.data.longitude) {
@@ -710,21 +702,41 @@ Page({
       auto_height: true
     })
   },
-  notifyAll: function (path, openids) {
-    var len = openids.length;
+  notifyAll: function () {
+    var page = this;
+    var notifyCards = page.data.notifyCards;
+    console.log(notifyCards);
+    var len = notifyCards.length;
+    if (len == 0) {
+      return;
+    }
     var count = 0;
+    var selectedOpenids = page.data.selectedOpenids;
+    console.log(selectedOpenids);
+    if (selectedOpenids.length == 0) {
+      return;
+    }
     for (var i=0; i<len; i++) {
-      var openid = openids[i];
+      var notify_openid = notifyCards[i].name;
+      if (selectedOpenids.indexOf(notify_openid) == -1){
+        console.log("ignore: ", notify_openid);
+        continue;
+      }
+      //推送给对方，保持对方的打开信息
+      var openid = notify_openid;
+      var card = notifyCards[i].card;
+      //参考details.getSharePath
+      var path = '/pages/details/details?id=' + card._id + '&latitude=' + card.latitude + '&longitude=' + card.longitude + '&address=' + encodeURIComponent(card.address);
+      console.log("submessage:",openid,card);
       wx.cloud.callFunction({
         name: 'submessage',
         data: {
           path: path,
-          title: title,
           openid: openid,
-          message: message
+          message: card.content.substr(0,15)+" ...",
         },
         success: res => {
-          console.log("cloud.unimessage:", res);
+          console.log("cloud.submessage ok:", card, res);
           wx.showLoading({
             title: openid,
           })
@@ -732,16 +744,17 @@ Page({
         },
         fail: res => {
           count += 1;
-          console.log("cloud.unimessage:", res);
-          app.save_err(args.openid, res);
+          console.log("cloud.submessage:", res);
+          app.save_err(openid, res);
         },
         complete: () => {
-          console.log("cloud.unimessage complete")
+          console.log("cloud.submessage complete")
           if (count >= len) {
             wx.showToast({
               title: count
             })
 
+            /*
             wx.showLoading({
               title: "submessage_reset...",
             })
@@ -763,11 +776,96 @@ Page({
                 wx.hideLoading();
               }
             });
+            */
 
           }
         }
       });
     }
+  },
+  onSubscribe: function() {
+    wx.requestSubscribeMessage({
+      tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
+      success(res) {
+        wx.showToast({
+          title: '订阅成功！',
+        })        
+       }
+    })
+  },
+  onSaveNotifyInput: function(e) {
+    console.log("onSaveNotifyInput", e.detail.value);
+    var card = this.data.card;
+    card.notify_tag = e.detail.value;
+    this.setData({
+      card: card
+    })
+  },
+  saveNotify: function (event) {
+    var page = this;
+    submessage.add(page.data.card._openid, page.data.card._id, page.data.card.notifyTag);
+  },
+  pullNotify: function(event) {
+    var page = this;
+    wx.showLoading({
+      title: '拉取订阅...',
+      mask: true,
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    });
+    db.collection('submessage').where({
+      notify_tag: page.data.card.notify_tag
+    }).get({
+      success: res => {
+        var items = [];
+        for (var i=0; i<res.data.length; i++) {
+
+          var card_id = res.data[i].card_id;
+          var notify_openid = res.data[i].notify_openid;
+          db.collection('attractions').where({
+            _id: card_id
+          }).get({
+            success: res2 => {
+              if (res2.data.length == 0) {
+                console.error("card_id not exists: ", card_id);
+              } else {
+                var card = res2.data[0];
+                console.log("get card:",card);
+                items.push({
+                  name: notify_openid, 
+                  value: card.content, 
+                  card: card, 
+                  checked: 'true'
+                });
+                page.setData({
+                  notifyCards: items,
+                  showNotify: true
+                })
+                console.log("get card fin.");           
+              }
+            },
+            fail: res2 => {
+              console.error(res2);
+            }
+          });
+
+        }
+        wx.hideLoading();
+      }
+    });
+  },
+  checkboxChange: function (event) {
+    /*
+      1\“订阅”点击提交，进入待审
+      2\“订阅”过审，绑定到submessage表 - 推送标签
+      3\
+    */
+    console.log('checkbox发生change事件，携带value值为：', typeof(event.detail.value), event.detail.value);
+    this.setData({
+      seletedStr: "选中的values值：" + event.detail.value,
+      selectedOpenids: event.detail.value
+    });
   }
 })
 

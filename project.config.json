@@ -23,7 +23,7 @@
 	},
 	"appid": "wx658ecc427ea40939",
 	"projectname": "yalife",
-	"libVersion": "2.9.3",
+	"libVersion": "2.9.4",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",

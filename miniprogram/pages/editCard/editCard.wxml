@@ -8,7 +8,8 @@
       <text style="font-size:8pt">【技巧提醒】您的发布信息也可以不附带联系方式！因为已发布的条目可以在评论区“隐私回复“给您留言的人，避免外露您的联系方式给所有人看！</text>
     </view>  
   <view wx:if="{{isAdmin}}" style="margin-top:8px;border:solid red 1px">
-    <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+    <text style="width:100%;background-color:#CDCDCD;display:none"> 审核 </text>
+    <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" style="border:dotted 1px">
       <view style="bottom-margin:20px;" bindtap="">
         <text>类型：</text>
         <text class="modify" style="color: blue">{{array[index]}}</text>
@@ -20,10 +21,29 @@
         <text class="modify" style="color: blue">{{array2[index2]}}</text>
       </view>
     </picker>  
-    <input placeholder="输入标签：a,b,c" style="border: solid 1px" bindinput="getInput" type="text" value="{{ card.tags }}"></input>
-    <input placeholder="下线原因" style="border: solid 1px" bindinput="getReason" type="text"></input>
+    <input placeholder="输入标签：a,b,c" style="border: dotted 1px" bindinput="getInput" type="text" value="{{ card.tags }}"></input>
+    <view style="width:100%">
+      <input placeholder="推送标签" style="border: dotted 1px;display:inline-block" bindinput="onSaveNotifyInput" type="text" value="{{ card.notify_tag }}"></input>
+      <button style="font-size:10px;display:inline-block" bindtap="saveNotify">记订阅</button>
+      <button style="font-size:10px;display:inline-block" bindtap="pullNotify">拉订阅</button>
+    </view>
+    <button bindtap="auditOk">通过</button> 
+    <input placeholder="下线原因" style="border: dotted 1px" bindinput="getReason" type="text"></input>
     <button bindtap="auditFail">不通过</button>
-    <button bindtap="auditOk">通过</button>
+  </view>
+  <view wx:if="{{isAdmin && showNotify}}" style="margin-top:8px;border:solid blue 1px">
+    <text style="width:100%;background-color:#CDCDCD;display:none"> 通知 </text>
+    
+    <checkbox-group class="group" bindchange="checkboxChange">
+      <block wx:for="{{notifyCards}}" wx:item="item">
+        <view class="item">
+          <checkbox value="{{item.name}}" checked="{{item.checked}}" color="red" />{{item.value}}
+        </view>
+      </block>
+    </checkbox-group>
+    <text class="selected">{{seletedStr}}</text>
+
+    <button bindtap="notifyAll">通知</button>
   </view>
 
     <view style="bottom-margin:20px;margin-top:8px">
@@ -60,4 +80,6 @@
   <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
     <button formType="submit">发布</button>
   </form>
+
+  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px"  bindtap="onSubscribe">有符合的主动通知我</button>
 </view>

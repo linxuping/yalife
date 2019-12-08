@@ -14,7 +14,6 @@
   </view>
 
   <image style="width:55px;height:55px;position:fixed;bottom:4px;text-align:center;align-items: center;justify-content: center;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage" wx:if="{{showGoods}}"></image>
-  
 
   <view class="weui-search-bar" style="width:100%;position:fixed; top:0;z-index:999" wx:if="{{showGoods}}">
     <view class="weui-search-bar__form">
