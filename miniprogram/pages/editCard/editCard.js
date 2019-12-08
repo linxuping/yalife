@@ -53,7 +53,8 @@ Page({
     seletedStr: "",
     selectedOpenids: "",
     showNotify: false,
-    notifyCards: []
+    notifyCards: [],
+    isSub: false
   },
 
   /**
@@ -70,6 +71,12 @@ Page({
 
     console.log(options);
     console.log(options.id);
+
+    if (options.sub == 1) {
+      page.setData({
+        isSub: true
+      });
+    }
 
     if (options.id != undefined) {
       app.addEventLog("into card.update", options.id);
@@ -578,7 +585,6 @@ Page({
       content: page.data.content,
       update_time: formatTime(new Date), //formatTime(new Date)
       sort_time:   new Date,
-      notify_tag: page.data.card.notifyTag || "",
       unread_count:  0   //消息未读数
     };
     if (page.data.latitude && page.data.longitude) {
@@ -600,6 +606,7 @@ Page({
       cardData["tags"] = [ "二手" ]
       cardData["priority"] = 0
       cardData["finished"] = 0
+      cardData["notify_tag"] = ""
       wx.showLoading({
         title: '正在新建...',
         mask: true
@@ -646,6 +653,7 @@ Page({
       if (app.isAdmin()) { //admin直接添加上线
         cardData["status"] = page.data.status
         cardData["tags"] = page.data.tags
+        cardData["notify_tag"] = page.data.notify_tag
       }
       //update
       wx.showLoading({
@@ -807,7 +815,7 @@ Page({
   },
   saveNotify: function (event) {
     var page = this;
-    submessage.add(page.data.card._openid, page.data.card._id, page.data.card.notifyTag);
+    submessage.add(page.data.card._openid, page.data.card._id, page.data.card.notify_tag);
   },
   pullNotify: function(event) {
     var page = this;

@@ -1,4 +1,4 @@
-
+<!--homepage.wxml-->
 <view class='container'>
   <loading hidden="{{!loading}}">加载中</loading>
   <open-data type="userAvatarUrl" class="testAvatar"></open-data>
