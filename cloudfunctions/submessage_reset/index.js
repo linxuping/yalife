@@ -30,14 +30,14 @@ exports.main = async (event, context) => {
   try {
     const db = cloud.database()
     const _ = db.command;
-    return await db.collection('submessage').doc(event.cardid).update({
+    return await db.collection('submessage').doc(event.sub_id).update({
       data: {
-        _openid: _.in(event.openids)
+        status: 0
       }}).then(res => {
         console.log("已更新条目属性 ", res);
       }).catch(res => {
         console.log("update fail: ", res);
-        save_err(event.cardid, res);
+        save_err(event.sub_id, res);
       });
   } catch (e) {
     console.log("catch: ", e)

@@ -36,7 +36,8 @@ class SubMsg {
         notify_tag: tag,
         card_id: card_id,
         create_time: d,
-        create_time_str: formatDate(d)
+        create_time_str: formatDate(d),
+        status: 1
       }
     }).then(res => {
       wx.showToast({

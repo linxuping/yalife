@@ -716,15 +716,22 @@ Page({
     if (selectedOpenids.length == 0) {
       return;
     }
+    wx.showLoading({
+      title: '开始通知',
+    })
     for (var i=0; i<len; i++) {
       var notify_openid = notifyCards[i].name;
       if (selectedOpenids.indexOf(notify_openid) == -1){
         console.log("ignore: ", notify_openid);
         continue;
       }
+      wx.showLoading({
+        title: i,
+      })
       //推送给对方，保持对方的打开信息
       var openid = notify_openid;
       var card = notifyCards[i].card;
+      var sub_id = notifyCards[i].sub_id;
       //参考details.getSharePath
       var path = '/pages/details/details?id=' + card._id + '&latitude=' + card.latitude + '&longitude=' + card.longitude + '&address=' + encodeURIComponent(card.address);
       console.log("submessage:",openid,card);
@@ -754,29 +761,26 @@ Page({
               title: count
             })
 
-            /*
             wx.showLoading({
               title: "submessage_reset...",
             })
             wx.cloud.callFunction({
               name: 'submessage_reset',
               data: {
-                cardid: cardid,
-                openids: openids
+                sub_id: sub_id
               },
               success: res => {
                 console.log("cloud.submessage_reset:", res);
               },
               fail: res => {
                 console.log("cloud.submessage_reset:", res);
-                app.save_err(cardid, res);
+                app.save_err(sub_id, res);
               },
               complete: () => {
                 console.log("cloud.submessage_reset complete")
                 wx.hideLoading();
               }
             });
-            */
 
           }
         }
@@ -815,14 +819,18 @@ Page({
       complete: function (res) { },
     });
     db.collection('submessage').where({
-      notify_tag: page.data.card.notify_tag
+      notify_tag: page.data.card.notify_tag,
+      status: 1,
     }).get({
       success: res => {
         var items = [];
+        var selectedOpenids = [];
         for (var i=0; i<res.data.length; i++) {
 
           var card_id = res.data[i].card_id;
           var notify_openid = res.data[i].notify_openid;
+          var sub_id = res.data[i]._id;
+          selectedOpenids.push(notify_openid);
           db.collection('attractions').where({
             _id: card_id
           }).get({
@@ -836,10 +844,12 @@ Page({
                   name: notify_openid, 
                   value: card.content, 
                   card: card, 
-                  checked: 'true'
+                  checked: 'true',
+                  sub_id: sub_id
                 });
                 page.setData({
                   notifyCards: items,
+                  selectedOpenids: selectedOpenids,
                   showNotify: true
                 })
                 console.log("get card fin.");           
