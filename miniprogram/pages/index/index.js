@@ -516,7 +516,13 @@ Page({
       app.getOpenid(function(){
         user.get(app.globalData.openid, function(data){
           wx.showToast({title: '加载覆盖...'});
+          console.log("加载覆盖...", data);
           app.globalData = data;
+
+          if (!app.globalData.address || app.globalData.address == "undefined" || app.globalData.address == "附近") {
+            page.getAddress(app.globalData.latitude, app.globalData.longitude);
+          }
+
           loadCards();
         }, function(){
           wx.showToast({title: '初始化本地...'});
@@ -552,7 +558,6 @@ Page({
                 location: latitude + "," + longitude,
                 key
               }
-
               wechat.request(url, params).then(function (value) {
                   //console.log(`fulfilled: ${value}`);
                   console.log(value.data.result);
@@ -568,6 +573,26 @@ Page({
         });
       });
     }
+  },
+  getAddress: function (latitude, longitude) {
+    var page = this;
+    let url = `https://apis.map.qq.com/ws/geocoder/v1/`;
+    let key = 'V3WBZ-LO4WK-FEYJS-AXWMR-YT5YO-A3FXR';
+    let location = latitude + "," + longitude;
+    let params = {
+      location: location,
+      key
+    }
+    console.log("location: ", location);
+    wechat.request(url, params).then(function (value) {
+      console.log(value.data);
+      app.globalData.address = value.data.result.address_component.street_number || "附近";
+      page.setData({ address: app.globalData.address });
+    }).catch(function (value) {
+      console.log(value)
+      app.globalData.address = "附近";
+      page.setData({ address: "附近" });
+    });
   },
   choosePos: function () {
     console.log("choose pos");
