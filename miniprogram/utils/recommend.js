@@ -39,9 +39,10 @@ class Recommend {
           cardIds.push(card._id);
         }
           
-        cond._id = _.nin(cardIds) //没有阅读过的卡片
-        cond.tags =  _.in(tags)   //当前相关的标签
-        db.collection('attractions').orderBy('priority', 'desc').orderBy('sort_time', 'desc').where(cond).limit(4).get({
+        //cond._id = _.nin(cardIds) //没有阅读过的卡片
+        //cond.tags =  _.in(tags)   //当前相关的标签
+        cond.seek_type = 1 //寻找
+        db.collection('attractions').orderBy('sort_time', 'desc').where(cond).limit(4).get({
           success: res => {
             console.log("cards.1: ");
             console.log(res.data);
@@ -53,7 +54,10 @@ class Recommend {
 
             //2、非同标签下
 
-            cond.tags =  _.nin(tags)  //除了当前的其他标签
+            //cond.tags =  _.nin(tags)  //除了当前的其他标签
+            delete cond.seek_type //排除寻找
+            cond._id = _.nin(cardIds) //没有阅读过的卡片
+            cond.tags =  _.in(tags)   //当前相关的标签
             db.collection('attractions').orderBy('priority', 'desc').orderBy('sort_time', 'desc').where(cond).limit(4).get({
               success: res => {
                 console.log("cards.2: ");

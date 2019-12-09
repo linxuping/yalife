@@ -1,6 +1,7 @@
 // miniprogram/pages/details/details.js
 var db = wx.cloud.database();
 var recommend = require("../../utils/recommend")
+let submessage = require("../../utils/submessage");
 const app = getApp()
 const _ = db.command
 
@@ -38,6 +39,8 @@ Page({
     isAdmin: false,
     openid: "",
     openSwitch: false,
+    source: "",
+    notify_tag: "", //only for continue notify
   },
   showInputBox: function () {
     this.setData({ inputBoxShow: true });
@@ -80,6 +83,8 @@ Page({
       
       if (!!options.source) {
         app.globalData.source = options.source;
+        page.setData({source: options.source});
+        page.setData({notify_tag: decodeURIComponent(options.notify_tag)});
       }
 
       db.collection('attractions').where({
@@ -602,5 +607,20 @@ Page({
         });
       }
     })    
+  },
+  continueSubscribe: function() {
+    var page = this;
+    wx.requestSubscribeMessage({
+      tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
+      success(res) {
+        submessage.add(app.globalData.openid, page.data.card._id, page.data.notify_tag);
+      },
+      fail(res) {
+        wx.showToast({
+          title: '请打开订阅权限',
+        })
+        console.error(res);
+      }
+    })
   }
 })

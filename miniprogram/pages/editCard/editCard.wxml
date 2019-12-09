@@ -52,6 +52,7 @@
         <button formType="submit" style="display:inline;color:blue;font-size:30rpx;padding:0px" class="no-border-btn">{{address || '(请点击选择)'}}</button>
       </form>
     </view>
+    <text>注意！该次订阅为一次性效果，当收到订阅消息后，如果还想继续该订阅，请在详情页下方点击“我要继续订阅消息！”，下次遇到喜欢的就能继续推送给您了。</text>
 
     <form bindsubmit="chooseImage" data-type="{{item}}" report-submit="{{true}}" class="keyword">
       <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 

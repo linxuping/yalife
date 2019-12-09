@@ -265,15 +265,21 @@ Page({
   },
   goAddPage: function () {
     app.addEventLog("into homepage.add");
-    var url = '/pages/editCard/editCard';
-    wx.navigateTo({
-      url: url,
-      fail: function (res) {
-        console.log("go editCard fail: ");
-        console.log(res);
-        wx.redirectTo({
-          url: url,
-        });
+    wx.showActionSheet({
+      itemList: ['订阅（合适的立刻通知我）', '发布'],
+      success: function (e) {
+        console.log(e.tapIndex) //没有item项下的key或index
+        if (e.tapIndex == 1) {
+          app.addEventLog("into index.add.pub");
+          wx.redirectTo({
+            url: '/pages/editCard/editCard',
+          })
+        } else if (e.tapIndex == 0) {
+          app.addEventLog("into index.add.sub");
+          wx.redirectTo({
+            url: '/pages/editCard/editCard?sub=1',
+          })
+        }
       }
     })
   },

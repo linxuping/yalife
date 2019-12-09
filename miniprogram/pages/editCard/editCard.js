@@ -534,7 +534,35 @@ Page({
     app.saveFormid(event.detail.formId, "cmt");
   },
   updateCard: function (event) {
+    console.log("update card.");
     var page = this;
+    var opType = event.currentTarget.dataset.type;
+
+    if (page.data.loading) {
+      wx.showToast({
+        title: '正在上传图片...',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
+    if (event.detail.formId != 'the formId is a mock one') {
+    }
+    console.log("formid: ", event.detail.formId);
+    app.saveFormid(event.detail.formId);
+
+    if (page.data.content == "") {
+      console.log("content empty...");
+      wx.showToast({
+        title: '发布内容为空！',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
+
     if (page.data.isSub == 1) {
       wx.requestSubscribeMessage({
         tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
@@ -570,21 +598,9 @@ Page({
     }
 
     if (event.detail.formId != 'the formId is a mock one') {
-
     }
-    console.log("formid: ");
-    console.log(event.detail.formId);
-    /*wx.showToast({
-      title: event.detail.formId
-    })
-    wx.setClipboardData({
-      data: event.detail.formId,
-      success() {
-        wx.hideToast();   
-      }
-    })*/
+    console.log("formid: ", event.detail.formId);
     app.saveFormid(event.detail.formId);
-    
 
     if (page.data.content == "") {
       console.log("content empty...");
@@ -762,7 +778,7 @@ Page({
       var card = notifyCards[i].card;
       var sub_id = notifyCards[i].sub_id;
       //参考details.getSharePath
-      var path = '/pages/details/details?id=' + card._id + '&latitude=' + card.latitude + '&longitude=' + card.longitude + '&address=' + encodeURIComponent(card.address);
+      var path = '/pages/details/details?id=' + card._id + '&latitude=' + card.latitude + '&longitude=' + card.longitude + '&address=' + encodeURIComponent(card.address) + '&from=notify' + '&tag=' + encodeURIComponent(page.data.card.notify_tag);
       console.log("submessage:",openid,card);
       wx.cloud.callFunction({
         name: 'submessage',
