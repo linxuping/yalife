@@ -533,8 +533,29 @@ Page({
     });
     app.saveFormid(event.detail.formId, "cmt");
   },
-
   updateCard: function (event) {
+    var page = this;
+    if (page.data.isSub == 1) {
+      wx.requestSubscribeMessage({
+        tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
+        success(res) {
+          wx.showToast({
+            title: '订阅成功！',
+          });
+          page._updateCard(event);
+        },
+        fail(res) {
+          wx.showToast({
+            title: '请打开订阅权限',
+          })
+          console.error(res);
+        }
+      })
+    } else {
+      page._updateCard(event);
+    }
+  },
+  _updateCard: function (event) {
     console.log("update card.");
     var page = this;
     var opType = event.currentTarget.dataset.type;

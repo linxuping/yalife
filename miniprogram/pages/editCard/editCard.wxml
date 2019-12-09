@@ -3,8 +3,8 @@
   <image style="width:30px;height:30px;position:fixed;top:4px;left:4px;z-index:1000" src="../../images/back.png" mode="aspectFit" bindtap="goBack"></image>
 
   <view style="width:95%;margin-top:35px;margin-bottom:80px;text-align:center">
-    <textarea placeholder="一堆杂乱闲置的堆在家里？分享给其他邻居当作宝吧，自个家也清爽些！二手、招聘、赠送、求助、租借转让、爱心行动都可。末尾附带联系方式哦～" style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000" auto-height="{{auto_height}}" bindblur='areablur' bindfocus='areafocus'></textarea>
-    <view style="width:100%;text-align:left">
+    <textarea placeholder="{{isSub?'求***一个，有转让的邻居请联系我，联系方式：***':'一堆杂乱闲置的堆在家里？分享给其他邻居当作宝吧，自个家也清爽些！二手、招聘、赠送、求助、租借转让、爱心行动都可。末尾附带联系方式哦～'}}" style="width:auto;text-align:left;min-height:200rpx;max-height:400rpx;background:#EFEFEF;border-radius:4px;padding:4px" value="{{content}}" bindinput="onInput" maxlength="1000" auto-height="{{auto_height}}" bindblur='areablur' bindfocus='areafocus'></textarea>
+    <view style="width:100%;text-align:left;display:none">
       <text style="font-size:8pt">【技巧提醒】您的发布信息也可以不附带联系方式！因为已发布的条目可以在评论区“隐私回复“给您留言的人，避免外露您的联系方式给所有人看！</text>
     </view>  
   <view wx:if="{{isAdmin}}" style="margin-top:8px;border:solid red 1px">
@@ -75,11 +75,11 @@
     <text style="text-decoration:underline" wx:if="{{!!cardId}}" bindtap="onDeleteCard">删除此次发布</text>
   </view>
   <form bindsubmit="updateCard" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">
-    <button formType="submit">修改</button>
+    <button formType="submit">{{isSub?'修改（有符合的主动通知我）':'修改'}}</button>
   </form>
   <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
-    <button formType="submit">发布</button>
+    <button formType="submit">{{isSub?'发布（有符合的主动通知我）':'修改'}}</button>
   </form>
 
-  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px"  bindtap="onSubscribe">有符合的主动通知我</button>
+  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px;display:none"  bindtap="onSubscribe">有符合的主动通知我</button>
 </view>
