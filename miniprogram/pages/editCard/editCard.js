@@ -856,6 +856,9 @@ Page({
   },
   pullNotify: function(event) {
     var page = this;
+    page.setData({
+      notifyCards: []
+    });
     wx.showLoading({
       title: '拉取订阅...',
       mask: true,

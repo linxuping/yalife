@@ -22,7 +22,7 @@
       </view>
     </picker>  
     <input placeholder="输入标签：a,b,c" style="border: dotted 1px" bindinput="getInput" type="text" value="{{ card.tags }}"></input>
-    <view style="width:100%">
+    <view style="width:100%" wx:if="{{!!cardId}}">
       <input placeholder="推送标签" style="border: dotted 1px;display:inline-block" bindinput="onSaveNotifyInput" type="text" value="{{ card.notify_tag }}"></input>
       <button style="font-size:10px;display:inline-block" bindtap="saveNotify">记订阅</button>
       <button style="font-size:10px;display:inline-block" bindtap="pullNotify">拉订阅</button>
@@ -82,5 +82,5 @@
     <button formType="submit">{{isSub?'发布（有符合的主动通知我）':'修改'}}</button>
   </form>
 
-  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px;display:none"  bindtap="onSubscribe">有符合的主动通知我</button>
+  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px"  bindtap="onSubscribe">有符合的主动通知我</button>
 </view>
