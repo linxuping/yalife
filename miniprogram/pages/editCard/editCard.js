@@ -775,7 +775,7 @@ Page({
       })
       //推送给对方，保持对方的打开信息
       var openid = notify_openid;
-      var card = notifyCards[i].card;
+      var card = page.data.card; //notifyCards[i].card;
       var sub_id = notifyCards[i].sub_id;
       //参考details.getSharePath
       var path = '/pages/details/details?id=' + card._id + '&latitude=' + card.latitude + '&longitude=' + card.longitude + '&address=' + encodeURIComponent(card.address) + '&from=notify' + '&tag=' + encodeURIComponent(page.data.card.notify_tag);
