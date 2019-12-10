@@ -11,6 +11,10 @@
     </view>
   </view>
 
+  <form bindsubmit="continueSubscribe" report-submit="{{true}}" class="keyword" wx:if="{{source=='notify' || true}}">
+      <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" >还不满意，我要继续订阅</button> 
+  </form>
+
   <view style="margin-top:36px" wx:if="{{showHome && comments.length==0}}">
     <text style="color:blue;letter-spacing:2px" bindtap="showInputBox">写留言</text>
   </view>

@@ -608,8 +608,9 @@ Page({
       }
     })    
   },
-  continueSubscribe: function() {
+  continueSubscribe: function(event) {
     var page = this;
+    app.saveFormid(event.detail.formId, "cmt");
     wx.requestSubscribeMessage({
       tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
       success(res) {

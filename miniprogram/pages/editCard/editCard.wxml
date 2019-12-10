@@ -52,12 +52,15 @@
         <button formType="submit" style="display:inline;color:blue;font-size:30rpx;padding:0px" class="no-border-btn">{{address || '(请点击选择)'}}</button>
       </form>
     </view>
-    <text wx:if="{{isSub}}" style="font-color:red">注意！该次订阅为一次性效果，当收到订阅消息后，如果还想继续该订阅，请在详情页下方点击“我要继续订阅消息！”，下次遇到喜欢的就能继续推送给您了。</text>
 
     <form bindsubmit="chooseImage" data-type="{{item}}" report-submit="{{true}}" class="keyword">
       <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 
       <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" wx:else>{{loading?'正在上传图片... ...':'更换图片'}}</button> 
     </form>
+
+    <view style="width:100%;text-align:left">
+      <text wx:if="{{isSub}}" style="color:red">注意！该次订阅为一次性效果，当收到订阅消息后，如果还想继续该订阅，请在详情页下方点击“我要继续订阅消息！”，下次遇到喜欢的就能继续推送给您了。</text>
+    </view>
 
     <!-->
     <button class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" bindtap="chooseImage" wx:if="{{imgurls.length==0 && !imgurl}}">{{loading?'正在上传图片... ...':'增加图片'}}</button> 
@@ -79,7 +82,7 @@
     <button formType="submit">{{isSub?'修改（有符合的主动通知我）':'修改'}}</button>
   </form>
   <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
-    <button formType="submit">{{isSub?'发布（有符合的主动通知我）':'修改'}}</button>
+    <button formType="submit">{{isSub?'订阅（有符合的主动通知我）':'发布'}}</button>
   </form>
 
   <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px"  bindtap="onSubscribe">有符合的主动通知我</button>
