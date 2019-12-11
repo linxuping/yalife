@@ -87,6 +87,12 @@ Page({
         page.setData({notify_tag: decodeURIComponent(options.notify_tag)});
       }
 
+      if (!!options.from) {
+        app.globalData.source = options.from;
+        page.setData({source: options.from});
+        page.setData({notify_tag: decodeURIComponent(options.notify_tag)});
+      }
+
       db.collection('attractions').where({
         _id: options.id
       }).get({

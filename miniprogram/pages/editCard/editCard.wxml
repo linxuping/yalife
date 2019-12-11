@@ -78,10 +78,10 @@
 
     <text style="text-decoration:underline" wx:if="{{!!cardId}}" bindtap="onDeleteCard">删除此次发布</text>
   </view>
-  <form bindsubmit="updateCard" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">
+  <form bindtap="updateCard" bindsubmit="saveFormid" data-type="update" report-submit="{{true}}" class="add-btn" wx:if="{{cardId}}">
     <button formType="submit">{{isSub?'修改（有符合的主动通知我）':'修改'}}</button>
   </form>
-  <form bindsubmit="updateCard"  data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
+  <form bindtap="updateCard" bindsubmit="saveFormid" data-type="add" report-submit="{{true}}" class="add-btn" wx:else>
     <button formType="submit">{{isSub?'订阅（有符合的主动通知我）':'发布'}}</button>
   </form>
 

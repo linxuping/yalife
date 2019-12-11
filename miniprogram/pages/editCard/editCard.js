@@ -533,6 +533,12 @@ Page({
     });
     app.saveFormid(event.detail.formId, "cmt");
   },
+  saveFormid: function (event) {
+    if (event.detail.formId != 'the formId is a mock one') {
+    }
+    console.log("formid: ", event.detail.formId);
+    app.saveFormid(event.detail.formId);
+  },
   updateCard: function (event) {
     console.log("update card.");
     var page = this;
@@ -546,11 +552,6 @@ Page({
       })
       return
     }
-
-    if (event.detail.formId != 'the formId is a mock one') {
-    }
-    console.log("formid: ", event.detail.formId);
-    app.saveFormid(event.detail.formId);
 
     if (page.data.content == "") {
       console.log("content empty...");
@@ -807,11 +808,12 @@ Page({
         },
         complete: () => {
           console.log("cloud.submessage complete")
-          if (count >= len) {
+          if (true || count >= len) {
             wx.showToast({
               title: count
             })
 
+            /*
             wx.showLoading({
               title: "submessage_reset...",
             })
@@ -831,11 +833,33 @@ Page({
                 console.log("cloud.submessage_reset complete")
                 wx.hideLoading();
               }
-            });
+            });*/
 
           }
         }
       });
+
+      wx.showLoading({
+        title: "submessage_reset...",
+      })
+      wx.cloud.callFunction({
+        name: 'submessage_reset',
+        data: {
+          sub_id: sub_id
+        },
+        success: res => {
+          console.log("cloud.submessage_reset:", res);
+        },
+        fail: res => {
+          console.log("cloud.submessage_reset:", res);
+          app.save_err(sub_id, res);
+        },
+        complete: () => {
+          console.log("cloud.submessage_reset complete")
+          wx.hideLoading();
+        }
+      });
+
     }
   },
   onSubscribe: function(event) {
@@ -888,11 +912,13 @@ Page({
       success: res => {
         var items = [];
         var selectedOpenids = [];
+        var tmpDic = {};
         for (var i=0; i<res.data.length; i++) {
 
           var card_id = res.data[i].card_id;
           var notify_openid = res.data[i].notify_openid;
           var sub_id = res.data[i]._id;
+          tmpDic[card_id] = res.data[i];
           selectedOpenids.push(notify_openid);
           db.collection('attractions').where({
             _id: card_id
@@ -904,11 +930,11 @@ Page({
                 var card = res2.data[0];
                 console.log("get card:",card);
                 items.push({
-                  name: notify_openid, 
+                  name: card._openid, 
                   value: card.content, 
                   card: card, 
                   checked: 'true',
-                  sub_id: sub_id
+                  sub_id: tmpDic[card._id]._id
                 });
                 page.setData({
                   notifyCards: items,

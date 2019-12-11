@@ -1098,7 +1098,7 @@ Page({
   },
   goAddPage: function () {
     wx.showActionSheet({
-      itemList: ['我要寻找', '我要分享'],
+      itemList: ['订阅(有符合的通知我)', '发布'],
       success: function (e) {
         console.log(e.tapIndex) //没有item项下的key或index
         if (e.tapIndex == 1) {
