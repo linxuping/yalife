@@ -567,14 +567,20 @@ Page({
       wx.requestSubscribeMessage({
         tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
         success(res) {
-          wx.showToast({
-            title: '订阅成功！',
-          });
-          page._updateCard(event);
+          if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+            wx.showToast({
+              title: '订阅成功！',
+            });
+            page._updateCard(event);
+          } else {
+            wx.showToast({
+              title: '没有订阅！',
+            });
+          }
         },
         fail(res) {
           wx.showToast({
-            title: '请打开订阅权限',
+            title: '请开订阅权限',
           })
           console.error(res);
         }
@@ -832,13 +838,22 @@ Page({
       });
     }
   },
-  onSubscribe: function() {
+  onSubscribe: function(event) {
+    var page = this;
     wx.requestSubscribeMessage({
       tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
       success(res) {
-        wx.showToast({
-          title: '订阅成功！',
-        })        
+        console.log(res);
+        if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+          wx.showToast({
+            title: '订阅成功！',
+          });
+          page._updateCard(event);
+        } else {
+          wx.showToast({
+            title: '没有订阅！',
+          });
+        }       
        }
     })
   },

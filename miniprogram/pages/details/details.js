@@ -614,11 +614,20 @@ Page({
     wx.requestSubscribeMessage({
       tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
       success(res) {
-        submessage.add(app.globalData.openid, page.data.card._id, page.data.notify_tag);
+        if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+          wx.showToast({
+            title: '订阅成功！',
+          });
+          submessage.add(app.globalData.openid, page.data.card._id, page.data.notify_tag);
+        } else {
+          wx.showToast({
+            title: '没有订阅！',
+          });
+        } 
       },
       fail(res) {
         wx.showToast({
-          title: '请打开订阅权限',
+          title: '请开订阅权限',
         })
         console.error(res);
       }

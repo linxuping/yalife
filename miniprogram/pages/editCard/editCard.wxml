@@ -59,7 +59,7 @@
     </form>
 
     <view style="width:100%;text-align:left">
-      <text wx:if="{{isSub}}" style="color:red">注意！该次订阅为一次性效果，当收到订阅消息后，如果还想继续该订阅，请在详情页下方点击“我要继续订阅消息！”，下次遇到喜欢的就能继续推送给您了。</text>
+      <text wx:if="{{isSub}}" style="color:red">注意！该次订阅为一次性效果！当收到点开订阅消息后，如果还想继续订阅，请在详情页下方点击“我要继续订阅消息！”，下次遇到匹配的就能继续推送给您了😊</text>
     </view>
 
     <!-->
@@ -85,5 +85,5 @@
     <button formType="submit">{{isSub?'订阅（有符合的主动通知我）':'发布'}}</button>
   </form>
 
-  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px"  bindtap="onSubscribe">有符合的主动通知我</button>
+  <button class="add-btn" data-subscribe="1" data-type="add" style="bottom:50px;display:none"  bindtap="onSubscribe">有符合的主动通知我</button>
 </view>
