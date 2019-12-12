@@ -17,12 +17,12 @@
     <view bindlongpress="onDeleteCard" data-cardid="{{item._id}}" style="width:95%;background-color:#FEFEFE">
       <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; border-bottom: 1px solid #DBDBDB'>
         <!--左边图片-->
-        <view style='width:128rpx; height:128rpx; margin:20rpx;' bindtap="jumpEdit" data-cardid="{{item._id}}">
+        <view style='width:128rpx; height:128rpx; margin:20rpx;' bindtap="jumpEdit" data-sub="{{item.is_sub}}" data-cardid="{{item._id}}">
           <image class='index-logo' style='width:128rpx; height:128rpx; border-radius:8px' src="{{item.imgurl || ((!!item.imgurls && item.imgurls.length>0)?item.imgurls[0]:defaultImg)}}"></image>
         </view>
         <!-- 右边内容 上下结构 -->
         <view style='width:100%'>
-          <view style='width:100%' bindtap="jumpEdit" data-cardid="{{item._id}}">
+          <view style='width:100%' bindtap="jumpEdit" data-sub="{{item.is_sub}}" data-cardid="{{item._id}}">
             <text class='item_title' style="display:block">{{item.content}}</text>
             <text class="cardStatus" wx:if="{{item.is_proxy==1}}">在线</text>
             <text class="cardStatus" wx:elif="{{item.status==2}}">审核中</text>
@@ -33,7 +33,7 @@
             <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
           </view>
           <view style="width:100%;text-align:right" bindtap="jumpDetail" data-cardId="{{item._id}}">
-            <form class="display:inline;margin-right:4px;display:none" bindsubmit="jumpEdit" report-submit="{{true}}" data-cardId="{{item._id}}">
+            <form class="display:inline;margin-right:4px;display:none" bindsubmit="jumpEdit" data-sub="{{item.is_sub}}" report-submit="{{true}}" data-cardId="{{item._id}}">
               <button formType="submit" style="padding:0px;display:inline;margin-left:6px;margin-right:6px;display:none" class="no-border-btn">编辑</button>
             </form>
             <form class="" bindsubmit="goDetail" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.unread_count>0 && item._openid==openid}}">

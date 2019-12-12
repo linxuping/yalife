@@ -164,7 +164,8 @@ Page({
     console.log(event);
     app.saveFormid(event.detail.formId, "cmt");
     var cardId = event.currentTarget.dataset.cardid;
-    var url = '/pages/editCard/editCard?id=' + cardId;
+    var sub = event.currentTarget.dataset.sub;
+    var url = '/pages/editCard/editCard?id=' + cardId + '&sub=' + sub;
     wx.navigateTo({
       url: url,
       fail: function (res) {

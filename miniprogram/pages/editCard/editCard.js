@@ -54,7 +54,7 @@ Page({
     selectedOpenids: "",
     showNotify: false,
     notifyCards: [],
-    isSub: false
+    isSub: 0
   },
 
   /**
@@ -74,7 +74,7 @@ Page({
 
     if (options.sub == 1) {
       page.setData({
-        isSub: true
+        isSub: 1
       });
     }
 
@@ -651,6 +651,7 @@ Page({
       cardData["priority"] = 0
       cardData["finished"] = 0
       cardData["notify_tag"] = ""
+      cardData["is_sub"] = page.data.isSub
       wx.showLoading({
         title: '正在新建...',
         mask: true
