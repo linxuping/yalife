@@ -87,10 +87,10 @@ Page({
         page.setData({notify_tag: decodeURIComponent(options.notify_tag)});
       }
 
-      if (!!options.from) {
+      if (!!options.from && !!options.tag) {
         app.globalData.source = options.from;
         page.setData({source: options.from});
-        page.setData({notify_tag: decodeURIComponent(options.notify_tag)});
+        page.setData({notify_tag: decodeURIComponent(options.tag)});
       }
 
       db.collection('attractions').where({
@@ -614,9 +614,11 @@ Page({
       }
     })    
   },
+  saveFormid: function (event) {
+    app.saveFormid(event.detail.formId, "cmt");
+  },
   continueSubscribe: function(event) {
     var page = this;
-    app.saveFormid(event.detail.formId, "cmt");
     wx.requestSubscribeMessage({
       tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
       success(res) {
