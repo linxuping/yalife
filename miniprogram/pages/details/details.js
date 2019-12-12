@@ -90,7 +90,7 @@ Page({
       if (!!options.from) {
         app.globalData.source = options.from;
         page.setData({source: options.from});
-        page.setData({notify_tag: decodeURIComponent(options.notify_tag)});
+        page.setData({notify_tag: decodeURIComponent(options.tag)});
       }
 
       db.collection('attractions').where({
