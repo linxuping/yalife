@@ -44,7 +44,7 @@
         </view>
         <text wx:if="{{item.reply.anonymous==1 && isAdmin}}" style="color:gray">{{item.reply.content}}（管理员可见）</text>
         <text wx:elif="{{item.reply.anonymous==1 && item.reply._openid==openid}}" style="color:gray">{{item.reply.content}}（该回复仅对方可见）</text>
-        <text wx:elif="{{item.reply.anonymous==1}}" style="color:gray">***（作者已设置仅留言者可见）</text>
+        <text wx:elif="{{item.reply.anonymous==1 && item._openid!=openid}}" style="color:gray">***（作者已设置仅留言者可见）</text>
         <text wx:else>{{item.reply.content}}</text>
         <text style="{{item.reply.status==2?'color:red':''}}">{{isAdmin?" "+item.reply.status:""}}</text>
         <form bindsubmit="delComment" data-isreply="{{1}}" data-cid="{{item.reply._id}}" report-submit="{{true}}">
