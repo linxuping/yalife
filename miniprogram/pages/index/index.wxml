@@ -61,7 +61,7 @@
     </view>  
   </view>
 
-<image mode="aspectFill" style="display:none;width:100%;height:{{screenHeight}}px" src='/images/bg.jpeg'></image>
+<image mode="aspectFill" style="width:120px;height:70px;margin-top:100px;padding-left:35px" src='/images/none.png'wx:if="{{showGoods && goods.length==0}}"></image>
 <view class="{{goods.length>1 ? 'parent':'parent-one'}}">
   <view class="card child" wx:for="{{goods}}" wx:key="key" wx:if="{{showGoods}}" wx:key="_id">
     <!--<navigator url="/pages/details/details?id={{item._id}}" open-type="navigate" >-->

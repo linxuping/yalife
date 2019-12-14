@@ -336,6 +336,7 @@ Page({
 
         if (res.data.length==0 && firstPage) {
           wx.hideLoading();
+          return;
           wx.showModal({
             title: '附近该类别暂空 😊',
             content: '',

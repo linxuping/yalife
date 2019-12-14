@@ -21,15 +21,35 @@ function formatDate(time) {
 
 class ErrorCollect {
   static add(err) {
-    db.collection('error_collect').add({
-      data: {
-        message: err,
-        create_time: formatDate(new Date().getTime()),
-        time: new Date()
+    wx.getSystemInfo({
+      success(res) {
+        console.log("get system: ",res)
+        db.collection('error_collect').add({
+          data: {
+            message: err,
+            create_time: formatDate(new Date().getTime()),
+            time: new Date(),
+            system: res
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(console.error) 
+
+        if (err.indexOf("is not a function") != -1) {
+          wx.showModal({
+            title: '温馨提示',
+            content: '微信版本低，会影响该小程序正常运行哦～',
+            success(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+        }
       }
-    }).then(res => {
-      console.log(res)
-    }).catch(console.error) 
+    })
   };
 }
 module.exports = ErrorCollect;

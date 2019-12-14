@@ -892,7 +892,7 @@ Page({
   },
   saveNotify: function (event) {
     var page = this;
-    submessage.add(page.data.card._openid, page.data.card._id, page.data.card.notify_tag);
+    submessage.add(page.data.card._openid, page.data.card._id, page.data.card.notify_tag, "admin");
   },
   pullNotify: function(event) {
     var page = this;

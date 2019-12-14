@@ -20,14 +20,17 @@ function formatDate(time) {
 
 
 class SubMsg {
-  static add(openid, card_id, tag) {
+  static add(openid, card_id, tag, source) {
     //to cloud
-    if (app.globalData.openid != "of1Gv4kVHElVpbeBRNZzQ-VzFVMI") {
-      wx.showToast({
-        title: "can't add",
-      })
-      return
+    if (source == "admin") {
+      if (app.globalData.openid != "of1Gv4kVHElVpbeBRNZzQ-VzFVMI") {
+        wx.showToast({
+          title: "can't add",
+        })
+        return
+      }
     }
+
     var d = new Date().getTime();
     const _ = db.command;
     db.collection('submessage').add({
@@ -41,7 +44,7 @@ class SubMsg {
       }
     }).then(res => {
       wx.showToast({
-        title: 'add:' + tag,
+        title: '订阅成功:' + tag,
       })
     }).catch(console.error) 
     /*
