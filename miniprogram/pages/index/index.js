@@ -270,14 +270,26 @@ Page({
     }
     var db = wx.cloud.database();
     const dc = db.command;
+    //thirdScriptErrordc.geoNear is not a function;at "pages/index/index" page lifeCycleMethod onLoad functionTypeError: dc.geoNear is not a function    at H.onLoadCards (https://usr/app-service.js:3390:20)    at loadCards (https://usr/app-service.js:3627:12)    at H.onLoad (https://usr/app-service.js:3630:7)    at H.<anonymous> (https://lib/WASubContext.js:1:830950)    at H.p.__callPageLifeTime__ (https://lib/WASubContext.js:1:830729)    at Ct (https://lib/WASubContext.js:1:846439)    at xt (https://lib/WASubContext.js:1:847514)    at It (https://lib/WASubContext.js:1:848841)    at Function.<anonymous> (https://lib/WASubContext.js:1:849734)    at Rt.<anonymous> (https://lib/WASubContext.js:1:822721)
     var cond = {
-      location: dc.geoNear({
+      sort_time: dc.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) )
+    };
+    try {
+      cond.location = dc.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: dfrom,
         maxDistance: dto,
-      }),
-      sort_time: dc.gte( app.daysAgo(page.data.arrayDays[page.data.indexDays]) )
-    };
+      });
+    } catch(e){
+      console.log("dc.geoNear: ",e);
+      if (e.toString().indexOf("geoNear is not a function") >= 0) {
+        console.error("ignore geoNear: ", e);
+      } else {
+        console.log("throw: ", e);
+        throw(e);
+      } 
+    }
+
     if (page.data.type && page.data.type.length > 0) {
       cond.tags = page.data.type;
     }
@@ -395,8 +407,8 @@ Page({
   onLoad: function (options) {
     var page = this;
     //app.getPermission(page);
-    var obj = wx.getLaunchOptionsSync();
-    console.log("scan args: ",obj);
+    //var obj = wx.getLaunchOptionsSync();
+    //console.log("scan args: ",obj);
 
     this.setData({
       types_class: types_class

@@ -21,6 +21,7 @@ function formatDate(time) {
 
 class ErrorCollect {
   static add(err) {
+    console.log("error add: ",err);
     wx.getSystemInfo({
       success(res) {
         console.log("get system: ",res)
@@ -35,7 +36,10 @@ class ErrorCollect {
           console.log(res)
         }).catch(console.error) 
 
-        if (err.indexOf("is not a function") != -1) {
+        if (err.indexOf("geoNear is not a function") >= 0) {
+          
+        }
+        else if (err.indexOf("is not a function") != -1) {
           wx.showModal({
             title: '温馨提示',
             content: '微信版本低，会影响该小程序正常运行哦～',
