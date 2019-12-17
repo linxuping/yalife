@@ -41,6 +41,7 @@ Page({
     openSwitch: false,
     source: "",
     notify_tag: "", //only for continue notify
+    liked: false,
   },
   showInputBox: function () {
     this.setData({ inputBoxShow: true });
@@ -108,7 +109,8 @@ Page({
             card.address = card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
             card.imgurls = card.imgurls || [card.imgurl]
             page.setData({
-              card: card
+              card: card, 
+              liked: (card.help_uids || []).indexOf(app.globalData.openid)>-1
             });
 
             //page.getCardsRelated();
@@ -656,13 +658,13 @@ Page({
       }
     })
   },
-  HelpIt: function(event) {
+  onLike: function(event) {
     var page = this;  
-    var help_uids = page.data.card.help_uids || [];
-    help_uids.push(app.globalData.openid);
-    page.data.card.help_uids = help_uids;
+    //var help_uids = page.data.card.help_uids || [];
+    //help_uids.push(app.globalData.openid);
+    //page.data.card.help_uids = help_uids;
     page.setData({
-      card: card
+      liked: true
     });
     db.collection('attractions').where({
       _id: page.data.cardId
@@ -680,6 +682,9 @@ Page({
             },
             success: res => {
               console.log("card_help succ", page.data.card._id);
+              wx.showToast({
+                title: '感谢点赞哈',
+              })
             },
             fail: err => {
               console.log(err);
@@ -692,4 +697,9 @@ Page({
       }
     });
   },
+  onLike2: function(event) {
+    wx.showToast({
+      title: 'hello\r\nworld,fucking',
+    })
+  }
 })
