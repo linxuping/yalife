@@ -645,6 +645,7 @@ Page({
       cardData["create_time"] = formatTime(new Date)
       cardData["status"] = 2
       cardData["visit_count"] = 1
+      cardData["visit_count_all"] = 1
       cardData["type"] = "邻里"
       cardData["reason"] = ""
       cardData["tags"] = [ "二手" ]

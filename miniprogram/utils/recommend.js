@@ -39,7 +39,7 @@ class Recommend {
           cardIds.push(card._id);
         }
           
-        //cond._id = _.nin(cardIds) //没有阅读过的卡片
+        cond._id = _.nin(cardIds) //没有阅读过的卡片
         //cond.tags =  _.in(tags)   //当前相关的标签
         cond.seek_type = 1 //寻找
         db.collection('attractions').orderBy('sort_time', 'desc').where(cond).limit(4).get({

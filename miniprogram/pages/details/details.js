@@ -131,6 +131,21 @@ Page({
         }
       });
       page.loadComments();
+
+      wx.cloud.callFunction({
+        name: 'visit_count',
+        data: {
+          cardId: page.data.cardId,
+          openid: app.globalData.openid
+        },
+        success: res => {
+          console.log("add visit_count succ", page.data.cardId);
+        },
+        fail: err => {
+          console.log(err);
+        }
+      });
+
     } else {
       page.setData({ showHome: true })
     }
@@ -640,5 +655,41 @@ Page({
         console.error(res);
       }
     })
-  }
+  },
+  HelpIt: function(event) {
+    var page = this;  
+    var help_uids = page.data.card.help_uids || [];
+    help_uids.push(app.globalData.openid);
+    page.data.card.help_uids = help_uids;
+    page.setData({
+      card: card
+    });
+    db.collection('attractions').where({
+      _id: page.data.cardId
+    }).get({
+      success: res => {
+        console.log("details: ");
+        console.log(res.data);
+        var card = res.data[0];
+        if ( (card.help_uids || []).indexOf(app.globalData.openid) == -1 ) {
+          wx.cloud.callFunction({
+            name: 'card_help',
+            data: {
+              cardId: page.data.card._id,
+              openid: app.globalData.openid
+            },
+            success: res => {
+              console.log("card_help succ", page.data.card._id);
+            },
+            fail: err => {
+              console.log(err);
+            }
+          });
+        }
+      },
+      fail: err => {
+        console.error(err);
+      }
+    });
+  },
 })
