@@ -310,5 +310,11 @@ Page({
         })
       }
     });
+  },
+  saveFormid: function (event) {
+    if (event.detail.formId != 'the formId is a mock one') {
+    }
+    console.log("formid: ", event.detail.formId);
+    app.saveFormid(event.detail.formId);
   }
 })
