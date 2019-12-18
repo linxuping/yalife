@@ -44,7 +44,7 @@ class Recommend {
         //cond.tags =  _.in(tags)   //当前相关的标签
         //cond.seek_type = 1 //寻找
         //db.collection('attractions').orderBy('sort_time', 'desc').where(cond).limit(4).get({
-        cond.help_uids_len = _.gte(1) //大于6个有推荐
+        cond.help_uids_len = _.gte(8) //大于6个有推荐
         db.collection('attractions').orderBy('help_uids_len', 'desc').where(cond).limit(4).get({
           success: res => {
             console.log("cards.1: ");

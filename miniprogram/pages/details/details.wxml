@@ -85,7 +85,7 @@
           <view class="mulLine" style="">{{item.content}}</view>
           <view class="address oneLine" style="text-align:right;margin-top:8px;margin-bottom:8px">
             {{item.address}}
-            <view style="display:inline-block" wx:if="{{item.help_uids_len>0}}">
+            <view style="display:inline-block;margin-left:8px" wx:if="{{item.help_uids_len>0}}">
               <image mode="aspectFit" style="width:20px;height:20px" src="/images/like_after.png" />
               {{item.help_uids_len}}
             </view>
