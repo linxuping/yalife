@@ -43,6 +43,7 @@ Page({
     source: "",
     notify_tag: "", //only for continue notify
     liked: false,
+    users: [],
   },
   showInputBox: function () {
     this.setData({ inputBoxShow: true });
@@ -115,6 +116,7 @@ Page({
             });
 
             //page.getCardsRelated();
+            page.loadLikers(card.help_uids);
 
             app.addEventLog("into detail", card);
             
@@ -691,6 +693,8 @@ Page({
               console.log(err);
             }
           });
+          card.help_uids.push(app.globalData.openid);
+          page.loadLikers(card.help_uids);
         }
       },
       fail: err => {
@@ -709,5 +713,11 @@ Page({
       user.update()
       page.onLike()
     }
-  }
+  },
+  loadLikers: function(openids) {
+    var page = this;
+    user.getm(openids, function(users){
+      page.setData({users:users});
+    })
+  },
 })
