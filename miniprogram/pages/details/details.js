@@ -697,9 +697,12 @@ Page({
       }
     });
   },
-  onLike2: function(event) {
-    wx.showToast({
-      title: 'hello\r\nworld,fucking',
-    })
+  bindGetUserInfo: function(e) {
+    var userInfo = e.detail.userInfo;
+    //拒绝 e.detail.userInfo -> undefined
+    console.log("bindGetUserInfo: ", userInfo);
+    if (!!userInfo) {
+      //save user info
+    }
   }
 })
