@@ -60,10 +60,10 @@
   </view>
 
   <view style="width:100%;margin-top:20px;text-align:center" wx:if="{{showHome}}">
-    <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" plain="true" style="border:none;width:100px">
-      <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_before.png" bindtap="onLike" wx:if="{{!liked}}"></image>
-      <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_after.png" bindtap="onLike2" wx:else></image>
+    <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" plain="true" style="border:none;width:100px" wx:if="{{!liked}}">
+      <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_before.png" bindtap="onLike"></image>
     </button>
+    <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_after.png" wx:else></image>
   </view>
 
   <view class="line" wx:if="{{cardList.length>1}}" style="display:none">

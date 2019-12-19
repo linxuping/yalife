@@ -85,5 +85,36 @@ class User {
       }
     })
   };
+
+  static getm(openids, cb, err_cb) {
+    if (!openids || openids.length == 0) {
+      console.log("invalid openids: ", openids);
+      err_cb();
+      return;
+    }
+    const _ = db.command;
+    db.collection('user').where({
+      _openid: _.in(openids)
+    }).get({
+      success: res => {
+        console.log("get users: ", openids, res.data);
+        if (res.data.length > 0) {
+          for (var i=0; i<res.data.length; i++) {
+            if (res.data[i].address == "undefined") {
+              res.data[i].address = "附近";
+            }
+          }
+          cb(res.data);
+        } else {
+          console.log("get user. invalid res", openids, res);
+          err_cb();
+        }
+      },
+      fail: err => {
+        console.log(err);
+        err_cb();
+      }
+    })
+  };
 }
 module.exports = User;

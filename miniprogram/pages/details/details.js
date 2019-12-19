@@ -2,6 +2,7 @@
 var db = wx.cloud.database();
 var recommend = require("../../utils/recommend")
 let submessage = require("../../utils/submessage");
+let user = require("../../utils/user");
 const app = getApp()
 const _ = db.command
 
@@ -658,7 +659,7 @@ Page({
       }
     })
   },
-  onLike: function(event) {
+  onLike: function() {
     var page = this;  
     //var help_uids = page.data.card.help_uids || [];
     //help_uids.push(app.globalData.openid);
@@ -698,11 +699,15 @@ Page({
     });
   },
   bindGetUserInfo: function(e) {
+    var page = this;
     var userInfo = e.detail.userInfo;
     //拒绝 e.detail.userInfo -> undefined
     console.log("bindGetUserInfo: ", userInfo);
     if (!!userInfo) {
       //save user info
+      app.globalData.userInfo = userInfo;
+      user.update()
+      page.onLike()
     }
   }
 })
