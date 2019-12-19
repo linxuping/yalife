@@ -716,7 +716,8 @@ Page({
   },
   loadLikers: function(openids) {
     var page = this;
-    user.getm(openids, 5, function(users){
+    user.getm(openids, 20, function(users){
+      //users = users.concat(users);
       page.setData({users:users});
     })
   },

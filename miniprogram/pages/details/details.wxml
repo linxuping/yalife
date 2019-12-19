@@ -64,6 +64,7 @@
       <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_before.png" bindtap="onLike"></image>
     </button>
     <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_after.png" wx:else></image>
+    <image mode="aspectFit" style="width:20px;height:20px;border-radius:10px;margin-left:2px" src="{{item.userInfo.avatarUrl}}" wx:for="{{users}}"></image>
   </view>
 
   <view class="line" wx:if="{{cardList.length>1}}" style="display:none">
