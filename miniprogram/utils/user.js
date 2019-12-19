@@ -86,7 +86,7 @@ class User {
     })
   };
 
-  static getm(openids, cb, err_cb) {
+  static getm(openids, limit, cb, err_cb) {
     if (!openids || openids.length == 0) {
       console.log("invalid openids: ", openids);
       err_cb();
@@ -95,7 +95,7 @@ class User {
     const _ = db.command;
     db.collection('user').where({
       _openid: _.in(openids)
-    }).get({
+    }).orderBy('sort_time','desc').limit(limit).get({
       success: res => {
         console.log("get users: ", openids, res.data);
         if (res.data.length > 0) {
