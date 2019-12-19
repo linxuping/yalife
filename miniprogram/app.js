@@ -218,6 +218,9 @@ App({
     return lis.indexOf(this.globalData.openid)>=0;
   },
   saveFormid: function(formid, type) {
+    if (!formid) {
+      return
+    }
     var page = this;
     var db = wx.cloud.database();
     const _ = db.command

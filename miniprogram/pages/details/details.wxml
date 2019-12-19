@@ -60,11 +60,11 @@
   </view>
 
   <view style="width:100%;margin-top:20px;text-align:center" wx:if="{{showHome}}">
-    <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" plain="true" style="border:none;width:100px" wx:if="{{!liked}}">
+    <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" plain="true" style="border:none;width:40px;height:30px;display:inline-block" wx:if="{{!liked}}">
       <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_before.png" bindtap="onLike"></image>
     </button>
-    <image mode="aspectFit" style="width:30px;height:30px" src="/images/like_after.png" wx:else></image>
-    <image mode="aspectFit" style="width:20px;height:20px;border-radius:10px;margin-left:2px" src="{{item.userInfo.avatarUrl}}" wx:for="{{users}}"></image>
+    <image mode="aspectFit" style="width:30px;height:30px;display:inline-block" src="/images/like_after.png" wx:else></image>
+    <image mode="aspectFit" style="width:20px;height:20px;border-radius:10px;margin-left:2px;display:inline-block" src="{{item.userInfo.avatarUrl}}" wx:for="{{users}}"></image>
   </view>
 
   <view class="line" wx:if="{{cardList.length>1}}" style="display:none">
