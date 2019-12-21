@@ -145,7 +145,7 @@
         <text style="margin:10px">{{item}}</text>
       </view>-->
       <view style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center" wx:for="{{tags}}" wx:key="id" wx:if="{{item!='高'}}">
-        <form bindsubmit="typeSearch" data-type="{{item}}" report-submit="{{true}}" class="add-btn">
+        <form bindtap="typeSearch" bindsubmit="saveFormid" data-type="{{item}}" report-submit="{{true}}" class="add-btn">
           <button formType="submit" class="keyword">{{item}}</button>
         </form>
       </view>   

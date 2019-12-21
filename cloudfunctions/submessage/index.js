@@ -25,7 +25,7 @@ async function sendTemplateMessage(event) {
         value: event.message,
       },
       thing1: {
-        value: "邻里",
+        value: event.tag || "邻里",
       },
     }
   })

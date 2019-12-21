@@ -33,52 +33,23 @@ class SubMsg {
 
     var d = new Date().getTime();
     const _ = db.command;
+    var data = {
+      notify_openid: openid,
+      notify_tag: tag,
+      card_id: card_id,
+      create_time: d,
+      create_time_str: formatDate(d),
+      address: app.globalData.address,
+      location: db.Geo.Point(app.globalData.longitude, app.globalData.latitude),
+      status: 1 //0:used 2:success
+    };
     db.collection('submessage').add({
-      data: {
-        notify_openid: openid,
-        notify_tag: tag,
-        card_id: card_id,
-        create_time: d,
-        create_time_str: formatDate(d),
-        status: 1
-      }
+      data: data
     }).then(res => {
       wx.showToast({
         title: '订阅成功:' + tag,
       })
     }).catch(console.error) 
-    /*
-    db.collection('submessage').get({
-      data: {
-        notify_openid: openid
-      }
-    }).then(res => {
-      if (res.data.length == 0) {
-        db.collection('submessage').add({
-          data: {
-            notify_openid: openid,
-            notify_tags: [tag],
-            create_time: d,
-            create_time_str: formatDate(d)
-          }
-        }).then(res => {
-          wx.showToast({
-            title: 'add:'+tag,
-          })
-        }).catch(console.error) 
-      } else {
-        db.collection('submessage').doc(res.data[0]._id).update({
-          data: {
-            notify_tags: _.push([tag])
-          }
-        }).then(res => {
-          wx.showToast({
-            title: 'up:' + tag,
-          })
-        }).catch(console.error) 
-      }
-    }).catch(console.error) 
-    */
   };
   
   static fetch(tag, cb) {

@@ -3,6 +3,7 @@ const app = getApp()
 let wechat = require("../../utils/wechat");
 var common = require("../../utils/common.js")
 var user = require("../../utils/user.js")
+let submessage = require("../../utils/submessage");
 var types = [];
 //var types_titles = {};
 var pages = 0;
@@ -934,7 +935,38 @@ Page({
       })
     }
   },
+  saveFormid: function(event){
+    app.saveFormid(event.detail.formId);
+  },
   typeSearch: function(event){
+    var page = this;
+    var type = event.currentTarget.dataset.type;
+    if (type == "全部" || type==undefined) {
+      page.typeSearch2(event);
+      return;
+    }
+    wx.requestSubscribeMessage({
+      tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
+      success(res) {
+        console.log(res);
+        if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+          wx.showToast({
+            title: '订阅成功！',
+          });
+          submessage.add(app.globalData.openid, 0, type);
+          page.typeSearch2(event);
+        } else {
+          wx.showToast({
+            title: '请允许订阅哈~',
+          });
+        }       
+      },
+      fail(res) {
+        console.error(res);
+      }
+    })
+  },
+  typeSearch2: function(event){
     var page = this;
     var distance = page.data.distance;
     if (event.currentTarget.dataset.distance) {
@@ -963,7 +995,6 @@ Page({
     app.globalData.distanceDesc = distanceDesc;
     app.globalData.type = type;
     page.onLoadCards(app.globalData.openid, page.data.latitude, page.data.longitude, 0, parseInt(distance), 20, 0, true, []);
-    app.saveFormid(event.detail.formId);
     user.update();
   },
   onReachBottom: function(){

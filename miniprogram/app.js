@@ -16,6 +16,7 @@ App({
       type: "租卖房", //"二手", 
       index: 2, 
       distance: 15000, //default 15km
+      distanceDefault: 15000, //default 15km
       distanceDesc: "15km内", 
       newestVersion: "",
       tags: [],

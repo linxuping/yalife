@@ -795,6 +795,7 @@ Page({
           path: path,
           openid: openid,
           message: card.content.substr(0,15)+" ...",
+          tag: page.data.card.notify_tag,
         },
         success: res => {
           console.log("cloud.submessage ok:", card, res);
@@ -907,49 +908,70 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     });
-    db.collection('submessage').where({
+    var cond = {
       notify_tag: page.data.card.notify_tag,
       status: 1,
-    }).get({
+    }
+    const dc = db.command;
+    cond.location = dc.geoNear({
+      geometry: db.Geo.Point(page.data.card.longitude, page.data.card.latitude),
+      minDistance: 0,
+      maxDistance: app.globalData.distanceDefault,
+    });
+    db.collection('submessage').where(cond).get({
       success: res => {
         var items = [];
         var selectedOpenids = [];
         var tmpDic = {};
         for (var i=0; i<res.data.length; i++) {
-
           var card_id = res.data[i].card_id;
           var notify_openid = res.data[i].notify_openid;
           var sub_id = res.data[i]._id;
           tmpDic[card_id] = res.data[i];
           selectedOpenids.push(notify_openid);
-          db.collection('attractions').where({
-            _id: card_id
-          }).get({
-            success: res2 => {
-              if (res2.data.length == 0) {
-                console.error("card_id not exists: ", card_id);
-              } else {
-                var card = res2.data[0];
-                console.log("get card:",card);
-                items.push({
-                  name: card._openid, 
-                  value: card.content, 
-                  card: card, 
-                  checked: 'true',
-                  sub_id: tmpDic[card._id]._id
-                });
-                page.setData({
-                  notifyCards: items,
-                  selectedOpenids: selectedOpenids,
-                  showNotify: true
-                })
-                console.log("get card fin.");           
+          if (!!card_id) {
+            db.collection('attractions').where({
+              _id: card_id
+            }).get({
+              success: res2 => {
+                if (res2.data.length == 0) {
+                  console.error("card_id not exists: ", card_id);
+                } else {
+                  var card = res2.data[0];
+                  console.log("get card:",card);
+                  items.push({
+                    name: card._openid, 
+                    value: card.content, 
+                    card: card, 
+                    checked: 'true',
+                    sub_id: tmpDic[card._id]._id
+                  });
+                  page.setData({
+                    notifyCards: items,
+                    selectedOpenids: selectedOpenids,
+                    showNotify: true
+                  })
+                  console.log("get card fin.");           
+                }
+              },
+              fail: res2 => {
+                console.error(res2);
               }
-            },
-            fail: res2 => {
-              console.error(res2);
-            }
-          });
+            });
+          } else {
+            items.push({
+              name: notify_openid, 
+              value: notify_openid, 
+              card: {}, 
+              checked: 'true',
+              sub_id: sub_id
+            });
+            page.setData({
+              notifyCards: items,
+              selectedOpenids: selectedOpenids,
+              showNotify: true
+            })
+          }
 
         }
         wx.hideLoading();
