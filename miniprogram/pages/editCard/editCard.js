@@ -54,7 +54,8 @@ Page({
     selectedOpenids: "",
     showNotify: false,
     notifyCards: [],
-    isSub: 0
+    isSub: 0,
+    tagsCalc: ""
   },
 
   /**
@@ -124,7 +125,16 @@ Page({
         fail: err => {
           console.log(err);
         }
-      })      
+      });      
+      if (page.data.isAdmin) {
+        submessage.fetchNoSend(function(dic){
+          var s = "订阅：";
+          for (var key in dic) { 
+            s += (key+":"+dic[key]+" ");
+          }
+          page.setData({tagsCalc:s});
+        });
+      }
     } else {
       console.log("get location:");
       if (app.globalData.address) {

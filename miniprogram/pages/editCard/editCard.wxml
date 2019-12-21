@@ -30,6 +30,7 @@
     <button bindtap="auditOk">通过</button> 
     <input placeholder="下线原因" style="border: dotted 1px" bindinput="getReason" type="text"></input>
     <button bindtap="auditFail">不通过</button>
+    <text >{{tagsCalc}}</text>
   </view>
   <view wx:if="{{isAdmin && showNotify}}" style="margin-top:8px;border:solid blue 1px">
     <text style="width:100%;background-color:#CDCDCD;display:none"> 通知 </text>

@@ -70,5 +70,24 @@ class SubMsg {
       }
     })
   };
+
+  static fetchNoSend(cb) {
+    db.collection('submessage').where({
+      status: 1
+    }).get({
+      success: res => {
+        console.log("fetch submessage result: ", res.data);
+        var openids = [];
+        var tmpdic = {};
+        for (var i=0; i<res.data.length; i++) {
+          tmpdic[ res.data[i].notify_tag ] = (tmpdic[ res.data[i].notify_tag ] || 0) + 1;
+        }
+        cb(tmpdic)
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })
+  };
 }
 module.exports = SubMsg;
