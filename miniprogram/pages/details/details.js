@@ -708,6 +708,7 @@ Page({
     var userInfo = e.detail.userInfo;
     //拒绝 e.detail.userInfo -> undefined
     console.log("bindGetUserInfo: ", userInfo);
+    app.addEventLog("like.add", page.data.card._id, userInfo);
     if (!!userInfo) {
       //save user info
       app.globalData.userInfo = userInfo;

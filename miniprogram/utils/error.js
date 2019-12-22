@@ -43,6 +43,8 @@ class ErrorCollect {
       console.log(res)
     }).catch(console.error) 
 
+    /*if (typeof err.indexOf != "function") { 
+    }*/
     if (err.indexOf("geoNear is not a function") >= 0) {
       
     }

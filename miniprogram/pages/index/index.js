@@ -964,12 +964,14 @@ Page({
         success(res) {
           console.log(res);
           if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+            app.addEventLog("sub.accept", type);
             wx.showToast({
               title: '订阅成功！',
             });
             submessage.add(app.globalData.openid, 0, type);
             page.typeSearch2(event);
           } else {
+            app.addEventLog("sub.reject", type);
             wx.showToast({
               title: '请先订阅哈~',
             });
