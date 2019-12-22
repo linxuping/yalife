@@ -80,12 +80,37 @@ class SubMsg {
         var openids = [];
         var tmpdic = {};
         for (var i=0; i<res.data.length; i++) {
+          if (app.getAdmins().indexOf(res.data[i].notify_openid) >= 0) {
+            continue
+          }
           tmpdic[ res.data[i].notify_tag ] = (tmpdic[ res.data[i].notify_tag ] || 0) + 1;
         }
         cb(tmpdic)
       },
       fail: err => {
         console.log(err);
+      }
+    })
+  };
+
+  static getTags(cb) {
+    db.collection('submessage').where({
+      status: 1,
+      notify_openid: app.globalData.openid,
+    }).get({
+      success: res => {
+        console.log("fetch submessage result: ", res.data);
+        var tags = [];
+        for (var i=0; i<res.data.length; i++) {
+          if (tags.indexOf(res.data[i].notify_tag) >= 0) 
+            continue
+          tags.push(res.data[i].notify_tag);
+        }
+        cb(tags);
+      },
+      fail: err => {
+        console.log(err);
+        cb([]);
       }
     })
   };

@@ -47,8 +47,7 @@ class Recommend {
         cond.help_uids_len = _.gte(8) //大于6个有推荐
         db.collection('attractions').orderBy('help_uids_len', 'desc').where(cond).limit(4).get({
           success: res => {
-            console.log("cards.1: ");
-            console.log(res.data);
+            console.log("cards.help_uids_len>8: ", res.data);
             for (var i=0; i<res.data.length; i++) {
               res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
             }
@@ -89,11 +88,29 @@ class Recommend {
         })  
 
         delete cond.help_uids_len
-        cond.seek_type = 1 //寻找
+        cond.is_sub = 1 //寻找
         db.collection('attractions').orderBy('sort_time', 'desc').where(cond).limit(4).get({
           success: res => {
-            console.log("cards.2: ");
-            console.log(res.data);
+            console.log("cards.is_sub=1: ", res.data);
+            for (var i = 0; i < res.data.length; i++) {
+              res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
+            }
+            if (res.data.length > 0) {
+              cards = cards.concat(res.data) //插入尾部
+              //返回渲染
+              cb(cards); //全部更新
+            }
+          },
+          fail: err => {
+            console.log(err);
+          }
+        })
+
+        //delete cond.help_uids_len
+        cond.is_sub = 0 //非寻找
+        db.collection('attractions').orderBy('sort_time', 'desc').where(cond).limit(4).get({
+          success: res => {
+            console.log("cards.is_sub=0: ", res.data);
             for (var i = 0; i < res.data.length; i++) {
               res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
             }
