@@ -127,7 +127,7 @@ Page({
         }
       });      
       if (page.data.isAdmin) {
-        submessage.fetchNoSend(function(dic){
+        submessage.fetchNoSend(page.data.card, function(dic){
           var s = "非Admin订阅：";
           for (var key in dic) { 
             s += (key+":"+dic[key]+" ");
