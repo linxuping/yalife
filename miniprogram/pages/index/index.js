@@ -744,7 +744,7 @@ Page({
       }
       tags.sort(
         function compareFunction(param1, param2) {
-          return param1.localeCompare(param2,"zh");
+          return param1.localeCompare(param2,'zh-Hans-CN',{sensitivity: 'accent'});
       });
       tags.push("全部"); 
       if (tags.length == 0) {
