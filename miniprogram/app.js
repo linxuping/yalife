@@ -212,6 +212,9 @@ App({
       }
     })
   },
+  getAdmins() {
+    return ["oV5MQ5YBim_nRH66WxfWLGVcW7yc", "of1Gv4kVHElVpbeBRNZzQ-VzFVMI", "of1Gv4iy9Gh2wQnpp9o3vq45SVWk"];
+  },
   isAdmin() {
     //return false;
     console.log("isAdmin: " + this.globalData.openid);

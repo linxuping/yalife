@@ -128,7 +128,7 @@ Page({
       });      
       if (page.data.isAdmin) {
         submessage.fetchNoSend(function(dic){
-          var s = "订阅：";
+          var s = "非Admin订阅：";
           for (var key in dic) { 
             s += (key+":"+dic[key]+" ");
           }
@@ -821,10 +821,11 @@ Page({
         },
         complete: () => {
           console.log("cloud.submessage complete")
-          if (true || count >= len) {
+          if (count >= len) {
             wx.showToast({
               title: count
             })
+            wx.hideLoading();
 
             /*
             wx.showLoading({
@@ -971,7 +972,7 @@ Page({
           } else {
             items.push({
               name: notify_openid, 
-              value: notify_openid, 
+              value: res.data[i].address + notify_openid, 
               card: {}, 
               checked: 'true',
               sub_id: sub_id

@@ -208,7 +208,8 @@ Page({
     curTabDays: 1,
     currentDays: 1,
     filterDays: 3,
-    screenHeight: 0
+    screenHeight: 0,
+    subTags: [],
   },
 
   selectTab(e) {
@@ -260,6 +261,7 @@ Page({
 
   onLoadCards: function (openid, latitude, longitude, dfrom, dto, limit, offset, firstPage, lis) {
     var page = this;
+    page.initSubTags();
     console.log("onLoadCards: ", openid, latitude, longitude, dfrom, dto, limit, offset, firstPage, lis.length, page.data);
     if (openid == "") {
       console.log("no openid");
@@ -404,7 +406,13 @@ Page({
       }
     });
   },
-
+  initSubTags: function() {
+    var page = this;
+    submessage.getTags(function(tags){
+      console.log("subTags: ",tags);
+      page.setData({subTags:tags});
+    });
+  },
   onLoad: function (options) {
     var page = this;
     //app.getPermission(page);
@@ -489,6 +497,8 @@ Page({
         }); 
       }
     });
+
+    //page.initSubTags();
 
     /*
     const $ = db.command.aggregate
@@ -945,26 +955,34 @@ Page({
       page.typeSearch2(event);
       return;
     }
-    wx.requestSubscribeMessage({
-      tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
-      success(res) {
-        console.log(res);
-        if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
-          wx.showToast({
-            title: '订阅成功！',
-          });
-          submessage.add(app.globalData.openid, 0, type);
-          page.typeSearch2(event);
-        } else {
-          wx.showToast({
-            title: '请允许订阅哈~',
-          });
-        }       
-      },
-      fail(res) {
-        console.error(res);
-      }
-    })
+
+    if (page.data.subTags.indexOf(type) >= 0) {
+      page.typeSearch2(event);
+    } else {
+      wx.requestSubscribeMessage({
+        tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
+        success(res) {
+          console.log(res);
+          if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+            app.addEventLog("sub.accept", type);
+            wx.showToast({
+              title: '订阅成功！',
+            });
+            submessage.add(app.globalData.openid, 0, type);
+            page.typeSearch2(event);
+          } else {
+            app.addEventLog("sub.reject", type);
+            wx.showToast({
+              title: '请先订阅哈~',
+            });
+          }       
+        },
+        fail(res) {
+          console.error(res);
+        }
+      })        
+    }
+
   },
   typeSearch2: function(event){
     var page = this;
@@ -978,6 +996,7 @@ Page({
     if (type == "全部" || type==undefined) {
       type = "" 
     }
+
     /*if (type == "全部" ) {
       type = "" 
     } else if (!type) {

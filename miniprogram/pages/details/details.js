@@ -122,7 +122,7 @@ Page({
             
             var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
             var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
-            var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
+            var address = (!!page.data.addressShared && page.data.addressShared != "undefined") ? page.data.addressShared : app.globalData.address;
             recommend.get(card, latitude, longitude, function(cards){
               console.log("recommend cb: ");
               console.log(cards);
@@ -258,8 +258,9 @@ Page({
     var cardId = event.currentTarget.dataset.cardid;
     var latitude = page.data.latitudeShared > 0 ? page.data.latitudeShared : app.globalData.latitude;
     var longitude = page.data.longitudeShared > 0 ? page.data.longitudeShared : app.globalData.longitude;
-    var address = !!page.data.addressShared ? page.data.addressShared : app.globalData.address;
+    var address = (!!page.data.addressShared && page.data.addressShared!="undefined") ? page.data.addressShared : app.globalData.address;
     var url = "/pages/details/details?id=" + cardId + "&latitude=" + latitude + "&longitude=" + longitude + '&address=' + encodeURIComponent(address);
+    console.log("goDetails url: ", url, page.data.addressShared, app.globalData.address);
     wx.navigateTo({
       url: url,
       success: function (res) {
@@ -646,7 +647,7 @@ Page({
           wx.showToast({
             title: '订阅成功！',
           });
-          submessage.add(app.globalData.openid, page.data.card._id, page.data.notify_tag);
+          submessage.add(app.globalData.openid, 0, page.data.notify_tag);
         } else {
           wx.showToast({
             title: '没有订阅！',
@@ -707,6 +708,7 @@ Page({
     var userInfo = e.detail.userInfo;
     //拒绝 e.detail.userInfo -> undefined
     console.log("bindGetUserInfo: ", userInfo);
+    app.addEventLog("like.add", page.data.card._id, userInfo);
     if (!!userInfo) {
       //save user info
       app.globalData.userInfo = userInfo;
