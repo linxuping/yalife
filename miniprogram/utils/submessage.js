@@ -94,19 +94,31 @@ class SubMsg {
   };
 
   static getTags(cb) {
-    db.collection('submessage').where({
+    var offset = 0;
+    var limit = 20;
+    var tags = [];
+    SubMsg.getTags2(offset,limit,tags,cb);
+  };
+
+  static getTags2(offset,limit,tags,cb) {
+    db.collection('submessage').skip(offset).limit(limit).where({
       status: 1,
       notify_openid: app.globalData.openid,
     }).get({
       success: res => {
         console.log("fetch submessage result: ", res.data);
-        var tags = [];
         for (var i=0; i<res.data.length; i++) {
           if (tags.indexOf(res.data[i].notify_tag) >= 0) 
             continue
           tags.push(res.data[i].notify_tag);
         }
-        cb(tags);
+        console.log("SubMsg.getTags2: ",offset,limit,res.data.length);
+        if (res.data.length == limit) {
+          offset = offset+limit;
+          SubMsg.getTags2(offset,limit,tags,cb);
+        } else {
+          cb(tags);
+        }
       },
       fail: err => {
         console.log(err);

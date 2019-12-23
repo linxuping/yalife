@@ -19,6 +19,7 @@ App({
       distanceDefault: 15000, //default 15km
       distanceDesc: "15km内", 
       newestVersion: "",
+      tags0: [],
       tags: [],
       days: this.daysAgo(7),
       indexDays: 2,  //[1,3,7,15]

@@ -144,11 +144,16 @@
       <!--<view bindtap="typeSearch" data-type="{{item}}" style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center;margin-top:8px" wx:for="{{tags}}" wx:if="{{item!='高'}}">
         <text style="margin:10px">{{item}}</text>
       </view>-->
-      <view style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center" wx:for="{{tags}}" wx:key="id" wx:if="{{item!='高'}}">
+      <view style="margin:1%;display:inline-block;background-color:#E8E8E8;width:23%;text-align:center" wx:for="{{tags0}}" wx:key="id">
         <form bindtap="typeSearch" bindsubmit="saveFormid" data-type="{{item}}" report-submit="{{true}}" class="add-btn">
           <button formType="submit" class="keyword">{{item}}</button>
         </form>
       </view>   
+      <view style="margin:1%;display:inline-block;background-color:#EFEFEF;width:23%;text-align:center" wx:for="{{tags}}" wx:key="id">
+        <form bindtap="typeSearch" bindsubmit="saveFormid" data-type="{{item}}" report-submit="{{true}}" class="add-btn">
+          <button formType="submit" class="keyword">{{item}}</button>
+        </form>
+      </view>
     </view>
     <view style="display:none">
       <view bindtap="typeSearch" data-type="{{item}}" style="margin:10px;display:inline-block;background-color:#CDCDCD;border-radius:8px" wx:for="{{tags}}" wx:key="id" wx:if="{{item!='高'}}">

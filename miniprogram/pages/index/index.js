@@ -200,6 +200,7 @@ Page({
     typeImgHeight: 0,
     typeImgHeight2: 0,
     type: app.globalData.type,
+    tags0: [],
     tags: [],
     index: app.globalData.index, //15km
     array: ['3km内', '8km内', '15km内'],
@@ -682,7 +683,7 @@ Page({
               var ver = res.data[0]._id
               if (app.globalData.newestVersion==ver && app.globalData.tags.length>0){
                 console.log("hit tags and return: ", ver, app.globalData.tags);
-                page.setData({ tags: app.globalData.tags });
+                page.setData({ tags: app.globalData.tags, tags0: app.globalData.tags0 || [] });
                 if (showLoading) {
                   wx.hideLoading();
                 }
@@ -712,6 +713,7 @@ Page({
     }
     loadTagPages(function(){
       var dic = {};
+      var tagsDef = ["招聘","租卖房","租车位","儿童"];
       for (var i=0; i<cards.length; i++) {
         var tmpTags = cards[i].tags;
         if (tmpTags==undefined || tmpTags.length==0) {
@@ -729,26 +731,21 @@ Page({
 
       var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a] });
       var tags = [];
-      var tags2 = [];
+      var tags0 = [];
       for(var key in res2){
         var tag = res2[key];
         if (tag == "二手")
           continue
-        if (dic[tag] > 1)
-          tags.push(tag)
-        else
-          tags2.push(tag)
+        if (tagsDef.indexOf(tag) >= 0) {
+          tags0.push(tag)
+          continue
+        }
+        tags.push(tag)
       }
-      if (tags.length > 4) {
-        var tags_1 = tags.slice(0,4);
-        var tags_2 = tags.slice(4);
-        //tags_1.push("");
-        tags_2.sort(function(a,b){ return a.length-b.length }); 
-        tags = tags_1.concat(tags_2);
-      }
-      //tags.push("");
-      tags2.sort(function(a,b){ return a.length-b.length }); 
-      tags = tags.concat(tags2); 
+      tags.sort(
+        function compareFunction(param1, param2) {
+          return param1.localeCompare(param2,"zh");
+      });
       tags.push("全部"); 
       if (tags.length == 0) {
         wx.showToast({
@@ -756,51 +753,11 @@ Page({
           duration: 3000
         })
       }
-      page.setData({ tags: tags }); 
+      page.setData({ tags: tags, tags0: tags0 }); 
       app.globalData.tags = tags;
+      app.globalData.tags0 = tags0;
       wx.hideLoading();
     });
-    /*
-    db.collection('attractions').where(cond).orderBy("sort_time", "desc").get({
-      success: res => {
-        console.log("get tags: ");
-        console.log(res.data);
-        var dic = {};
-        for (var i=0; i<res.data.length; i++) {
-          var tmpTags = res.data[i].tags;
-          if (tmpTags==undefined || tmpTags.length==0) {
-            continue
-          }
-          for (var j=0; j<tmpTags.length; j++) {
-            var tag = tmpTags[j];
-            if (dic[tag] == undefined) {
-              dic[tag] = 1
-            } else {
-              dic[tag] = dic[tag] + 1
-            }
-          }
-        }
-
-        var res2 = Object.keys(dic).sort(function(a,b){ return dic[b]-dic[a]; });
-        var tags = [];
-        for(var key in res2){
-          tags.push(res2[key])
-        }
-        if (tags.length > 0) {
-          tags.push("全部");         
-        } else {
-          wx.showToast({
-            title: '未搜到分享信息...',
-          })
-        }
-        page.setData({ tags: tags }); 
-        wx.hideLoading();
-      },
-      fail: err => {
-        console.log(err);
-        wx.hideLoading();
-      }
-    })*/
   },
   /**
    * 生命周期函数--监听页面隐藏

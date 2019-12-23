@@ -132,4 +132,6 @@
           </form>
         </view>
       </view>
+<ad unit-id="adunit-d5a8b69a87f99f3f" ad-type="grid" grid-opacity="0.8" grid-count="5" ad-theme="white" wx:if="{{card && showHome}}"></ad>
+<ad unit-id="adunit-6eb0419269123145" wx:if="{{card && showHome}}"></ad>
 </view>

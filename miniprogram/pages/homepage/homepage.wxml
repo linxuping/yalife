@@ -66,4 +66,6 @@
   <view class="add-btn" style="width:150%;text-align:center">
     <image style="width:55px;height:55px;bottom:8px;z-index:1000" src="../../images/new.png" mode="aspectFit" bindtap="goAddPage"></image>
   </view>
+<ad unit-id="adunit-d5a8b69a87f99f3f" ad-type="grid" grid-opacity="0.8" grid-count="5" ad-theme="white"></ad>
+<ad unit-id="adunit-6eb0419269123145"></ad>
 </view>
