@@ -43,7 +43,7 @@ async function sendTemplateMessage(event) {
   const sendResult = await cloud.openapi.subscribeMessage.send({
     touser: event.openid,
     templateId: templateId,
-    page: path,
+    page: page,
     data: {
       thing5: {
         value: event.message.substr(0,15)+" ...",

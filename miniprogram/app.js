@@ -564,7 +564,7 @@ App({
     
     var funcname = "submessage"
     if (type == "audit") {
-      funcname = "submessage"
+      funcname = "submessage_audit"
     } else if (type == "ask") {
       console.log("发送留言信息：");
       funcname = "submessage_ask"

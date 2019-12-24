@@ -269,7 +269,7 @@ Page({
       name: 'audit_status',
       data: args,
       success: res => {
-        app.push("audit", args, function (res) {
+        app.pushSub("audit", args, function (res) {
           wx.hideLoading()
           wx.redirectTo({
             url: '/pages/homepage/homepage',
