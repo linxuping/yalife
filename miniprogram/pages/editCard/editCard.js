@@ -304,7 +304,7 @@ Page({
                   };
                   console.log("发送message：", args2);
                   wx.cloud.callFunction({
-                    name: 'unimessage',
+                    name: 'submessage_audit',
                     data: args2,
                     success: res => {
                       console.log("cloud.unimessage:", res);
@@ -574,17 +574,22 @@ Page({
       return
     }
 
+    //j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg 新动态发布提醒
+    //zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w 留言提醒
+    var tmplIds = ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg','zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w']; //
 
     if (page.data.isSub == 1) {
       wx.requestSubscribeMessage({
-        tmplIds: ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'],
+        tmplIds: tmplIds,
         success(res) {
-          if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg'] == "accept") {
+          if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg']=="accept" && res['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w']=="accept") {
+            app.addEventLog("sub.accept", "card.new & cmt.ask");
             wx.showToast({
               title: '订阅成功！',
             });
             page._updateCard(event);
           } else {
+            app.addEventLog("sub.reject", "card.new & cmt.ask");
             wx.showToast({
               title: '没有订阅！',
             });

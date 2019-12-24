@@ -356,20 +356,34 @@ Page({
   addComment: function(event) {
     var page = this;
     if (page.data.replyId.length > 0) {
-      //reply.
-      page.addComment2(event);
+      tmplIds: ['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w'], //留言提醒
+      success(res) {
+        console.log(res);
+        if (res['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w'] == "accept") {
+          app.addEventLog("sub.accept", "cmt.ask");
+          page.addComment2(event);
+        } else {
+          app.addEventLog("sub.reject", "cmt.ask");
+          wx.showToast({
+            title: '请先订阅哈~',
+          });
+        }       
+      },
+      fail(res) {
+        console.error(res);
+      }
       return;
     }
     //ask.
     wx.requestSubscribeMessage({
-      tmplIds: ['q69f2LmSJYX6qQF9hjZIWUlmR2-oiUhYARGSPc4-h78'],
+      tmplIds: ['q69f2LmSJYX6qQF9hjZIWUlmR2-oiUhYARGSPc4-h78'],  //留言回复提醒
       success(res) {
         console.log(res);
         if (res['q69f2LmSJYX6qQF9hjZIWUlmR2-oiUhYARGSPc4-h78'] == "accept") {
           app.addEventLog("sub.accept", "cmt.reply");
           page.addComment2(event);
         } else {
-          app.addEventLog("sub.reject", "audit & reply");
+          app.addEventLog("sub.reject", "cmt.reply");
           wx.showToast({
             title: '请先订阅哈~',
           });
