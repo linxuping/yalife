@@ -574,22 +574,23 @@ Page({
       return
     }
 
-    //j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg 新动态发布提醒
-    //zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w 留言提醒
-    var tmplIds = ['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg','zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w']; //
+    var tmpAudit = "0L8j-6hFwCTKqVkeYh8eZPmnppybm-X0MOEMxGJuW_0" //审核结果提醒
+    var tmpSub   = "j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg" //新动态发布提醒
+    var tmpAsk   = "zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w" //留言提醒
 
     if (page.data.isSub == 1) {
+      var tmplIds = [tmpAudit, tmpSub, tmpAsk]; //
       wx.requestSubscribeMessage({
         tmplIds: tmplIds,
         success(res) {
-          if (res['j-4XK2DeMlOsMyNsyn06oXor6L_tL9aQhfMrNk6Gpzg']=="accept" && res['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w']=="accept") {
-            app.addEventLog("sub.accept", "card.new & cmt.ask");
+          if (res[tmpAudit]=="accept" && res[tmpSub]=="accept" && res[tmpAsk]=="accept") {
+            app.addEventLog("sub.accept", "audit & sub.new & cmt.ask");
             wx.showToast({
               title: '订阅成功！',
             });
             page._updateCard(event);
           } else {
-            app.addEventLog("sub.reject", "card.new & cmt.ask");
+            app.addEventLog("sub.reject", "audit & sub.new & cmt.ask");
             wx.showToast({
               title: '没有订阅！',
             });
@@ -603,7 +604,30 @@ Page({
         }
       })
     } else {
-      page._updateCard(event);
+      var tmplIds = [tmpAudit, tmpAsk]; //
+      wx.requestSubscribeMessage({
+        tmplIds: tmplIds,
+        success(res) {
+          if (res[tmpAudit]=="accept" && res[tmpAsk]=="accept") {
+            app.addEventLog("sub.accept", "audit & cmt.ask");
+            wx.showToast({
+              title: '订阅成功！',
+            });
+            page._updateCard(event);
+          } else {
+            app.addEventLog("sub.reject", "audit & cmt.ask");
+            wx.showToast({
+              title: '没有订阅！',
+            });
+          }
+        },
+        fail(res) {
+          wx.showToast({
+            title: '请开订阅权限',
+          })
+          console.error(res);
+        }
+      })
     }
   },
   _updateCard: function (event) {
