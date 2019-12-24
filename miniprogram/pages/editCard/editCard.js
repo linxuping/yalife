@@ -120,21 +120,22 @@ Page({
                 }
               })
             }
+            if (page.data.isAdmin) {
+              console.log("fetchNoSend.card: ",card);
+              submessage.fetchNoSend(card, function(dic){
+                var s = "非Admin订阅：";
+                for (var key in dic) { 
+                  s += (key+":"+dic[key]+" ");
+                }
+                page.setData({tagsCalc:s});
+              });
+            }
           }
         },
         fail: err => {
           console.log(err);
         }
       });      
-      if (page.data.isAdmin) {
-        submessage.fetchNoSend(page.data.card, function(dic){
-          var s = "非Admin订阅：";
-          for (var key in dic) { 
-            s += (key+":"+dic[key]+" ");
-          }
-          page.setData({tagsCalc:s});
-        });
-      }
     } else {
       console.log("get location:");
       if (app.globalData.address) {
