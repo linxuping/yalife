@@ -46,10 +46,10 @@ async function sendTemplateMessage(event) {
     page: page,
     data: {
       thing5: {
-        value: event.message.substr(0,15)+" ...",
+        value: event.title.substr(0,15)+" ...",
       },
       phrase1: {
-        value: event.title,
+        value: event.message,
       },
     }
   })
