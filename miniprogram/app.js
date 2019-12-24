@@ -556,6 +556,41 @@ App({
       console.error(err)
       app.save_err(args.openid, err);
     });
+  },
+  pushSub: function(type, args, cb) {
+    console.log("push: ", type, args, cb,);
+    var page = this;
+    var db = wx.cloud.database();
+    
+    var funcname = "submessage"
+    if (type == "audit") {
+      funcname = "submessage"
+    } else if (type == "ask") {
+      console.log("发送留言信息：");
+      funcname = "submessage_ask"
+    } else if (type == "reply") {
+      console.log("发送回复信息")
+      funcname = "submessage_reply"
+    }
+    console.log("cloud.callFunction: ",funcname,args);
+    wx.cloud.callFunction({
+      name: funcname,
+      data: args,
+      success: res => {
+        console.log("cloud.call:", funcname, res);
+        wx.showToast({
+          title: '发送成功！',
+        })
+        cb();
+      },
+      fail: res => {
+        console.error(res);
+      },
+      complete: () => {
+        console.log("cloud.call complete", funcname)
+      }
+    });
+    
   }
 })
 

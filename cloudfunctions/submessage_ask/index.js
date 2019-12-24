@@ -42,7 +42,7 @@ async function sendTemplateMessage(event) {
         value: getNowStr(),
       },
       thing1: {
-        value: event.message.substr(0,15)+" ...",
+        value: event.content.substr(0,15)+" ...",
       },
     }
   })

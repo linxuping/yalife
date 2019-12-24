@@ -127,7 +127,7 @@
         <view class='input-box' style="bottom:">
           <textarea class="textarea" placeholder="请输入你的看法" show-confirm-bar="{{false}}" adjust-position="{{true}}" auto-focus="{{true}}" bindinput="onCmtChanged" />
           <switch type="switch" bindchange="switchChange" wx:if="{{!!replyId}}" style="margin-top:8px">回复仅对方可见</switch>
-          <form class='send' bindsubmit="addComment" report-submit="{{true}}" style="float:right">
+          <form class='send' bindsubmit="saveFormid" bindtap="addComment" report-submit="{{true}}" style="float:right">
             <button formType="submit" class="no-border-btn" style="background-color:#DEDEDE;border-radius:100px">发送</button>
           </form>
         </view>

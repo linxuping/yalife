@@ -323,12 +323,12 @@ Page({
       }
     });
   },
-  addComment: function(event) {
+  addComment2: function(event) {
     var page = this;
     wx.showLoading({
       title: '正在新增...',
     })
-    app.saveFormid(event.detail.formId, "cmt");
+    //app.saveFormid(event.detail.formId, "cmt");
     db.collection('comment').add({
       // data 字段表示需新增的 JSON 数据
       data: {
@@ -352,6 +352,33 @@ Page({
         wx.hideLoading();
       }
     });
+  },
+  addComment: function(event) {
+    var page = this;
+    if (page.data.replyId.length > 0) {
+      //reply.
+      page.addComment2(event);
+      return;
+    }
+    //ask.
+    wx.requestSubscribeMessage({
+      tmplIds: ['q69f2LmSJYX6qQF9hjZIWUlmR2-oiUhYARGSPc4-h78'],
+      success(res) {
+        console.log(res);
+        if (res['q69f2LmSJYX6qQF9hjZIWUlmR2-oiUhYARGSPc4-h78'] == "accept") {
+          app.addEventLog("sub.accept", "cmt.reply");
+          page.addComment2(event);
+        } else {
+          app.addEventLog("sub.reject", "audit & reply");
+          wx.showToast({
+            title: '请先订阅哈~',
+          });
+        }       
+      },
+      fail(res) {
+        console.error(res);
+      }
+    })
   },
   delComment: function(event) {
     var page = this;
@@ -487,7 +514,7 @@ Page({
                 wx.hideLoading()
                 return
               } else {
-                app.push(type, args, function (res) {
+                app.pushSub(type, args, function (res) {
                   page.loadComments();
                   wx.hideLoading()
                 });                
