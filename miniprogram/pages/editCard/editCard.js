@@ -122,7 +122,7 @@ Page({
             }
             if (page.data.isAdmin) {
               console.log("fetchNoSend.card: ",card);
-              submessage.fetchNoSend(card, function(dic){
+              submessage.fetchNoSend(card.longitude, card.latitude, function(dic){
                 var s = "非Admin订阅：";
                 for (var key in dic) { 
                   s += (key+":"+dic[key]+" ");

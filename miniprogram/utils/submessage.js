@@ -71,12 +71,12 @@ class SubMsg {
     })
   };
 
-  static fetchNoSend(card, cb) {
+  static fetchNoSend(longitude, latitude, cb) {
     const dc = db.command;
     db.collection('submessage').where({
       status: 1,
       location: dc.geoNear({
-        geometry: db.Geo.Point(card.longitude, card.latitude),
+        geometry: db.Geo.Point(longitude, latitude),
         minDistance: 0,
         maxDistance: app.globalData.distanceDefault,
       }),
