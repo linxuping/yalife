@@ -359,27 +359,29 @@ Page({
   addComment: function(event) {
     var page = this;
     if (page.data.replyId.length > 0) {
+      var hasReply = false;
       page.addComment2(event, function(){ //回复后留言提醒
-        wx.requestSubscribeMessage({
-          tmplIds: ['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w'], 
-          success(res) {
-            console.log(res);
-            if (res['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w'] == "accept") {
-              app.addEventLog("sub.accept", "cmt.ask");
-              wx.showToast({
-                title: '订阅成功！',
-              });
-            } else {
-              app.addEventLog("sub.reject", "cmt.ask");
-              wx.showToast({
-                title: '请先订阅哈~',
-              });
-            }       
-          },
-          fail(res) {
-            console.error(res);
-          }
-        });
+        hasReply = true;
+      });
+      wx.requestSubscribeMessage({
+        tmplIds: ['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w'], 
+        success(res) {
+          console.log(res);
+          if (res['zLyGroNFbS8B-B-H7p5FL3HjHuizgsobVlwr26JiI0w'] == "accept") {
+            app.addEventLog("sub.accept", "cmt.ask");
+            wx.showToast({
+              title: '订阅成功！',
+            });
+          } else {
+            app.addEventLog("sub.reject", "cmt.ask");
+            wx.showToast({
+              title: '订阅才能收消息哈~',
+            });
+          }       
+        },
+        fail(res) {
+          console.error(res);
+        }
       });
       return;
     }
