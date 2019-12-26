@@ -414,7 +414,11 @@ Page({
       page.setData({subTags:tags});
     });
   },
+  onShow: function () {
+    wx.hideLoading();
+  },
   onLoad: function (options) {
+    wx.hideLoading();
     var page = this;
     //app.getPermission(page);
     //var obj = wx.getLaunchOptionsSync();
