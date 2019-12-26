@@ -72,6 +72,13 @@ class SubMsg {
   };
 
   static fetchNoSend(longitude, latitude, cb) {
+    var tmpdic = {};
+    var offset = 0;
+    var limit = 20;
+    SubMsg.fetchNoSend2(longitude, latitude, offset, limit, tmpdic, cb);
+  };
+
+  static fetchNoSend2(longitude, latitude, offset, limit, tmpdic, cb) {
     const dc = db.command;
     db.collection('submessage').where({
       status: 1,
@@ -81,18 +88,22 @@ class SubMsg {
         minDistance: 0,
         maxDistance: app.globalData.distanceDefault,
       }),
-    }).orderBy("create_time", "desc").get({
+    }).skip(offset).limit(limit).get({
       success: res => {
         console.log("fetch submessage result: ", res.data);
         var openids = [];
-        var tmpdic = {};
+        //var tmpdic = {};
         for (var i=0; i<res.data.length; i++) {
           if (app.getAdmins().indexOf(res.data[i].notify_openid) >= 0) {
             continue
           }
           tmpdic[ res.data[i].notify_tag ] = (tmpdic[ res.data[i].notify_tag ] || 0) + 1;
         }
+        console.log("fetchNoSend2: ", longitude, latitude, offset, limit, tmpdic);
         cb(tmpdic)
+        if (res.data.length == limit) {
+          SubMsg.fetchNoSend2(longitude, latitude, offset+limit, limit, tmpdic, cb);
+        }
       },
       fail: err => {
         console.log(err);
