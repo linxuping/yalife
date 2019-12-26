@@ -487,3 +487,20 @@ border-bottom: 5rpx solid #1aae18;
 .keyword:after{
   border: none
 }
+.swiper_container {
+ height: 38rpx;
+ width: 90%;
+ margin-top:4px
+}
+ 
+.swiper_item {
+ font-size: 30rpx;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+ text-align: left;
+}
+.bar_left {
+  width: 27rpx;
+  height: 25rpx;
+}

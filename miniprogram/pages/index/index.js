@@ -211,6 +211,7 @@ Page({
     filterDays: 3,
     screenHeight: 0,
     subTags: [],
+    msgList: [],
   },
 
   selectTab(e) {
@@ -268,6 +269,22 @@ Page({
       console.log("no openid");
       return
     }
+
+    //加载订阅条目
+    if (firstPage) {
+      submessage.fetchNoSend(longitude, latitude, function(dic){
+        var msgList = [];
+        for (var key in dic) {
+          var count = dic[key];
+          msgList.push({ url: "url", title: "有"+count+'位邻居正在寻找 "'+key+'"' } );
+        }
+        console.log("msgList: ", msgList);
+        page.setData({
+          msgList: msgList
+        });
+      });
+    }
+
     //console.log(page.data);
     if (dto == 0) {
       dto = 100000000;
@@ -419,7 +436,6 @@ Page({
     //app.getPermission(page);
     //var obj = wx.getLaunchOptionsSync();
     //console.log("scan args: ",obj);
-
     this.setData({
       types_class: types_class
     });

@@ -75,12 +75,13 @@ class SubMsg {
     const dc = db.command;
     db.collection('submessage').where({
       status: 1,
+      _openid: dc.nin(app.getAdmins()),
       location: dc.geoNear({
         geometry: db.Geo.Point(longitude, latitude),
         minDistance: 0,
         maxDistance: app.globalData.distanceDefault,
       }),
-    }).get({
+    }).orderBy("create_time", "desc").get({
       success: res => {
         console.log("fetch submessage result: ", res.data);
         var openids = [];

@@ -61,6 +61,20 @@
     </view>  
   </view>
 
+  <swiper class="swiper_container" vertical="true" autoplay="true" circular="true" interval="2000" wx:if="{{showGoods && msgList.length>0}}">
+    <block wx:for="{{msgList}}">
+      <navigator url="/pages/editCard/editCard" open-type="navigate">
+        <swiper-item>
+        
+          <view class="swiper_item">
+            <image class="bar_left" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAgCAYAAAB6kdqOAAACtUlEQVRYR8WXS6iNURTHf3dggFIIMVJeAyPyjHBRDC551TW5orxzxYCIPFIMcD3K9cj73lJC10UiJqIQMpJiYiCGJigT+p/WqXV3+zvf951b2xqds/Zee/2+tddee+0G0stg4DKwGfgaum9IzDMKuAlMBB4DC/430FwDUpQkW4AzHqo3EWoChgLvgPclIr0VOOXmTwVeV//XC9QGbLdFfgArgUcloM4BG2z+U2B+vUCKSDuwPHC+EzhaAmg48AYYYTZa745+l4nQJIOZHHF8EDgQ0V8DFIHrkTHN32/6TqClDNAygxmWEYUYUDewyOb3A34Htj5KvywffxaJ0DbgRM52xIDOA+vN7hCwLydK64CLeUA+eWsxxYBGA5+c0XTgZbDIPOCJT24BjQQ2AVMiHucUTNSsHDoNtNoad4ElkfW+A9VU6CugK8Dqgo6zpmUBTbA6Jbtv7lT5dW5Y2ZBuvID+9hJG5llAGvsIjDMfY4DPgb9dwBHTNaUA0lYtNodLga4AaCNw1nStKYD09YqCRCdNJ86Lqry2TdKWAsg71E3fHAAtBB6aris10ANAl7IXD9SdAshv2SVgbY0ta08B5JP6MLCnRlLvTgHkj33slPlj35KyMP6xiqz+yYs6glWmaEx5ddxz9cgDqdFXXyTQgXmXq8iPAUOCrwr/Frlc1YrcDwxnAM9NdxVYkwekubqPjgONNaDy2o+s6PgmTR/fUQRIHH0sUmrQY5LXoM0EXgSGYRurruNLUaDqWqohitaAYPFaLexbQG1IKD46le3ShLJAsplm0dL+V0W6Vzl55ofD6MwGntULJLv+wA5grC5Ee0GU4Kk8DvWUltwGVlSN64lQGcexueqdL7iBHqcvNdAs4JYrIyfdg7PCmBpIJ6kD0KnT81slpYekBpLzQXruAHuBDyHQP3RYlqAkbg9OAAAAAElFTkSuQmCC" />
+            <text style="color:#666666;margin-left:6px">{{item.title}}</text>
+          </view>
+        </swiper-item>
+      </navigator>
+    </block>
+  </swiper>
+
 <image mode="aspectFill" style="width:120px;height:70px;margin-top:100px;padding-left:35px" src='/images/none.png'wx:if="{{showGoods && goods.length==0}}"></image>
 <view class="{{goods.length>1 ? 'parent':'parent-one'}}">
   <view class="card child" wx:for="{{goods}}" wx:key="key" wx:if="{{showGoods}}" wx:key="_id">
