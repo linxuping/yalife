@@ -5,6 +5,7 @@
     <view style="width:95%">
       <image src="{{item}}" wx:if="{{!!item}}" wx:for="{{card.imgurls}}" style="margin-top:2px;margin-bottom:2px;width:100%;border-radius:4px" mode="widthFix" data-src="{{item}}" bindtap="previewImage"></image>
     </view>
+    <text style="margin:4px;font-size:10px">温馨提示：本平台不收取中间费！欢迎邻居投诉举报</text>
     <text class="address" style="margin-top:16px;color:#0000A0" wx:if="{{card}}">{{card.address}}</text>  
     <view style="width:95%;text-align:right;font-size:30rpx;margin-top:8px">
       <text style="margin-right:4px;color:#888888">{{card.create_time}}</text>
