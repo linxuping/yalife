@@ -312,6 +312,19 @@ Page({
       }
     });
   },
+  goPromote: function (event) {
+    var page = this;
+    var url = "/pages/details/details?id=b040a67a5e058551079e26837e45a860";
+    wx.navigateTo({
+      url: url,
+      success: function (res) {
+        console.log("goPromote success: ");
+      },
+      fail: function (res) {
+        console.log("goPromote fail: ", res);
+      }
+    });
+  },
   saveFormid: function (event) {
     if (event.detail.formId != 'the formId is a mock one') {
     }

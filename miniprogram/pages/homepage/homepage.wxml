@@ -33,12 +33,16 @@
             <text class="cardStatus" style="margin-bottom:4px" wx:if="{{item.status>2}}">{{item.reason}}</text>
           </view>
           <view style="width:100%;text-align:right" bindtap="" data-cardId="{{item._id}}">
+            <form class="" bindsubmit="goPromote" bindtap="saveFormid" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.status==1}}">
+              <button formType="submit" style="padding:0px;display:inline;margin-right:6px;background-color:#DEDEDE;padding-left:8px;padding-right:8px" class="no-border-btn" hover-class='hover-class'>推广</button>
+            </form>
             <form class="display:inline;margin-right:4px;display:none" bindsubmit="jumpEdit" bindtap="saveFormid" data-sub="{{item.is_sub}}" report-submit="{{true}}" data-cardId="{{item._id}}">
               <button formType="submit" style="padding:0px;display:inline;margin-left:6px;margin-right:6px;display:none" class="no-border-btn">编辑</button>
             </form>
             <form class="" bindsubmit="goDetail" bindtap="saveFormid" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.status==1}}">
               <button formType="submit" style="padding:0px;display:inline;margin-right:6px;background-color:#DEDEDE;padding-left:8px;padding-right:8px" class="no-border-btn" hover-class='hover-class'>详情</button>
             </form>
+            
             <form class="" bindsubmit="jumpEdit" data-cardid="{{item._id}}" report-submit="{{true}}" wx:if="{{item.status>0}}">
               <button formType="submit" style="padding:0px;display:inline;margin-right:6px;background-color:#DEDEDE;padding-left:8px;padding-right:8px" class="no-border-btn" hover-class='hover-class'>编辑</button>
             </form>
