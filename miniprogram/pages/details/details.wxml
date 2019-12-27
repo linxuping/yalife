@@ -8,12 +8,15 @@
     <text class="address" style="margin-top:16px;color:#0000A0" wx:if="{{card}}">{{card.address}}</text>  
     <view style="width:95%;text-align:right;font-size:30rpx;margin-top:8px">
       <text style="margin-right:4px;color:#888888">{{card.create_time}}</text>
-      <text style="float:left;margin-left:4px;color:#666666">阅读：{{card.visit_count_all}}</text>
+      <text style="float:left;margin-left:4px;color:#666666">阅读：{{isAdmin?("["+card.visit_count+"]"):""}}{{card.visit_count_all}}</text>
     </view>
   </view>
 
-  <form bindtap="continueSubscribe" bindsubmit="saveFormid" report-submit="{{true}}" class="keyword" wx:if="{{source=='notify'}}">
-      <button formType="submit" class="noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" >我要继续订阅"{{notify_tag}}"相关动态</button> 
+  <form bindtap="continueSubscribe" bindsubmit="saveFormid" report-submit="{{true}}" class="keyword" wx:if="{{showHome && source=='notify'}}">
+      <button formType="submit" class="subbtn noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" >其他邻居发布"{{notify_tag}}"继续通知我</button> 
+  </form>
+  <form bindtap="continueSubscribe" bindsubmit="saveFormid" report-submit="{{true}}" class="keyword" wx:elif="{{showHome}}">
+      <button formType="submit" class="subbtn noborder" style="margin:30rpx;border-radius: 30px;background-color: beige" >其他邻居发布"{{card.subTags}}"时通知我</button> 
   </form>
 
   <view style="margin-top:36px" wx:if="{{showHome && comments.length==0}}">
@@ -114,6 +117,7 @@
 
   <button style="margin-top:50px" wx:if="{{isAdmin}}" bindtap="toTopCard">置顶</button>
   <button style="margin-top:50px" wx:if="{{isAdmin}}" bindtap="setSeek">设置寻找</button>
+  <button style="margin-top:50px" wx:if="{{isAdmin}}" bindtap="addReadRand">增阅</button>
   <button style="margin-top:50px" wx:if="{{isAdmin && openid==card._openid}}" bindtap="goEdit">编辑</button>
 
   <view style="height:100px"></view>

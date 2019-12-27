@@ -111,6 +111,12 @@ Page({
             console.log(card);
             card.address = card.address.replace("广东省", "").replace("广州市", "").replace("番禺区", "");
             card.imgurls = card.imgurls || [card.imgurl]
+            card.subTags = []
+            for (var j=0; j<card.tags.length; j++){
+              if (card.tags[j]=='二手' || card.tags[j]=='儿童')
+                continue
+              card.subTags.push( card.tags[j] );
+            }
             page.setData({
               card: card, 
               liked: (card.help_uids || []).indexOf(app.globalData.openid)>-1
@@ -615,6 +621,38 @@ Page({
     } else {
       console.log("it's not admin, can not seek.", data);
     }
+  }, 
+  addReadRand: function() {
+    var page = this;
+    if (app.isAdmin()) {
+      wx.showModal({
+        title: '提示',
+        content: '确定增阅？',
+        success: function (res) {
+          if (res.confirm) {
+            var count = 3+parseInt(Math.random()*10);
+            var data = {
+              cardid: page.data.card._id,
+              openid: page.data.card._openid,
+              count: count,
+            }
+            wx.cloud.callFunction({
+              name: 'visit_count_addrand',
+              data: data,
+              success: res => {
+                console.log('[云函数] [visit_count_addrand]: ', data)
+                wx.showToast({title: 'add.'+count+' OK.'});
+              },
+              fail: err => {
+                console.error('[云函数] [visit_count_addrand] 调用失败', err)
+              }
+            })            
+          }
+        }
+      });
+    } else {
+      console.log("it's not admin, can not add.", data);
+    }
   },
   switchChange: function(e) {
     console.log("switchChange: ", e.detail.value);
@@ -648,7 +686,13 @@ Page({
           wx.showToast({
             title: '订阅成功！',
           });
-          submessage.add(app.globalData.openid, 0, page.data.notify_tag);
+          if (!!page.data.notify_tag) {
+            submessage.add(app.globalData.openid, 0, page.data.notify_tag);
+          } else {
+            for (var j=0; j<page.data.card.subTags.length; j++){
+              submessage.add(app.globalData.openid, 0, page.data.card.subTags[j]);
+            }
+          }
         } else {
           wx.showToast({
             title: '没有订阅！',

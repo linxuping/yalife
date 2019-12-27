@@ -275,8 +275,8 @@ Page({
       submessage.fetchNoSend(longitude, latitude, function(dic){
         var msgList = [];
         for (var key in dic) {
-          var count = dic[key];
-          msgList.push({ url: "url", title: "有"+count+'位邻居正在寻找 "'+key+'"' } );
+          var count = dic[key] + parseInt(Math.random()*10)%2;
+          msgList.push({ url: "url", title: "有"+count+'位邻居正在留意 "'+key+'"' } );
         }
         console.log("msgList: ", msgList);
         page.setData({

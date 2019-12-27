@@ -43,8 +43,8 @@ exports.main = async (event, context) => {
     console.log("prepare: ", event);
     const db = cloud.database()
     const _ = db.command;
-    //var d = new Date(Date.now()+8*3600000);
-    var d = new Date();
+    var d = new Date(Date.now()+8*3600000);
+    //var d = new Date();
     return await  db.collection('attractions').doc(event.cardid).update({
       data: {
         update_time: formatTime(d),

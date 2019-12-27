@@ -102,3 +102,4 @@
 .no-border-btn:after{
   border: none
 }
+.subbtn::after{border:0}
