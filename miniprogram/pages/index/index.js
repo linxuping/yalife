@@ -331,7 +331,7 @@ Page({
         var cardIds = [];
         for (var i=0; i<res.data.length; i++) {
           if (res.data[i].address) {
-            res.data[i].address = res.data[i].address.replace("广东省", "").replace("广州市", "").replace("番禺区", "").replace("石楼镇", "").replace("广州亚运城", "");
+            res.data[i].address = common.local_trim(res.data[i].address);
             //console.log(res.data[i].update_time.toString());
             if (res.data[i].update_time.toString().indexOf("-") > 0) {
               //console.log(res.data[i].update_time);

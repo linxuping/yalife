@@ -925,11 +925,11 @@ Page({
       status: 1,
     }
     const dc = db.command;
-    cond.location = dc.geoNear({
+    /*cond.location = dc.geoNear({
       geometry: db.Geo.Point(page.data.card.longitude, page.data.card.latitude),
       minDistance: 0,
       maxDistance: app.globalData.distanceDefault,
-    });
+    });*/
     db.collection('submessage').where(cond).get({
       success: res => {
         var items = [];

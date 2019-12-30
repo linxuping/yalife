@@ -1,16 +1,19 @@
+var db = wx.cloud.database();
+const app = getApp()
+
 
 class Common {
+  static local_trim(str,max) {
+    str = str.replace("广东省", "").replace("广州市", "").replace("番禺区", "").replace("石楼镇", "").replace("广州亚运城", "");
+    return Common.slice(str, 12);
+  };
 
-  static formatTime(date) {
-    var year = date.getFullYear()
-    var month = date.getMonth() + 1
-    var day = date.getDate()
-
-    var hour = date.getHours()
-    var minute = date.getMinutes()
-    var second = date.getSeconds()
-
-    return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+  static slice(str,max) {
+    if (str.length > max) {
+      str = str.slice(0,max) + '...';
+    }
+    return str;
   };
 }
+
 module.exports = Common;

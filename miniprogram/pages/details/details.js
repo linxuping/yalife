@@ -3,6 +3,8 @@ var db = wx.cloud.database();
 var recommend = require("../../utils/recommend")
 let submessage = require("../../utils/submessage");
 let user = require("../../utils/user");
+let timeMgr = require("../../utils/time");
+let common = require("../../utils/common");
 const app = getApp()
 const _ = db.command
 
@@ -133,6 +135,10 @@ Page({
             recommend.get(card, latitude, longitude, function(cards){
               console.log("recommend cb: ");
               console.log(cards);
+              for (var i=0; i<cards.length; i++) {
+                cards[i].update_time = timeMgr.getDateDiff(cards[i].update_time );
+                cards[i].address = common.slice(cards[i].address, 12);
+              }
               page.setData({ cardList: cards, showHome: true })
             });
           }
