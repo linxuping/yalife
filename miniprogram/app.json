@@ -1,12 +1,12 @@
 {
   "cloud": true,
   "pages": [
-    "pages/index/index",
+    "pages/genCard/genCard",
     "pages/editCard/editCard",
     "pages/homepage/homepage",
     "pages/cards/cards",
     "pages/details/details",
-    "pages/genCard/genCard",
+    "pages/index/index",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",

@@ -1,7 +1,7 @@
 // pages/genCard/genCard.js
 const app = getApp()
 
-const bgUrl = "https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
+const bgUrl = "https://alcdn.yojiang.cn/upload/circle/10966/circle/327679/20200109/5155.jpeg";//"https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
 
 // 预设一个default对象
 var defaultOptions = {
@@ -14,11 +14,11 @@ var defaultOptions = {
   code_pos: [405, 1021],
   code_width: 200,
   code_height: 200,
-  codePath: '/images/genbg.jpg',
+  codePath: '/images/bg.jpeg',
 
   bg_url: bgUrl,
   bg_width: 750,
-  bg_height: 1334,
+  bg_height: 1020, //1334,
 
   wx_icon_width: 100,
   wx_icon_height: 100,
@@ -45,7 +45,7 @@ Page({
     bg: '',
     showLoading: true,
     followText: [
-      "我也要玩",
+      "KavinLin",
       "搜索“搞嘢吧”"
     ],
     testurl: "",
@@ -148,7 +148,7 @@ Page({
         that.setData({
           showCanvas: true
         })
-        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/8515/circle/327679/20191117/2862.jpeg");
+        that.loadPortraitPath("https://alcdn.yojiang.cn/upload/circle/10890/circle/327679/20200110/2836.jpeg");
         console.log("get image info.");
 
         // 改变背景图片
@@ -254,19 +254,19 @@ Page({
         ctx.drawImage(defaultOptions.bg_url, 0, 0, defaultOptions.bg_width, defaultOptions.bg_height)
         ctx.save(); 
 
-        /*var x = defaultOptions.bg_width - 260;
-        var y = defaultOptions.bg_height - 125; 
-        var d = 120;
-        var r = 60;
+        var x = 15; //defaultOptions.bg_width - 260;
+        var y = 15; //defaultOptions.bg_height - 125; 
+        var d = 130;
+        var r = 65;
 
         var cx = x + r;
         var cy = y + r;
         ctx.arc(cx, cy, r, 0, 2 * Math.PI);
         ctx.clip();
-        ctx.drawImage(defaultOptions.qrcode, x, y, d, d);
-        ctx.restore();*/
+        ctx.drawImage(defaultOptions.portraitPath, x, y, d, d);
+        ctx.restore();
 
-        ctx.drawImage(defaultOptions.qrcode, defaultOptions.bg_width - 585, defaultOptions.bg_height-138, 135, 135)
+        ctx.drawImage(defaultOptions.qrcode, defaultOptions.bg_width - 705, defaultOptions.bg_height-208, 135, 135)
         
         //画头像
         ctx.save(); // 保存当前ctx的状态
@@ -286,12 +286,12 @@ Page({
         ctx.setTextBaseline('middle');
         ctx.fillText(defaultOptions.nickName, defaultOptions.nickname_pos[0], defaultOptions.nickname_pos[1]);
 */
-        ctx.setFontSize(24)
-        ctx.setFillStyle('#969595')
+        ctx.setFontSize(36)
+        ctx.setFillStyle('#000000')
         ctx.setTextAlign('center')
-        ctx.fillText(that.data.followText[0], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094)
-        ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094 + 40)
-        canvasTextAutoLine("如果网络图片地址是异步请求过来的数据，需要先使用wx.downloadFile()的方式，把图片下载到本地，再把临时的本地路径使用drawImage()绘制", ctx, defaultOptions.bg_width * 1/2, defaultOptions.bg_height * 0.094 + 120, 40, that.data.x);
+        ctx.fillText(that.data.followText[0], 230, 60)
+        //ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094 + 40)
+        //canvasTextAutoLine("如果网络图片地址是异步请求过来的数据，需要先使用wx.downloadFile()的方式，把图片下载到本地，再把临时的本地路径使用drawImage()绘制", ctx, defaultOptions.bg_width * 1/2, defaultOptions.bg_height * 0.094 + 120, 40, that.data.x);
         
         console.log("before draw...", defaultOptions);
         //输出图片
