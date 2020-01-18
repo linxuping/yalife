@@ -1,7 +1,7 @@
 // pages/genCard/genCard.js
 const app = getApp()
 
-const bgUrl = "https://alcdn.yojiang.cn/upload/circle/10966/circle/327679/20200109/5155.jpeg";//"https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
+const bgUrl = "https://alcdn.yojiang.cn/upload/circle/10890/circle/327679/20200110/6547.jpeg";//"https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
 
 // 预设一个default对象
 var defaultOptions = {
@@ -46,7 +46,8 @@ Page({
     showLoading: true,
     followText: [
       "KavinLin",
-      "搜索“搞嘢吧”"
+      "8",
+      "要注意纸巾和厕所纸由于水溶性太强不可回收"
     ],
     testurl: "",
   },
@@ -266,7 +267,7 @@ Page({
         ctx.drawImage(defaultOptions.portraitPath, x, y, d, d);
         ctx.restore();
 
-        ctx.drawImage(defaultOptions.qrcode, defaultOptions.bg_width - 705, defaultOptions.bg_height-208, 135, 135)
+        ctx.drawImage(defaultOptions.qrcode, defaultOptions.bg_width - 705, defaultOptions.bg_height-218, 135, 135)
         
         //画头像
         ctx.save(); // 保存当前ctx的状态
@@ -289,8 +290,19 @@ Page({
         ctx.setFontSize(36)
         ctx.setFillStyle('#000000')
         ctx.setTextAlign('center')
+        ctx.font = "italic 36px sans-serif";
         ctx.fillText(that.data.followText[0], 230, 60)
-        //ctx.fillText(that.data.followText[1], defaultOptions.bg_width * 0.090, defaultOptions.bg_height * 0.094 + 40)
+        ctx.setFontSize(36)
+        ctx.setFillStyle('#404040')
+        ctx.setTextAlign('center')
+        ctx.font = "italic 36px sans-serif";
+        ctx.fillText(8, 450, 465)
+        /*ctx.restore();
+        ctx.setFontSize(36)
+        ctx.setFillStyle('#404040')
+        ctx.setTextAlign('left')
+        ctx.font = "CSS font DOMString"
+        ctx.fillText("注意：纸巾和厕所纸由于水溶性太强不可回收", 30, 530)*/
         //canvasTextAutoLine("如果网络图片地址是异步请求过来的数据，需要先使用wx.downloadFile()的方式，把图片下载到本地，再把临时的本地路径使用drawImage()绘制", ctx, defaultOptions.bg_width * 1/2, defaultOptions.bg_height * 0.094 + 120, 40, that.data.x);
         
         console.log("before draw...", defaultOptions);

@@ -1,7 +1,7 @@
 // pages/genCard/genCard.js
 const app = getApp()
 
-const bgUrl = "https://alcdn.yojiang.cn/upload/circle/10890/circle/327679/20200110/6547.jpeg";//"https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
+const bgUrl = "https://alcdn.yojiang.cn/upload/circle/23875/circle/327679/20200118/3970.jpeg";//"https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
 
 // 预设一个default对象
 var defaultOptions = {
@@ -293,7 +293,7 @@ Page({
         ctx.setFillStyle('#404040')
         ctx.setTextAlign('center')
         //ctx.font = "italic 36px sans-serif";
-        ctx.fillText(8, 450, 465)
+        ctx.fillText(8, 450, 450)
         /*ctx.restore();
         ctx.setFontSize(36)
         ctx.setFillStyle('#404040')

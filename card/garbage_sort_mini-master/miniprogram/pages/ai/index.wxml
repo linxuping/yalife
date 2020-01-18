@@ -17,7 +17,7 @@
 </view>
 <button class='ai-view' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"> 
   <image src='/images/punch.png' class='ai-paizhao' />
-  <text class='txt'>坚持打卡</text>
+  <text class='txt'>继续打卡</text>
 </button>
 <view  wx:if="{{canRecordStart}}"  class="speak-style">
     <image wx:if="{{j==1}}" class="sound-style" src="../../images/speech_1.png" ></image>
