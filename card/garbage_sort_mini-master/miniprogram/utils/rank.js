@@ -108,5 +108,18 @@ class Rank {
     })
   };
 
+
+  static getimgs(cb, err_cb) {
+    var imgs = [
+      "http://img.yojiang.cn/upload/user/portrait/166691/20181114_211120?imageView2/2/w/80",
+      "http://img.yojiang.cn/upload/user/portrait/37151/20181111_221250?imageView2/2/w/80",
+      "http://img.yojiang.cn/upload/user/portrait/2268418/20180807_235945?imageView2/2/w/80",
+      "http://img.yojiang.cn/upload/user/portrait/1041169/20181130_231918?imageView2/2/w/80",
+      "http://img.yojiang.cn/upload/user/portrait/1236796/20180806_191512?imageView2/2/w/80",
+      "http://img.yojiang.cn/upload/user/portrait/4808362/20190523_064759?imageView2/2/w/80",
+    ];
+    cb(imgs);
+  };
+
 }
 module.exports = Rank;
