@@ -1,10 +1,12 @@
 var checkPermissionUtil = require('../../utils/check-permission-util.js');
 var baiduTokenUtil = require('../../utils/baidu-token-util.js');
+var rank = require('../../utils/rank.js');
 
 Page({
     data: {
         SHOW_TOP: true,
         canRecordStart: false,
+        imgs: [],
     },
     isSpeaking: false,
     accessToken: "",
@@ -13,6 +15,9 @@ Page({
         var that=this
         wx.showShareMenu({
             withShareTicket: true //要求小程序返回分享目标信息
+        });
+        rank.getimgs(functions(imgs){
+          that.setData({imgs: imgs});
         });
         var isShowed = wx.getStorageSync("tip");
         if (isShowed != 1) {
