@@ -29,10 +29,13 @@ class Rank {
       _openid: app.globalData.openid
     }).get({
       success: res => {
+        var count = 0
         if (res.data.length == 0) {
           app.globalData.create_time = d;
           app.globalData.create_time_str = formatDate(d);
           app.globalData.punch_days = [day];
+          app.globalData.punch_count = [day];
+          count = 1
           console.log("add rank: ", app.globalData);
           db.collection('rank').add({
             data: app.globalData
@@ -45,9 +48,14 @@ class Rank {
           console.log("update rank: ", app.globalData);
           delete app.globalData._id
           delete app.globalData._openid
+          count = res.data[0].punch_days.length;
+          if (res.data[0].punch_days.indexOf(day) == -1) { 
+            count += 1;
+          }
           db.collection('rank').doc(res.data[0]._id).update({
             data: {
-              punch_days: _.addToSet(day)
+              punch_days: _.addToSet(day),
+              punch_count: count,
             },
             success: function(res) {
               console.log("rank update ok:", res)
@@ -75,7 +83,11 @@ class Rank {
     }).get({
       success: res => {
         console.log("get rank: ", openid, res.data);
-        cb(res.data.length);
+        if (res.data.length > 0) {
+          cb(res.data[0].punch_count);
+        } else {
+          cb(0);
+        }
       },
       fail: err => {
         console.log(err);
@@ -83,5 +95,18 @@ class Rank {
       }
     })
   };
+
+  static getm(cb, err_cb) {
+    db.collection('rank').orderBy('punch_count','desc').limit(20).get({
+      success: res => {
+        console.log("get ranks: ", res.data);
+      },
+      fail: err => {
+        console.log(err);
+        err_cb();
+      }
+    })
+  };
+
 }
 module.exports = Rank;
