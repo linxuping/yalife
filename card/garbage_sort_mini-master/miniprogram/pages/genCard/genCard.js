@@ -1,4 +1,5 @@
 // pages/genCard/genCard.js
+var rank = require('../../utils/rank.js');
 const app = getApp()
 
 const bgUrl = "https://alcdn.yojiang.cn/upload/circle/23875/circle/327679/20200118/3970.jpeg";//"https://alcdn.yojiang.cn/upload/circle/8088/circle/327679/20191201/9834.jpeg";
@@ -235,7 +236,7 @@ Page({
 
 
     //画出图片的方法
-    var makeImg = function (imgUrl, callback) {
+    var makeImg = function (imgUrl, days, callback) {
       try {
         //获得画布
         const ctx = wx.createCanvasContext('myCanvas');
@@ -293,7 +294,7 @@ Page({
         ctx.setFillStyle('#404040')
         ctx.setTextAlign('center')
         //ctx.font = "italic 36px sans-serif";
-        ctx.fillText(8, 450, 450)
+        ctx.fillText(days, 450, 450)
         /*ctx.restore();
         ctx.setFontSize(36)
         ctx.setFillStyle('#404040')
@@ -342,23 +343,25 @@ Page({
       let localPath = defaultOptions.portraitPath; //defaultOptions.portraitPath;
       console.log("_check ... ", localPath);
       if (!!localPath) {
-        makeImg(defaultOptions.portraitPath, function (path) {
-          //设置canvas生成的图片地址
-          defaultOptions.saveImgPath = path;
-          //console.log(defaultOptions.saveImgPath)
-          console.log("make img ... ", path);
+        rank.update(function(days){
+          makeImg(defaultOptions.portraitPath, days, function (path) {
+            //设置canvas生成的图片地址
+            defaultOptions.saveImgPath = path;
+            //console.log(defaultOptions.saveImgPath)
+            console.log("make img ... ", path);
 
-          if (path) {
-            that.showLoading()
-          }
+            if (path) {
+              that.showLoading()
+            }
 
-          //隐藏画布,显示输出的图片
-          that.setData({
-            showCanvas: false,
-            inviteCardUrl: path
+            //隐藏画布,显示输出的图片
+            that.setData({
+              showCanvas: false,
+              inviteCardUrl: path
+            })
+
           })
-
-        })
+        });
       } else {
         setTimeout(_check, 1000);
       }

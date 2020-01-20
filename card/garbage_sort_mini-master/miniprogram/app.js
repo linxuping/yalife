@@ -32,5 +32,25 @@ App({
         })
 
     },
-    globalData: {}
+    globalData: {},
+    getOpenid(cb) {
+      var page = this;
+      wx.cloud.callFunction({
+        name: 'login',
+        success: res => {
+          console.log("login success: ", res)
+          console.log('云函数获取到的openid: ', res.result.openid)
+          page.globalData.openid = res.result.openid;
+          if (!!cb) {
+            cb();
+          }
+        },
+        fail: res => {
+          console.log("login fail: ", res)
+        },
+        complete: res => {
+          console.log("login complete: ", res)
+        }
+      })
+    },
 })

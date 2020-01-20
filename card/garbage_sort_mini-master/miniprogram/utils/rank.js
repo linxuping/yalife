@@ -6,8 +6,7 @@ function formatDate(time) {
   var year = date.getFullYear(),
     month = date.getMonth() + 1,//月份是从0开始的
     day = date.getDate(),
-    hour = date.getHours(),
-    min = date.getMinutes(),
+    hour = date.getHours(), min = date.getMinutes(),
     sec = date.getSeconds();
   var newTime = year + '-' +
     (month < 10 ? '0' + month : month) + '-' +
@@ -20,10 +19,10 @@ function formatDate(time) {
 
 
 class Rank {
-  static update() {
+  static update(cb) {
     var d = new Date().getTime();
     var now = new Date();
-    var day = now.getMonth().toString()+now.getDay().toString();
+    var day = now.getMonth().toString()+now.getDate().toString();
     const _ = db.command;
     db.collection('rank').where({
       _openid: app.globalData.openid
@@ -34,7 +33,7 @@ class Rank {
           app.globalData.create_time = d;
           app.globalData.create_time_str = formatDate(d);
           app.globalData.punch_days = [day];
-          app.globalData.punch_count = [day];
+          app.globalData.punch_count = 1;
           count = 1
           console.log("add rank: ", app.globalData);
           db.collection('rank').add({
@@ -65,8 +64,10 @@ class Rank {
             },
           });   
         }
+        cb(count);
       },
       fail: err => {
+        cb(1);
         console.log(err);
       }
     })
